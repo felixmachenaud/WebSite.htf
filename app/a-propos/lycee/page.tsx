@@ -26,7 +26,7 @@ const LYCEE_DIRECTION = [
 
 export default function LyceePage() {
   return (
-    <main className="min-h-screen bg-page pt-[69px]">
+    <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader title="Lycée" imageUrl={LYCEE_IMAGES.header} />
       <div className="mx-auto max-w-6xl px-6 py-12">
         <section className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">

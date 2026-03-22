@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function AProposPage() {
   return (
-    <main className="min-h-screen bg-page pt-[69px]">
+    <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader
         title="À propos"
         imageUrl="https://picsum.photos/1920/600?random=about"

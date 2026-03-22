@@ -99,7 +99,7 @@ function InstallationsPhotos({
 
 export default function InformationGeneralePage() {
   return (
-    <main className="min-h-screen bg-page pt-[69px]">
+    <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader
         title="Informations générales"
         imageUrl="/images/informations-generales-header.jpg"

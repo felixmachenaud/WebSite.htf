@@ -13,6 +13,19 @@ body {
   background-color: var(--page-bg);
 }
 
+/* Espacement contenu sous la navbar (encoche iPhone) */
+.safe-navbar-pt {
+  padding-top: 69px;
+  padding-top: calc(69px + env(safe-area-inset-top, 0px));
+}
+
+/* h-screen corrigé pour iOS Safari (100vh inclut la barre d'URL) */
+.min-h-screen-ios {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: 100dvh;
+}
+
 .font-serif {
   font-family: var(--font-serif);
 }

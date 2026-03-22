@@ -25,7 +25,7 @@ export default function ActualitePage({ params }: { params: { slug: string } }) 
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-page pt-[69px]">
+      <main className="min-h-screen bg-page safe-navbar-pt">
         <PageHeader title={actu.titre} imageUrl={actu.imageUrl} />
         <div className="mx-auto max-w-3xl px-6 py-16">
           <div className="prose prose-slate max-w-none">

@@ -29,7 +29,7 @@ const SECTIONS = [
 
 export default function ProjetEducatifPage() {
   return (
-    <main className="min-h-screen bg-page pt-[69px]">
+    <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader
         title="Notre projet éducatif"
         imageUrl="/images/projet-educatif/header.jpg.webp"
@@ -40,7 +40,7 @@ export default function ProjetEducatifPage() {
         style={{ backgroundColor: "var(--page-bg)" }}
         aria-label="Citation"
       >
-        <p className="mx-auto max-w-2xl whitespace-nowrap font-serif text-lg font-bold italic leading-relaxed text-slate-800 md:text-xl">
+        <p className="mx-auto max-w-2xl font-serif text-lg font-bold italic leading-relaxed text-slate-800 md:text-xl md:whitespace-nowrap">
           <span className="quote-lettrine"><span className="quote-lettrine-char">L</span></span>&apos;éducation est l&apos;art de conduire les jeunes à la vérité. — Saint Jean Bosco
         </p>
       </section>

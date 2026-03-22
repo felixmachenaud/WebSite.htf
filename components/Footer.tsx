@@ -5,7 +5,10 @@ const GREEN_COLOR = "#14532d";
 export function Footer() {
   return (
     <div className="w-full">
-      <footer className="w-full border-b border-slate-200 bg-white px-8 py-14">
+      <footer
+        className="w-full border-b border-slate-200 bg-white px-6 py-14 md:px-8"
+        style={{ paddingBottom: "max(3.5rem, calc(1.25rem + env(safe-area-inset-bottom, 0px)))" }}
+      >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3 md:gap-0">
           {/* Colonne gauche : branding */}
           <div className="flex flex-col items-center md:items-start md:border-r md:border-black md:pr-8">

@@ -13,7 +13,7 @@ export default function ContactPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-page pt-[69px]">
+      <main className="min-h-screen bg-page safe-navbar-pt">
         <div className="mx-auto max-w-2xl px-6 py-20">
           <h1 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">
             Contact

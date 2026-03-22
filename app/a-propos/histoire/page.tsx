@@ -32,7 +32,7 @@ const FONDEMENTS = [
 
 export default function HistoirePage() {
   return (
-    <main className="min-h-screen bg-page pt-[69px]">
+    <main className="min-h-screen bg-page safe-navbar-pt">
         {/* 1. Hero section */}
         <section className="relative">
           <div className="relative flex min-h-[55vh] flex-col justify-end">

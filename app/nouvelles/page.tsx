@@ -15,7 +15,7 @@ export default function NouvellesPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-page pt-[69px]">
+      <main className="min-h-screen bg-page safe-navbar-pt">
         <PageHeader title="Actualités" imageUrl={HEADER_IMAGE} />
         <div className="mx-auto max-w-6xl px-6 py-16">
           <div className="grid gap-8 md:grid-cols-3">

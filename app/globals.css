@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: "DM Sans", system-ui, sans-serif;
+  --font-serif: "Source Serif 4", Georgia, serif;
+  --page-bg: #f2f7f0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--page-bg);
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.rounded-button {
+  border-radius: 0.5rem;
+}
+
+/* Prevent overscroll bounce on custom scroll */
+.scroll-container {
+  overscroll-behavior: none;
+}
+
+/* Landing: tout le scroll dans le container, pas dans le body */
+body.landing-scroll-active {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/* Paragraphes institutionnels : barre verticale + lettrine (Collège / Lycée) */
+.instit-paragraph-wrap {
+  display: flex;
+  gap: 0.5cm;
+  align-items: stretch;
+}
+
+.instit-paragraph-bar {
+  width: 1px;
+  flex-shrink: 0;
+  background-color: #000;
+  align-self: stretch;
+  min-height: 1em;
+}
+
+.bg-page {
+  background-color: var(--page-bg);
+}
+
+.instit-drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 3.25rem;
+  line-height: 0.85;
+  font-weight: 700;
+  margin: 0.08em 0.12em 0 0;
+  color: #0f172a;
+}
+
+/* Citation projet éducatif : lettrine «L (guillemet avant le L) */
+.quote-lettrine {
+  float: left;
+  font-family: var(--font-serif);
+  font-weight: 700;
+  margin: 0.08em 0.12em 0 0;
+  color: #0f172a;
+}
+.quote-lettrine-char {
+  font-size: 3.25rem;
+  line-height: 0.85;
+}
+
+

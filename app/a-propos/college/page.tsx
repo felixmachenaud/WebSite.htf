@@ -2,8 +2,8 @@ import { PageHeader } from "@/components/PageHeader";
 import { InstitutionalParagraph } from "@/components/InstitutionalParagraph";
 
 export const metadata = {
-  title: "Collège | Collège Lycée HauteFeuille",
-  description: "Le collège HauteFeuille - 100% de réussite au brevet, 96% de mentions.",
+  title: "Collège | Collège Lycée Hautefeuille",
+  description: "Le collège Hautefeuille - 100% de réussite au brevet, 96% de mentions.",
 };
 
 const COLLEGE_IMAGES = {
@@ -26,7 +26,7 @@ export default function CollegePage() {
         <section className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="flex flex-col justify-center">
             <InstitutionalParagraph dropCap>
-              Le collège HauteFeuille accueille les élèves de la 6e à la 3e dans un cadre bienveillant
+              Le collège Hautefeuille accueille les élèves de la 6e à la 3e dans un cadre bienveillant
               et exigeant. Notre projet éducatif vise à former des jeunes capables de s&apos;engager
               avec confiance dans leur parcours scolaire et personnel.
             </InstitutionalParagraph>

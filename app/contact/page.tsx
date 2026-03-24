@@ -2,8 +2,8 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 
 export const metadata = {
-  title: "Contact | Collège Lycée HauteFeuille",
-  description: "Contactez le Collège Lycée HauteFeuille.",
+  title: "Contact | Collège Lycée Hautefeuille",
+  description: "Contactez le Collège Lycée Hautefeuille.",
 };
 
 // À configurer : remplacez par votre lien Calendly

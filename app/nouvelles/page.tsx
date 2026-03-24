@@ -5,8 +5,8 @@ import { ACTUALITES } from "@/data/actualites";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Actualités | Collège Lycée HauteFeuille",
-  description: "Les dernières actualités du Collège Lycée HauteFeuille.",
+  title: "Actualités | Collège Lycée Hautefeuille",
+  description: "Les dernières actualités du Collège Lycée Hautefeuille.",
 };
 
 const HEADER_IMAGE = "/images/nouvelles/header.png";

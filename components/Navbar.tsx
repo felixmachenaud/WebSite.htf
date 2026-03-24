@@ -31,7 +31,7 @@ export function Navbar() {
         </button>
         <Link href="/" scroll={false} className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 font-serif text-xl font-semibold text-slate-800 sm:gap-2.5 sm:text-2xl">
           <img src="/images/logo.png" alt="" className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
-          <span className="truncate">HauteFeuille</span>
+          <span className="truncate">Hautefeuille</span>
         </Link>
         <div className="hidden min-w-[200px] items-center justify-end gap-4 md:flex lg:gap-6">
           <a

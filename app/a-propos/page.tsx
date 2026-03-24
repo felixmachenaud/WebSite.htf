@@ -1,7 +1,7 @@
 import { PageHeader } from "@/components/PageHeader";
 
 export const metadata = {
-  title: "À propos | Collège Lycée HauteFeuille",
+  title: "À propos | Collège Lycée Hautefeuille",
   description: "Viser l'excellence académique, s'ouvrir au monde et aux autres, donner du sens à sa vie.",
 };
 

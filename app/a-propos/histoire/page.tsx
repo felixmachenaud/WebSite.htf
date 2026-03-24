@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export const metadata = {
-  title: "Histoire | Collège Lycée HauteFeuille",
+  title: "Histoire | Collège Lycée Hautefeuille",
   description:
     "L'histoire, l'identité et les fondements éducatifs de Hautefeuille. Une école née d'une conviction en 1985.",
 };

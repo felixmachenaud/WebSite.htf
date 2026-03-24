@@ -13,7 +13,7 @@ export function Footer() {
           {/* Colonne gauche : branding */}
           <div className="flex flex-col items-center md:items-start md:border-r md:border-black md:pr-8">
             <img src="/images/logo.png" alt="" className="h-20 w-20 object-contain" />
-            <span className="mt-4 font-serif text-2xl font-bold text-slate-900">HauteFeuille</span>
+            <span className="mt-4 font-serif text-2xl font-bold text-slate-900">Hautefeuille</span>
             <span className="mt-1 text-sm font-medium uppercase tracking-wider text-slate-600">
               Collège Lycée
             </span>
@@ -58,9 +58,9 @@ export function Footer() {
             <h3 className="font-bold uppercase tracking-wider text-slate-900">
               Contactez-nous
             </h3>
-            <p className="mt-4 font-medium text-slate-800">Collège Lycée HauteFeuille</p>
+            <p className="mt-4 font-medium text-slate-800">Collège Lycée Hautefeuille</p>
             <p className="mt-2 text-sm text-slate-600">
-              65 Rue Armand Sylvestre
+              5 Rue Armand Silvestre
               <br />
               92400 Courbevoie, France
             </p>

@@ -156,7 +156,7 @@ export function ScrollHijackLanding() {
           className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 font-serif text-xl font-semibold text-slate-800 hover:text-slate-600 sm:gap-2.5 sm:text-2xl"
         >
           <img src="/images/logo.png" alt="" className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
-          <span className="truncate">HauteFeuille</span>
+          <span className="truncate">Hautefeuille</span>
         </Link>
         <div className="hidden min-w-[200px] items-center justify-end gap-4 md:flex lg:gap-6">
           <a
@@ -220,11 +220,11 @@ export function ScrollHijackLanding() {
           {/* Collège */}
           <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl md:p-8">
             <h3 className="font-serif text-xl font-bold text-slate-800">Collège</h3>
-            <p className="mt-2 text-slate-600">65 Rue Armand Sylvestre, 92400 Courbevoie, France</p>
+            <p className="mt-2 text-slate-600">5 Rue Armand Silvestre, 92400 Courbevoie, France</p>
             <div className="mt-6 aspect-video w-full overflow-hidden rounded bg-slate-200">
               <iframe
-                title="Collège HauteFeuille - Courbevoie"
-                src="https://www.google.com/maps?q=65+Rue+Armand+Sylvestre+92400+Courbevoie+France&output=embed"
+                title="Collège Hautefeuille - Courbevoie"
+                src="https://www.google.com/maps?q=5+Rue+Armand+Silvestre+92400+Courbevoie+France&output=embed"
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -240,7 +240,7 @@ export function ScrollHijackLanding() {
             <p className="mt-2 text-slate-600">26 rue Pierre Joigneaux, 92270 Bois-Colombes, France</p>
             <div className="mt-6 aspect-video w-full overflow-hidden rounded bg-slate-200">
               <iframe
-                title="Lycée HauteFeuille - Bois-Colombes"
+                title="Lycée Hautefeuille - Bois-Colombes"
                 src="https://www.google.com/maps?q=26+rue+Pierre+Joigneaux+92270+Bois+Colombes+France&output=embed"
                 width="100%"
                 height="100%"

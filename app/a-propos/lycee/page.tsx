@@ -4,8 +4,8 @@ import { RESULTATS_BAC } from "@/data/resultats";
 import { InstitutionalParagraph } from "@/components/InstitutionalParagraph";
 
 export const metadata = {
-  title: "Lycée | Collège Lycée HauteFeuille",
-  description: "Le lycée HauteFeuille - accompagnement vers l'excellence.",
+  title: "Lycée | Collège Lycée Hautefeuille",
+  description: "Le lycée Hautefeuille - accompagnement vers l'excellence.",
 };
 
 const LYCEE_IMAGES = {
@@ -32,7 +32,7 @@ export default function LyceePage() {
         <section className="grid gap-8 md:grid-cols-2 md:gap-12 lg:gap-16">
           <div className="flex flex-col justify-center">
             <InstitutionalParagraph dropCap>
-              Le lycée HauteFeuille accompagne les élèves de la seconde à la terminale vers
+              Le lycée Hautefeuille accompagne les élèves de la seconde à la terminale vers
               l&apos;excellence académique et personnelle. Un cadre propice à la réussite et à
               l&apos;épanouissement.
             </InstitutionalParagraph>

@@ -11,9 +11,9 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   const actu = ACTUALITES.find((a) => a.slug === params.slug);
-  if (!actu) return { title: "Actualité | HauteFeuille" };
+  if (!actu) return { title: "Actualité | Hautefeuille" };
   return {
-    title: `${actu.titre} | HauteFeuille`,
+    title: `${actu.titre} | Hautefeuille`,
     description: actu.excerpt.slice(0, 160),
   };
 }

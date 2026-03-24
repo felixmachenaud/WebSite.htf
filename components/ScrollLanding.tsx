@@ -22,7 +22,7 @@ export interface SectionData {
 
 const SECTIONS: SectionData[] = [
   {
-    title: "Bienvenue au Collège Lycée HauteFeuille",
+    title: "Bienvenue au Collège Lycée Hautefeuille",
     subtitle:
       "Le parcours de votre enfant commence par un premier pas. De la 6e à la terminale, nous l'accompagnons pour qu'il grandisse en confiance.",
     backgroundImage: getPathImage(1),
@@ -40,13 +40,13 @@ const SECTIONS: SectionData[] = [
   {
     title: "Enraciné dans la famille",
     subtitle:
-      "Il apprendra à se développer avec liberté et responsabilité. Les parents, par leur exemple et leur dévouement, sont le facteur le plus important dans l'éducation de leurs enfants. HauteFeuille est un collège de familles.",
+      "Il apprendra à se développer avec liberté et responsabilité. Les parents, par leur exemple et leur dévouement, sont le facteur le plus important dans l'éducation de leurs enfants. Hautefeuille est un collège de familles.",
     backgroundImage: getPathImage(3),
   },
   {
     title: "Jamais seul",
     subtitle:
-      "Pendant le trajet, il acquerra les valeurs de solidarité, de respect et d'amitié. HauteFeuille est plus qu'un collège : un lieu de relations et d'amitiés qui durent toute la vie.",
+      "Pendant le trajet, il acquerra les valeurs de solidarité, de respect et d'amitié. Hautefeuille est plus qu'un collège : un lieu de relations et d'amitiés qui durent toute la vie.",
     backgroundImage: getPathImage(4),
   },
   {
@@ -66,7 +66,7 @@ const SECTIONS: SectionData[] = [
   {
     title: "Un horizon ouvert",
     subtitle:
-      "Parcourir le chemin de HauteFeuille ouvrira un avenir riche en possibilités, rêves et projets. Notre communauté de familles, professeurs et anciens élèves maintient vivant l'esprit du collège au-delà des années passées ensemble.",
+      "Parcourir le chemin de Hautefeuille ouvrira un avenir riche en possibilités, rêves et projets. Notre communauté de familles, professeurs et anciens élèves maintient vivant l'esprit du collège au-delà des années passées ensemble.",
     backgroundImage: getPathImage(7),
     linkHref: "/nouvelles",
     linkLabel: "Voir les actualités",

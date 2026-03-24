@@ -4,7 +4,7 @@ import { SafeSectionImage } from "@/components/SafeSectionImage";
 import { AdresseCards } from "@/components/AdresseCards";
 
 export const metadata = {
-  title: "Informations générales | Collège Lycée HauteFeuille",
+  title: "Informations générales | Collège Lycée Hautefeuille",
   description: "Informations pratiques : transport, uniforme, calendrier, etc.",
 };
 

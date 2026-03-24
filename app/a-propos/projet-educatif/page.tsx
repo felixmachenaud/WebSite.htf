@@ -1,8 +1,8 @@
 import { PageHeader } from "@/components/PageHeader";
 
 export const metadata = {
-  title: "Notre projet éducatif | Collège Lycée HauteFeuille",
-  description: "Le projet éducatif de HauteFeuille.",
+  title: "Notre projet éducatif | Collège Lycée Hautefeuille",
+  description: "Le projet éducatif de Hautefeuille.",
 };
 
 // Images dans public/images/projet-educatif/

@@ -28,7 +28,7 @@ export function SidebarMenu({ onClose, currentPath = "", linkClassName = "text-l
             <img src="/images/logo.png" alt="" className="h-[104px] w-[104px] object-contain" />
             <img src="/images/logo-40-ans.png" alt="40 ans Hautefeuille" className="h-[80px] w-[80px] object-contain" />
           </div>
-          <span className="mt-2 font-serif text-xl font-semibold text-slate-800">HauteFeuille</span>
+          <span className="mt-2 font-serif text-xl font-semibold text-slate-800">Hautefeuille</span>
         </div>
         <nav className="flex flex-col gap-0 pt-4">
           {MENU_ITEMS.map((item, i) => {

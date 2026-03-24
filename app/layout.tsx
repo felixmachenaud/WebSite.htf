@@ -15,7 +15,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Collège Lycée HauteFeuille",
+  title: "Collège Lycée Hautefeuille",
   description: "Le parcours de votre enfant commence ici.",
 };
 

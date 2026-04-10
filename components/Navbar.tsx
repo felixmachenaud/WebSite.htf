@@ -14,7 +14,7 @@ export function Navbar() {
       <nav
         className="fixed left-0 right-0 top-0 z-[1000] flex min-h-[69px] items-center justify-between px-4 backdrop-blur-sm md:px-7"
         style={{
-          backgroundColor: "rgba(255, 255, 255, 0.85)",
+          backgroundColor: "rgba(209, 250, 229, 0.42)",
           paddingTop: "max(0.75rem, env(safe-area-inset-top))",
         }}
       >

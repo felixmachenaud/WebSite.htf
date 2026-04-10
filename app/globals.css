@@ -45,6 +45,30 @@ body.landing-scroll-active {
   overscroll-behavior: none;
 }
 
+/* Page d’accueil — 1er encadré : monte depuis le bas puis reste figé (fill-mode forwards) */
+@keyframes landing-overlay-first-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, clamp(72px, 24vh, 200px), 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.landing-overlay-first-in {
+  animation: landing-overlay-first-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .landing-overlay-first-in {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* Paragraphes institutionnels : barre verticale + lettrine (Collège / Lycée) */
 .instit-paragraph-wrap {
   display: flex;

@@ -78,16 +78,26 @@ function getLayerTranslateY(
 }
 
 /**
- * Pendant fwd_p2 : afficher l’encadré de la slide entrante une fois la révélation bien avancée.
- * Fenêtre large pour chevaucher le passage en `idle` (idx === i) et éviter tout clignotement.
+ * Fraction min. du viewport où la slide *entrante* doit être visible (depuis le bas) avant
+ * d’afficher l’encadré — évite l’encadré 2/3 tant que la 1re image occupe encore l’écran.
+ * `nextY` baisse quand la révélation progresse ; seuil : nextY <= vh * (1 - cette fraction).
  */
-const OVERLAY_FWD_P2_MAX_NEXTY_FRAC = 0.38;
+const OVERLAY_INCOMING_MIN_REVEAL_FRAC = 0.5;
 
 /**
- * Visibilité des encadrés : en `idle` sur la slide i, l’encadré i reste affiché (pas de test
- * upperFullyGone — il provoquait des faux négatifs / clignotements sur la 2e image).
- * Scroll retour : en `back_p2`, la slide idx-1 est au-dessus (z+) et recouvre la slide idx —
- * on masque l’encadré de la slide qu’on quitte jusqu’à l’idle sur la slide précédente.
+ * Slide sortante en `fwd_p2` : garder l’encadré jusqu’au moment où la révélation par le bas
+ * occupe la moitié basse du viewport (`nextY <= vh * fraction`). Avant : l’encadré disparaissait
+ * dès le début de la phase 2. `nextY` diminue quand la nouvelle image monte depuis le bas.
+ */
+const OVERLAY_OUTGOING_HIDE_NEXTY_FRAC = 0.5;
+
+/**
+ * Visibilité des encadrés (slides 2+).
+ *
+ * - `fwd_p1` + idx === i : encadré suit le peek (micro-scroll sans clignotement).
+ * - `fwd_p2` + idx === i - 1 : encadré entrant quand la révélation est assez avancée.
+ * - `fwd_p2` + idx === i (sortant) : encadré visible tant que nextY > seuil (50 % par défaut), puis masqué.
+ * - `idle` sur la slide i : encadré figé.
  */
 function shouldShowLandingOverlay(i: number, idx: number, m: EngineMode, vh: number, menuOpen: boolean): boolean {
   if (menuOpen) return false;
@@ -101,14 +111,20 @@ function shouldShowLandingOverlay(i: number, idx: number, m: EngineMode, vh: num
     return false;
   }
 
-  // i >= 1 — slide « interne »
+  // i >= 1
   if (m.mode === "idle" && idx === i) return true;
 
+  if (m.mode === "fwd_p1" && idx === i) return true;
+
   if (m.mode === "fwd_p2" && idx === i - 1) {
-    return m.nextY <= vh * OVERLAY_FWD_P2_MAX_NEXTY_FRAC;
+    const maxNextY = vh * (1 - OVERLAY_INCOMING_MIN_REVEAL_FRAC);
+    return m.nextY <= maxNextY;
   }
 
-  // Retour arrière : phase où l’image précédente (idx-1) se superpose et recouvre la courante
+  if (m.mode === "fwd_p2" && idx === i) {
+    return m.nextY > vh * OVERLAY_OUTGOING_HIDE_NEXTY_FRAC;
+  }
+
   if (m.mode === "back_p2" && idx === i) return false;
 
   if (m.mode === "back_p1" && idx === i) return true;
@@ -777,15 +793,22 @@ export function ScrollHijackLanding() {
     applyTransforms();
   }
 
+  /**
+   * Wheel : carrousel **uniquement** quand la page est en haut (`scrollY ≈ 0`). Dès qu’il y a un
+   * défilement document (même 2 px après la dernière slide), la molette doit d’abord gérer le
+   * scroll natif — sinon on reste « coincé » : impossible de remonter sans aller au bas de page.
+   * Zone contenu (`scrollY >= vh`) : toujours natif. Dernière slide + bas : natif pour entrer dans la page.
+   */
   function shouldHijackWheel(e: WheelEvent): boolean {
-    if (typeof window !== "undefined" && window.scrollY > 0.01) return false;
+    if (typeof window === "undefined") return true;
+    const vh = Math.max(vhRef.current, window.innerHeight, document.documentElement?.clientHeight ?? 0, 1);
+    const y = window.scrollY;
+    if (y >= vh - 0.5) return false;
+    if (y > 1) return false;
+
     const idx = engineIndex.current;
     const m = engineMode.current;
-    if (
-      idx === LANDING_IMAGES.length - 1 &&
-      m.mode === "idle" &&
-      e.deltaY > 0
-    ) {
+    if (idx === LANDING_IMAGES.length - 1 && m.mode === "idle" && e.deltaY > 0) {
       return false;
     }
     return true;
@@ -820,7 +843,17 @@ export function ScrollHijackLanding() {
 
     const onTouchMove = (e: TouchEvent) => {
       if (menuOpen) return;
-      if (typeof window !== "undefined" && window.scrollY > 0.01) return;
+      if (typeof window !== "undefined") {
+        const vh = Math.max(
+          vhRef.current,
+          window.innerHeight,
+          document.documentElement?.clientHeight ?? 0,
+          1
+        );
+        const sy = window.scrollY;
+        if (sy >= vh - 0.5) return;
+        if (sy > 1) return;
+      }
       if (lastTouchY.current == null) return;
       const y = e.touches[0].clientY;
       const raw = lastTouchY.current - y;
@@ -1008,7 +1041,11 @@ export function ScrollHijackLanding() {
                 {showOverlay && ov ? (
                   <div
                     className={`pointer-events-auto w-full max-w-[min(22rem,88vw)] rounded-[14px] border border-white/10 bg-black/65 px-5 py-6 text-center shadow-xl backdrop-blur-[2px] sm:max-w-[min(24rem,40vw)] sm:px-7 sm:py-7 md:max-h-[min(50vh,26rem)]${
-                      index === 0 ? " landing-overlay-first-in" : ""
+                      index === 0
+                        ? " landing-overlay-first-in"
+                        : index >= 1
+                          ? " landing-overlay-from-bottom"
+                          : ""
                     }`}
                   >
                     <h3 className="font-sans text-base font-bold uppercase leading-snug tracking-wide text-white sm:text-lg md:text-xl">

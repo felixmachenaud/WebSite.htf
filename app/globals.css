@@ -61,8 +61,14 @@ body.landing-scroll-active {
   animation: landing-overlay-first-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* 2e / 3e encadré : même entrée depuis le bas au moment où le seuil de révélation est franchi */
+.landing-overlay-from-bottom {
+  animation: landing-overlay-first-in 0.78s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .landing-overlay-first-in {
+  .landing-overlay-first-in,
+  .landing-overlay-from-bottom {
     animation: none;
     opacity: 1;
     transform: none;

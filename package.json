@@ -9,9 +9,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "hash-admin-password": "node scripts/hash-admin-password.mjs"
   },
   "dependencies": {
+    "@upstash/redis": "^1.39.0",
+    "@vercel/blob": "^2.8.0",
     "gsap": "^3.14.2",
     "lucide-react": "^0.577.0",
     "next": "16.3.7",

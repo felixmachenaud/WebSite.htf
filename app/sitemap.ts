@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { ACTUALITES } from "@/data/actualites";
+import { getContent } from "@/lib/content-store";
 import { siteUrl } from "@/lib/site-url";
 
 const PATHS = [
@@ -16,15 +16,16 @@ const PATHS = [
   "/confidentialite",
 ];
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
   const now = new Date();
+  const { actualites } = await getContent();
   return [
     ...PATHS.map((path) => ({
       url: `${base}${path === "/" ? "" : path}`,
       lastModified: now,
     })),
-    ...ACTUALITES.map((actu) => ({
+    ...actualites.filter((item) => item.slug).map((actu) => ({
       url: `${base}/nouvelles/${actu.slug}`,
       lastModified: now,
     })),

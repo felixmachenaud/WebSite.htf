@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { getContent } from "@/lib/content-store";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité | Collège Lycée Hautefeuille",
   description: "Finalités, destinataires et droits relatifs aux données du site Hautefeuille.",
 };
 
-export default function ConfidentialitePage() {
+export default async function ConfidentialitePage() {
+  const { chrome } = await getContent();
   return (
     <>
-      <Navbar />
+      <Navbar chrome={chrome} />
       <main className="min-h-screen bg-page safe-navbar-pt">
         <article className="mx-auto max-w-3xl px-6 py-16">
           <h1 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">

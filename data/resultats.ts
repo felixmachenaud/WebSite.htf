@@ -1,13 +1,6 @@
 /**
- * Données Résultats Bac — structure CMS-ready
- *
- * Intégration CMS (Sanity) :
- * 1. Créer un document type "resultatsBac" avec :
- *    - titre (string)
- *    - sousTitre (string)
- *    - annees (array of { annee: number, mentions: array of { label, value } })
- * 2. Remplacer l'import RESULTATS_BAC par un fetch async dans la page Lycée
- * 3. Passer les données au composant ResultatsSection
+ * Couleurs des mentions, laissées dans le code.
+ * Les chiffres et libellés viennent de SiteContent.
  */
 
 export const RESULTATS_COLORS = {
@@ -38,46 +31,24 @@ export interface ResultatsBacData {
   annees: ResultatAnnee[];
 }
 
-function buildMention(label: MentionLabel, value: number): ResultatMention {
+export function toResultatsBac(data: {
+  titre: string;
+  sousTitre: string;
+  annees: { annee: number; mentions: { label: string; value: number }[] }[];
+}): ResultatsBacData {
   return {
-    label,
-    value,
-    color: RESULTATS_COLORS[label],
+    titre: data.titre,
+    sousTitre: data.sousTitre,
+    annees: data.annees.map((annee) => ({
+      annee: annee.annee,
+      mentions: annee.mentions.map((mention) => ({
+        label: mention.label as MentionLabel,
+        value: mention.value,
+        color:
+          mention.label in RESULTATS_COLORS
+            ? RESULTATS_COLORS[mention.label as MentionLabel]
+            : "#94a3b8",
+      })),
+    })),
   };
 }
-
-// Données par défaut — à remplacer par le CMS
-export const RESULTATS_BAC: ResultatsBacData = {
-  titre: "LES RÉSULTATS",
-  sousTitre: "100 % de réussite au bac, 91 % de mentions",
-  annees: [
-    {
-      annee: 2025,
-      mentions: [
-        buildMention("TB", 3),
-        buildMention("B", 18.4),
-        buildMention("AB", 52.6),
-        buildMention("Admis", 26),
-      ],
-    },
-    {
-      annee: 2024,
-      mentions: [
-        buildMention("TB", 24),
-        buildMention("B", 26),
-        buildMention("AB", 30),
-        buildMention("Passable", 20),
-      ],
-    },
-    {
-      annee: 2023,
-      mentions: [
-        buildMention("TB", 15.2),
-        buildMention("B", 36.4),
-        buildMention("AB", 42.4),
-        buildMention("Passable", 3),
-        buildMention("Échec", 3),
-      ],
-    },
-  ],
-};

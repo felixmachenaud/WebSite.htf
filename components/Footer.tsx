@@ -1,8 +1,19 @@
 import Link from "next/link";
+import { getContent } from "@/lib/content-store";
 
 const GREEN_COLOR = "#14532d";
 
-export function Footer() {
+function lines(value: string) {
+  return value.split("\n").map((line) => (
+    <span key={line}>
+      {line}
+      <br />
+    </span>
+  ));
+}
+
+export async function Footer() {
+  const { footer, chrome } = await getContent();
   return (
     <div className="w-full">
       <footer
@@ -12,58 +23,40 @@ export function Footer() {
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3 md:gap-0">
           <div className="flex flex-col items-center md:items-start md:border-r md:border-black md:pr-8">
             <img src="/images/logo.png" alt="" className="h-20 w-20 object-contain" />
-            <span className="mt-4 font-serif text-2xl font-bold text-slate-900">Hautefeuille</span>
+            <span className="mt-4 font-serif text-2xl font-bold text-slate-900">{chrome.brand}</span>
             <span className="mt-1 text-sm font-medium uppercase tracking-wider text-slate-600">
-              Collège Lycée
+              {chrome.schoolLine}
             </span>
           </div>
 
           <div className="flex flex-col md:border-r md:border-black md:px-8">
-            <h2 className="font-bold uppercase tracking-wider text-slate-900">
-              Lettre d&apos;information
-            </h2>
-            <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              Nouvelles, concours, projets internationaux, initiatives de solidarité... L&apos;inscription
-              à la lettre d&apos;information sera bientôt disponible.
-            </p>
+            <h2 className="font-bold uppercase tracking-wider text-slate-900">{footer.newsletterTitle}</h2>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">{footer.newsletterBody}</p>
           </div>
 
           <div className="flex flex-col md:pl-8">
-            <h2 className="font-bold uppercase tracking-wider text-slate-900">
-              Contactez-nous
-            </h2>
-            <p className="mt-4 font-medium text-slate-800">Collège Lycée Hautefeuille</p>
-            <p className="mt-2 text-sm text-slate-600">
-              5 Rue Armand Silvestre
-              <br />
-              92400 Courbevoie, France
-            </p>
-            <p className="mt-2 text-sm text-slate-600">
-              26 rue Pierre Joigneaux
-              <br />
-              92270 Bois-Colombes, France
-            </p>
-            <a href="tel:+33143332402" className="mt-4 text-sm text-slate-600 hover:text-slate-900">
-              01 43 33 24 02
+            <h2 className="font-bold uppercase tracking-wider text-slate-900">{footer.contactTitle}</h2>
+            <p className="mt-4 font-medium text-slate-800">{footer.schoolName}</p>
+            <p className="mt-2 text-sm text-slate-600">{lines(footer.addressCourbevoie)}</p>
+            <p className="mt-2 text-sm text-slate-600">{lines(footer.addressBoisColombes)}</p>
+            <a href={footer.phoneHref} className="mt-4 text-sm text-slate-600 hover:text-slate-900">
+              {footer.phone}
             </a>
-            <a
-              href="mailto:hautefeuille92@gmail.com"
-              className="mt-1 text-sm text-slate-600 hover:text-slate-900"
-            >
-              hautefeuille92@gmail.com
+            <a href={`mailto:${footer.email}`} className="mt-1 text-sm text-slate-600 hover:text-slate-900">
+              {footer.email}
             </a>
           </div>
         </div>
 
         <nav
-          aria-label="Informations légales"
+          aria-label={footer.legalMentions}
           className="mx-auto mt-12 flex max-w-6xl flex-wrap gap-x-6 gap-y-2 border-t border-slate-200 pt-6 text-sm text-slate-600"
         >
           <Link href="/mentions-legales" className="hover:text-slate-900">
-            Mentions légales
+            {footer.legalMentions}
           </Link>
           <Link href="/confidentialite" className="hover:text-slate-900">
-            Politique de confidentialité
+            {footer.legalPrivacy}
           </Link>
         </nav>
       </footer>

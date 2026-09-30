@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { getContent } from "@/lib/content-store";
 
 export const metadata: Metadata = {
   title: "Mentions légales | Collège Lycée Hautefeuille",
   description: "Éditeur, responsable de publication et hébergeur du site du Collège Lycée Hautefeuille.",
 };
 
-export default function MentionsLegalesPage() {
+export default async function MentionsLegalesPage() {
+  const { chrome } = await getContent();
   return (
     <>
-      <Navbar />
+      <Navbar chrome={chrome} />
       <main className="min-h-screen bg-page safe-navbar-pt">
         <article className="mx-auto max-w-3xl px-6 py-16">
           <h1 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">

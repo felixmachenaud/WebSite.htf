@@ -4,6 +4,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState, useSyncExternalSto
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarMenu } from "./SidebarMenu";
+import type { SiteContent } from "@/lib/site-content";
 
 // =============================================================================
 // Landing — scroll hijack (wheel + rAF), peek + révélation (tout au scroll)
@@ -188,35 +189,6 @@ const LANDING_IMAGE_FILTERS: readonly string[] = [
   "grayscale(1) brightness(1.06) contrast(0.93)",
 ];
 
-const LANDING_OVERLAYS: readonly {
-  title: string;
-  body: string;
-  href: string;
-  /** Libellé du bouton = nom de la page cible */
-  buttonLabel: string;
-}[] = [
-  {
-    title: "LE VOYAGE DE VOTRE ENFANT COMMENCE PAR UN PREMIER PAS",
-    body:
-      "Et jusqu'à ce que vous atteigniez l'objectif, vous parcourrez un chemin plein d'expériences et d'opportunités.",
-    href: "/a-propos/histoire/",
-    buttonLabel: "Notre histoire",
-  },
-  {
-    title: "ENRACINÉ DANS LA FAMILLE",
-    body: "Vous apprendrez à vous débrouiller avec liberté et responsabilité.",
-    href: "/a-propos/lycee/",
-    buttonLabel: "Le lycée",
-  },
-  {
-    title: "IL NE MARCHERA JAMAIS SEUL",
-    body:
-      "Car en cours de route, il acquerra les valeurs de solidarité, de respect et d'amitié.",
-    href: "/a-propos/projet-educatif/",
-    buttonLabel: "Projet éducatif",
-  },
-];
-
 const LOGO_PX_FULL = 52;
 const LOGO_PX_COMPACT = 32;
 
@@ -283,7 +255,13 @@ function computePathProgressPx(vh: number, p1Max: number, idx: number, m: Engine
 
 // =============================================================================
 
-export function ScrollHijackLanding() {
+export function ScrollHijackLanding({
+  overlays,
+  chrome,
+}: {
+  overlays: SiteContent["landing"]["overlays"];
+  chrome: SiteContent["chrome"];
+}) {
   const [menuOpen, setMenuOpen] = useState(false);
   /** Défilement document : le hero fixe se translate vers le haut comme une page normale. */
   const [scrollState, setScrollState] = useState({ y: 0, vh: 800 });
@@ -1024,7 +1002,7 @@ export function ScrollHijackLanding() {
         <div className="pointer-events-none fixed inset-0 z-[856] overflow-hidden">
           {LANDING_IMAGES.map((_, index) => {
             const showOverlay = shouldShowLandingOverlay(index, idxNow, modeNow, vhPx, menuOpen);
-            const ov = LANDING_OVERLAYS[index];
+            const ov = overlays[index];
             const y = layerYsRef.current[index] ?? 0;
             return (
               <div
@@ -1132,12 +1110,12 @@ export function ScrollHijackLanding() {
           type="button"
           onClick={() => setMenuOpen((o) => !o)}
           className="flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center gap-2 text-black"
-          aria-label="Menu"
+          aria-label={chrome.menuButton}
         >
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          <span className="hidden font-semibold sm:inline">MENU</span>
+          <span className="hidden font-semibold sm:inline">{chrome.menuWord}</span>
         </button>
         <Link
           href="/"
@@ -1151,22 +1129,22 @@ export function ScrollHijackLanding() {
             className="shrink-0 object-contain"
             style={{ width: LOGO_PX_FULL, height: LOGO_PX_FULL }}
           />
-          <span className="truncate">Hautefeuille</span>
+          <span className="truncate">{chrome.brand}</span>
         </Link>
         <div className="hidden min-w-[200px] items-center justify-end gap-4 md:flex lg:gap-6">
           <a
-            href="https://www.ecoledirecte.com"
+            href={chrome.ecoleDirecteHref}
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium uppercase tracking-wider text-slate-800 hover:text-slate-600"
           >
-            École directe
+            {chrome.ecoleDirecte}
           </a>
           <Link
             href="/contact"
             className="font-medium uppercase tracking-wider text-slate-800 hover:text-slate-600"
           >
-            Contact
+            {chrome.contactLabel}
           </Link>
         </div>
         <div className="w-[44px] flex-shrink-0 md:hidden" aria-hidden />
@@ -1188,7 +1166,7 @@ export function ScrollHijackLanding() {
           paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 1rem))",
         }}
       >
-        <SidebarMenu onClose={() => setMenuOpen(false)} currentPath={pathname} />
+        <SidebarMenu items={chrome.nav} onClose={() => setMenuOpen(false)} currentPath={pathname} />
       </div>
     </>
   );

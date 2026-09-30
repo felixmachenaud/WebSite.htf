@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 30 septembre 2026 — vague 1 |
+| Dernière mise à jour | 30 septembre 2026 — vague 2 enregistrée, build OK, recette admin non faite |
 
 Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée.
 
@@ -89,12 +89,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : ESLint 8 et chaîne associée.
 - Action : `eslint-config-next` est aligné sur Next 16. npm signale `eslint@9.39.5` comme version plus supportée. La config, le passage de `npm run lint` et les avis hauts restants (`brace-expansion`, `browserslist`, `picomatch`) restent en vague 3.
 
-### SEC-12 [OPEN] [MEDIUM] 2026-09-30
+### SEC-12 [MONITOR] [MEDIUM] 2026-09-30
 
-- Composant : authentification admin (absente)
-- Constat : pas de rate-limit ni de CSRF sur un login qui n'existe pas encore.
-- Cause : pas de route d'auth.
-- Action : à créer avec le login, vague 2.
+- Composant : `app/api/admin/login/route.ts`, `lib/admin-sessions.ts`
+- Constat : le login limite les essais et exige l'en-tête `x-hautefeuille-admin`.
+- Cause : ces contrôles n'ont pas été exercés sur une Preview avec Redis.
+- Action : smoke test login (mauvais mot de passe, puis trop d'essais) avant d'ouvrir `/admin`.
 
 ### SEC-13 [OPEN] [MEDIUM] 2026-09-30
 
@@ -108,14 +108,14 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Composant : site public
 - Constat : pas d'authentification visiteur.
 - Cause : brochure publique, comportement voulu.
-- Action : conserver. Seul l'accès admin est à créer (vague 2).
+- Action : conserver. L'accès admin existe ; les visiteurs restent sans compte.
 
-### AUTH-02 [OPEN] [HIGH] 2026-09-30
+### AUTH-02 [MONITOR] [HIGH] 2026-09-30
 
-- Composant : `/admin` (absent)
-- Constat : aucun modèle d'auth (scrypt, session Redis, cookie opaque, pepper).
-- Cause : mini-CMS non implémenté.
-- Action : vague 2. Ne pas ouvrir `/admin` avant.
+- Composant : `lib/admin-auth.ts`, `lib/admin-sessions.ts`, `app/api/admin/`
+- Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis (fichier local hors production).
+- Cause : le parcours login → édition → logout n'a pas été joué. Sans variables, `/admin` reste « non configurée ».
+- Action : poser les variables sur la Preview, puis faire le smoke test avant toute ouverture.
 
 ### CODE-01 [OPEN] [HIGH] 2026-09-30
 
@@ -229,26 +229,26 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : ResponsiveContainer mesuré avant layout.
 - Action : vague 3.
 
-### CMS-01 [OPEN] [HIGH] 2026-09-30
+### CMS-01 [MONITOR] [HIGH] 2026-09-30
 
-- Composant : `lib/`, `app/admin`
-- Constat : aucun fichier du mini-CMS.
-- Cause : non implémenté. Bloquant avant d'ouvrir `/admin`, pas avant la brochure.
-- Action : vague 2.
+- Composant : `lib/site-content.ts`, `lib/content-store.ts`, `app/admin`, `app/api/admin`
+- Constat : le mini-CMS est dans le code. `next build` du 30 septembre 2026 a généré `/admin` et les trois routes API.
+- Cause : pas de commit de recette, pas de Blob ni de Redis configurés, pas de smoke test.
+- Action : ne pas merger vers la production tant que le smoke test Preview n'est pas fait.
 
-### CMS-02 [OPEN] [MEDIUM] 2026-09-30
+### CMS-02 [MONITOR] [MEDIUM] 2026-09-30
 
-- Composant : textes des pages
-- Constat : carte des textes à extraire vers `SiteContent` non faite.
-- Cause : textes en dur.
-- Action : vague 2.
+- Composant : pages publiques, `lib/site-content.ts`
+- Constat : les textes des pages branchées passent par `getContent()`. Les pages juridiques restent hors éditeur.
+- Cause : relecture visuelle non faite après branchement. Les couleurs de mentions restent dans `data/resultats.ts`.
+- Action : comparer l'accueil, le collège, le lycée, l'histoire, le projet et les infos pratiques avec la version d'avant.
 
-### CMS-03 [OPEN] [HIGH] 2026-09-30
+### CMS-03 [FIXED] [HIGH] 2026-09-30
 
 - Composant : `docs/CMS-RESULTATS.md`, `data/resultats.ts`
-- Constat : ces fichiers prescrivent Sanity, en contradiction avec le mini-CMS retenu.
+- Constat : ces fichiers prescrivaient Sanity.
 - Cause : document antérieur à la décision.
-- Action : vague 2.
+- Action : le document pointe vers `SiteContent`. Les couleurs restent dans le code, les chiffres dans le CMS.
 
 ### CMS-04 [OPEN] [LOW] 2026-09-30
 

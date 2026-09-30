@@ -3,24 +3,16 @@
 import React from "react";
 import Link from "next/link";
 
-const MENU_ITEMS = [
-  { href: "/", label: "Accueil" },
-  { href: "/a-propos/college", label: "Collège" },
-  { href: "/a-propos/lycee", label: "Lycée" },
-  { href: "/a-propos/information-generale", label: "Information générale" },
-  { href: "/a-propos/histoire", label: "Histoire" },
-  { href: "/a-propos/projet-educatif", label: "Notre projet éducatif" },
-  { href: "/nouvelles", label: "Actualités" },
-  { href: "/contact", label: "Contact" },
-] as const;
+import type { SiteContent } from "@/lib/site-content";
 
 interface SidebarMenuProps {
+  items: SiteContent["chrome"]["nav"];
   onClose?: () => void;
   currentPath?: string;
   linkClassName?: string;
 }
 
-export function SidebarMenu({ onClose, currentPath = "", linkClassName = "text-lg font-medium text-slate-800 hover:text-slate-600" }: SidebarMenuProps) {
+export function SidebarMenu({ items, onClose, currentPath = "", linkClassName = "text-lg font-medium text-slate-800 hover:text-slate-600" }: SidebarMenuProps) {
   return (
     <div className="relative flex h-full">
       <div className="flex flex-1 flex-col pl-8">
@@ -32,7 +24,7 @@ export function SidebarMenu({ onClose, currentPath = "", linkClassName = "text-l
           <span className="mt-2 font-serif text-xl font-semibold text-slate-800">Hautefeuille</span>
         </div>
         <nav className="flex flex-col gap-0 pt-4">
-          {MENU_ITEMS.map((item, i) => {
+          {items.map((item, i) => {
             const isActive =
               currentPath === item.href ||
               (item.href !== "/" && currentPath.startsWith(item.href));

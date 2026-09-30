@@ -1,60 +1,53 @@
+import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { getContent } from "@/lib/content-store";
 
-export const metadata = {
-  title: "Contact | Collège Lycée Hautefeuille",
-  description: "Contactez le Collège Lycée Hautefeuille.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { contact } = await getContent();
+  return { title: contact.metaTitle, description: contact.metaDescription };
+}
 
-// À configurer : remplacez par votre lien Calendly
-const CALENDLY_URL = "https://calendly.com/hautefeuille";
-
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getContent();
+  const { contact, footer, chrome } = content;
   return (
     <>
-      <Navbar />
+      <Navbar chrome={chrome} />
       <main className="min-h-screen bg-page safe-navbar-pt">
         <div className="mx-auto max-w-2xl px-6 py-20">
-          <h1 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">
-            Contact
-          </h1>
-          <p className="mt-6 font-sans text-base leading-relaxed text-slate-600">
-            Pour toute question ou demande de rendez-vous, n&apos;hésitez pas à nous contacter.
-          </p>
+          <h1 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">{contact.title}</h1>
+          <p className="mt-6 font-sans text-base leading-relaxed text-slate-600">{contact.intro}</p>
 
           <div className="mt-12 space-y-8">
             <div>
-              <h2 className="font-serif text-lg font-semibold text-slate-900">
-                Téléphone
-              </h2>
+              <h2 className="font-serif text-lg font-semibold text-slate-900">{contact.phoneTitle}</h2>
               <a
-                href="tel:+33143332402"
+                href={footer.phoneHref}
                 className="mt-2 block rounded-lg border border-slate-200 bg-slate-50/80 px-4 py-3 font-sans text-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.8)] transition-colors hover:bg-slate-100/80 hover:text-slate-900"
               >
-                01 43 33 24 02
+                {footer.phone}
               </a>
             </div>
 
             <div>
-              <h2 className="font-serif text-lg font-semibold text-slate-900">
-                Courriel
-              </h2>
+              <h2 className="font-serif text-lg font-semibold text-slate-900">{contact.emailTitle}</h2>
               <a
-                href="mailto:hautefeuille92@gmail.com"
+                href={`mailto:${footer.email}`}
                 className="mt-2 block rounded-lg border border-slate-200 bg-slate-50/80 px-4 py-3 font-sans text-slate-700 shadow-[0_1px_2px_rgba(0,0,0,0.06),inset_0_1px_0_rgba(255,255,255,0.8)] transition-colors hover:bg-slate-100/80 hover:text-slate-900"
               >
-                hautefeuille92@gmail.com
+                {footer.email}
               </a>
             </div>
 
             <div className="pt-4">
               <a
-                href={CALENDLY_URL}
+                href={contact.calendlyUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded border-2 border-slate-800 bg-slate-800 px-8 py-3 font-medium text-white transition-colors hover:bg-slate-900 hover:border-slate-900"
               >
-                Prendre rendez-vous (Calendly)
+                {contact.calendlyLabel}
               </a>
             </div>
           </div>

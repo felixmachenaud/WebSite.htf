@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ACTUALITES } from "@/data/actualites";
+import { DEFAULT_CONTENT } from "@/lib/site-content";
 
 interface ActualitesTimelineProps {
   visible?: boolean;
@@ -19,9 +19,9 @@ export function ActualitesTimeline({ visible = true }: ActualitesTimelineProps) 
         Actualités
       </h3>
       <div className="space-y-0">
-        {ACTUALITES.map((item, i) => (
+        {DEFAULT_CONTENT.actualites.map((item, i) => (
           <div key={item.id} className="relative flex gap-3 py-3">
-            {i < ACTUALITES.length - 1 && (
+            {i < DEFAULT_CONTENT.actualites.length - 1 && (
               <div
                 className="absolute left-[5px] top-8 h-full w-px bg-white/50"
                 style={{ height: "calc(100% + 8px)" }}

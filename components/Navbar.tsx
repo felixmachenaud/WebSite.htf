@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import type { SiteContent } from "@/lib/site-content";
 import { SidebarMenu } from "./SidebarMenu";
 import { usePathname } from "next/navigation";
 
-export function Navbar() {
+export function Navbar({ chrome }: { chrome: SiteContent["chrome"] }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -22,31 +23,31 @@ export function Navbar() {
           type="button"
           onClick={() => setMenuOpen((o) => !o)}
           className="flex min-h-[44px] min-w-[44px] flex-shrink-0 items-center gap-2 text-black"
-          aria-label="Menu"
+          aria-label={chrome.menuButton}
         >
           <svg className="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
           </svg>
-          <span className="hidden font-semibold sm:inline">MENU</span>
+          <span className="hidden font-semibold sm:inline">{chrome.menuWord}</span>
         </button>
         <Link href="/" scroll={false} className="absolute left-1/2 flex -translate-x-1/2 items-center gap-2 font-serif text-xl font-semibold text-slate-800 sm:gap-2.5 sm:text-2xl">
           <img src="/images/logo.png" alt="" className="h-8 w-8 object-contain sm:h-9 sm:w-9" />
-          <span className="truncate">Hautefeuille</span>
+          <span className="truncate">{chrome.brand}</span>
         </Link>
         <div className="hidden min-w-[200px] items-center justify-end gap-4 md:flex lg:gap-6">
           <a
-            href="https://www.ecoledirecte.com"
+            href={chrome.ecoleDirecteHref}
             target="_blank"
             rel="noopener noreferrer"
             className="font-medium uppercase tracking-wider text-slate-800 hover:text-slate-600"
           >
-            École directe
+            {chrome.ecoleDirecte}
           </a>
           <Link
             href="/contact"
             className="font-medium uppercase tracking-wider text-slate-800 hover:text-slate-600"
           >
-            Contact
+            {chrome.contactLabel}
           </Link>
         </div>
         <div className="w-[44px] flex-shrink-0 md:hidden" aria-hidden />
@@ -69,7 +70,7 @@ export function Navbar() {
           paddingTop: "max(3rem, calc(env(safe-area-inset-top) + 1rem))",
         }}
       >
-        <SidebarMenu onClose={() => setMenuOpen(false)} currentPath={pathname} />
+        <SidebarMenu items={chrome.nav} onClose={() => setMenuOpen(false)} currentPath={pathname} />
       </div>
     </>
   );

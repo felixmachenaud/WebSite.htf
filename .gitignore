@@ -28,6 +28,9 @@ yarn-error.log*
 .env.*
 !.env.example
 
+# contenu et sessions locales du mini-CMS
+.data/
+
 # Vercel
 .vercel
 

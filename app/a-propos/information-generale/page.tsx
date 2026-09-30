@@ -101,9 +101,9 @@ export default function InformationGeneralePage() {
       />
 
       <div className="mx-auto max-w-5xl px-6 py-12">
-        <h1 className="text-center font-sans text-2xl font-bold uppercase tracking-wide text-slate-900 md:text-3xl">
+        <p className="text-center font-sans text-2xl font-bold uppercase tracking-wide text-slate-900 md:text-3xl">
           Bienvenue à l&apos;année scolaire 2025 / 2026
-        </h1>
+        </p>
         <p
           className="mt-4 text-center font-sans text-sm font-semibold uppercase tracking-wider md:text-base"
           style={{ color: GREEN }}

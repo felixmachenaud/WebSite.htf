@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 30 septembre 2026 — vague 0 |
+| Dernière mise à jour | 30 septembre 2026 — vague 1 |
 
 Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée.
 
@@ -33,26 +33,26 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : `onSubmit` annulait l'envoi, sans endpoint.
 - Action : formulaire retiré. Texte « inscription bientôt disponible », sans champ.
 
-### SEC-04 [OPEN] [HIGH] 2026-09-30
+### SEC-04 [FIXED] [HIGH] 2026-09-30
 
 - Composant : `next.config.js`
 - Constat : aucun en-tête de sécurité, `X-Powered-By: Next.js` présent.
 - Cause : configuration sans `headers` ni `poweredByHeader: false`.
-- Action : vague 1.
+- Action : CSP (polices auto-hébergées, `frame-src` limité à Google), `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options: DENY` et `frame-ancestors 'none'`, `poweredByHeader: false`. HSTS seulement si `VERCEL=1` ou si `NEXT_PUBLIC_SITE_URL` est en HTTPS, pour ne pas l'envoyer sur le HTTP local.
 
-### SEC-05 [OPEN] [HIGH] 2026-09-30
+### SEC-05 [FIXED] [HIGH] 2026-09-30
 
-- Composant : `.gitignore`
-- Constat : `.env` n'est pas ignoré, pas de `.env.example`.
-- Cause : seules les variantes `.env*.local` sont ignorées.
-- Action : vague 1, avant tout secret du mini-CMS.
+- Composant : `.gitignore`, `.env.example`
+- Constat : `.env` n'était pas ignoré, pas de contrat d'environnement.
+- Cause : seules les variantes `.env*.local` étaient ignorées.
+- Action : `.env` et `.env.*` ignorés, exception `!.env.example`. L'exemple liste les noms sans valeur.
 
-### SEC-06 [OPEN] [HIGH] 2026-09-30
+### SEC-06 [MONITOR] [HIGH] 2026-09-30
 
 - Composant : `app/a-propos/page.tsx`, `components/AdresseCards.tsx`, `app/contact/page.tsx`
-- Constat : image picsum, iframes Google Maps sans consentement, URL Calendly commentée « à configurer » (`https://calendly.com/hautefeuille`).
-- Cause : tiers chargés sans cadre. L'établissement n'a pas confirmé le compte Calendly.
-- Action : vague 1 pour picsum et les cartes. L'URL Calendly n'est pas modifiée tant que l'école ne la confirme pas.
+- Constat : image picsum, iframes Google Maps sans action, URL Calendly non confirmée (`https://calendly.com/hautefeuille`).
+- Cause : tiers chargés sans cadre.
+- Action : picsum retiré, photo locale sur `/a-propos`. La carte Google ne se charge qu'au clic. L'URL Calendly est inchangée tant que l'école ne confirme pas le compte.
 
 ### SEC-07 [FIXED] [CRITICAL] 2026-09-30
 
@@ -166,12 +166,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : pas de source unique.
 - Action : vague 3, après extraction CMS.
 
-### CODE-08 [OPEN] [MEDIUM] 2026-09-30
+### CODE-08 [FIXED] [MEDIUM] 2026-09-30
 
 - Composant : `app/nouvelles/[slug]/page.tsx`
 - Constat : texte de chantier public « Page à enrichir via le CMS ».
 - Cause : placeholder laissé visible.
-- Action : vague 1.
+- Action : phrase retirée. L'article affiche son extrait.
 
 ### CODE-09 [OPEN] [LOW] 2026-09-30
 
@@ -194,12 +194,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : fichiers sources servis tels quels.
 - Action : vague 3. `collage-3.3.jpg` (~7 Mo) reste servi en vague 0.
 
-### ARCH-03 [OPEN] [HIGH] 2026-09-30
+### ARCH-03 [FIXED] [HIGH] 2026-09-30
 
-- Composant : metadata, favicon, sitemap
-- Constat : favicon 404, pas de robots/sitemap/Open Graph/`metadataBase`, pas de H1 sur l'accueil, double H1 sur Informations générales.
+- Composant : `app/layout.tsx`, `app/favicon.ico`, `app/robots.ts`, `app/sitemap.ts`, `app/page.tsx`, `app/a-propos/information-generale/page.tsx`
+- Constat : favicon 404, pas de robots/sitemap/Open Graph, pas de H1 sur l'accueil, double H1 sur Informations générales.
 - Cause : SEO de base non posé.
-- Action : vague 1.
+- Action : favicon, robots, sitemap, Open Graph et `metadataBase` ajoutés. H1 unique sur l'accueil et sur Informations générales. L'URL canonique de production reste PH-03.
 
 ### ARCH-04 [OPEN] [HIGH] 2026-09-30
 
@@ -208,12 +208,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : interaction uniquement à la molette / au clic.
 - Action : vague 3.
 
-### ARCH-05 [OPEN] [HIGH] 2026-09-30
+### ARCH-05 [FIXED] [HIGH] 2026-09-30
 
-- Composant : menu mobile
+- Composant : `components/SidebarMenu.tsx`
 - Constat : lien Contact absent du menu mobile.
-- Cause : Contact n'est rendu que dans la barre desktop.
-- Action : vague 1.
+- Cause : Contact n'était rendu que dans la barre visible à partir de `md`.
+- Action : entrée Contact ajoutée au menu latéral, utilisé par l'accueil et les pages intérieures.
 
 ### ARCH-06 [OPEN] [MEDIUM] 2026-09-30
 
@@ -270,3 +270,10 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Constat : avis modéré (arrêt du processus sur entrée invalide), apparu après la montée de Next. Aucun avis critique ou haut restant sur les dépendances de production. Trois avis hauts restent côté outils de dev (`brace-expansion`, `browserslist`, `picomatch`).
 - Cause : chaîne Browserslist / caniuse embarquée par le build.
 - Action : hors correctif Next immédiat. À revoir en vague 3 avec l'audit CI. Ne pas lancer `npm audit fix` à l'aveugle.
+
+### PH-03 [MONITOR] [MEDIUM] 2026-09-30
+
+- Composant : `lib/site-url.ts`, `.env.example`
+- Constat : le domaine public de production n'est pas dans le dépôt. Sans `NEXT_PUBLIC_SITE_URL`, sitemap, robots et Open Graph utilisent `http://localhost:3000`.
+- Cause : aucun domaine confirmé.
+- Action : renseigner `NEXT_PUBLIC_SITE_URL` en HTTPS sur Vercel avant la mise en ligne. HSTS dépend de cette valeur ou de `VERCEL=1`.

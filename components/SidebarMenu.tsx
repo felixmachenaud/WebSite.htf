@@ -11,6 +11,7 @@ const MENU_ITEMS = [
   { href: "/a-propos/histoire", label: "Histoire" },
   { href: "/a-propos/projet-educatif", label: "Notre projet éducatif" },
   { href: "/nouvelles", label: "Actualités" },
+  { href: "/contact", label: "Contact" },
 ] as const;
 
 interface SidebarMenuProps {

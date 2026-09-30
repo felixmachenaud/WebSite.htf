@@ -40,9 +40,6 @@ export default async function ActualitePage({
         <div className="mx-auto max-w-3xl px-6 py-16">
           <div className="prose prose-slate max-w-none">
             <p className="text-lg leading-relaxed text-slate-700">{actu.excerpt}</p>
-            <p className="mt-4 text-sm text-slate-500">
-              Page à enrichir via le CMS (texte et photos supplémentaires).
-            </p>
           </div>
           <Link
             href="/nouvelles"

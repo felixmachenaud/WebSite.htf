@@ -71,9 +71,8 @@ export default function ConfidentialitePage() {
               Une adresse sur le domaine de l&apos;établissement est à confirmer.
             </li>
             <li>
-              Google Maps : les pages d&apos;informations pratiques intègrent des cartes. Google peut
-              recevoir votre adresse IP. Le remplacement par un affichage qui ne charge la carte
-              qu&apos;après une action est prévu.
+              Google Maps : la carte n&apos;est chargée qu&apos;après un clic sur « Afficher la carte ».
+              Google peut alors recevoir votre adresse IP.
             </li>
             <li>
               Calendly : le bouton de rendez-vous ouvre https://calendly.com/hautefeuille dans un

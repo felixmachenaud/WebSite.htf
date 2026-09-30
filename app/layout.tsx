@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Source_Serif_4, DM_Sans } from "next/font/google";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const sourceSerif = Source_Serif_4({
@@ -14,9 +15,19 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
+const description = "Le parcours de votre enfant commence ici.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl()),
   title: "Collège Lycée Hautefeuille",
-  description: "Le parcours de votre enfant commence ici.",
+  description,
+  openGraph: {
+    title: "Collège Lycée Hautefeuille",
+    description,
+    locale: "fr_FR",
+    type: "website",
+    images: [{ url: "/images/logo.png", alt: "Collège Lycée Hautefeuille" }],
+  },
 };
 
 export const viewport: Viewport = {

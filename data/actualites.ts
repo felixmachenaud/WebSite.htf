@@ -4,7 +4,7 @@ export interface Actualite {
   slug: string;
   titre: string;
   excerpt: string;
-  imageUrl: string;
+  imageUrl?: string;
   date?: string;
 }
 
@@ -23,7 +23,6 @@ export const ACTUALITES: Actualite[] = [
     titre: "Une semaine à Rome qui fait parler le latin",
     excerpt:
       "À l'occasion du week-end de l'Ascension, nos élèves latinistes de seconde ont eu la chance de séjourner à Rome, au sein de l'Académie Vivarium Novum. Cette institution unique accueille chaque année des étudiants venus du monde entier pour s'immerger pleinement dans la langue et la culture latines.",
-    imageUrl: "/images/nouvelles/rome-latin.jpg",
   },
   {
     id: "3",
@@ -31,6 +30,5 @@ export const ACTUALITES: Actualite[] = [
     titre: "Les cinquièmes à Montmartre",
     excerpt:
       "Pour la deuxième année consécutive, les élèves de cinquième se sont rendus à la Basilique du Sacré-Cœur de Montmartre pour une journée et une nuit d'adoration. Ce temps fort de l'année, désormais bien ancré dans le parcours des collégiens, propose une alternance entre des temps de prière devant le Saint-Sacrement et des moments de cohésion et d'amitiés partagés à travers des activités sportives. Une manière concrète pour les garçons de se mettre à l'écoute du Cœur de Jésus, tout en vivant pleinement la joie et l'esprit d'équipe.",
-    imageUrl: "/images/nouvelles/cinquiemes-montmartre.jpg",
   },
 ];

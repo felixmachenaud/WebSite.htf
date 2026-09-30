@@ -48,27 +48,22 @@ const SECTION_COPY: Record<
   "materiel-scolaire": {
     title: "Matériel scolaire",
     body: "Listes de fournitures par niveau et recommandations pour bien équiper votre enfant tout au long de l'année.",
-    imageSrc: "/images/informations-generales/materiel-scolaire.jpg",
   },
   "menu-scolaire": {
     title: "Menu scolaire",
     body: "Menus de la cantine, équilibre alimentaire et informations sur les inscriptions.",
-    imageSrc: "/images/informations-generales/menu-scolaire.jpg",
   },
   services: {
     title: "Services",
     body: "Services proposés aux familles et aux élèves au sein de l'établissement.",
-    imageSrc: "/images/informations-generales/services.jpg",
   },
   calendrier: {
     title: "Calendrier",
     body: "Vacances scolaires, jours fériés et dates importantes de l'année scolaire.",
-    imageSrc: "/images/informations-generales/calendrier.jpg",
   },
   extrascolaire: {
     title: "Extrascolaire",
     body: "Activités proposées en dehors des cours : sport, culture et projets collectifs.",
-    imageSrc: "/images/informations-generales/extrascolaire.jpg",
   },
 };
 
@@ -177,6 +172,17 @@ export default function InformationGeneralePage() {
                   <div className="mt-8">
                     <InstallationsPhotos images={copy.images} />
                   </div>
+                </section>
+              );
+            } else if (!copy.imageSrc) {
+              sectionContent = (
+                <section id={item.id} className="scroll-mt-24 py-8">
+                  <h2 className="font-sans text-xl font-bold uppercase tracking-wide text-slate-900 md:text-2xl">
+                    {copy.title}
+                  </h2>
+                  <p className="mt-4 font-sans text-base leading-relaxed text-slate-700 md:text-lg">
+                    {copy.body}
+                  </p>
                 </section>
               );
             } else {

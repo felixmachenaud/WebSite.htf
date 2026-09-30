@@ -19,9 +19,11 @@ export function ActualitesGrid({ variant = "default", className = "" }: Props) {
     <div className={`grid gap-8 md:grid-cols-3 ${className}`.trim()}>
       {ACTUALITES.map((actu) => (
         <article key={actu.id} className={articleClass}>
-          <div className="aspect-video w-full overflow-hidden bg-slate-200">
-            <img src={actu.imageUrl} alt="" className="h-full w-full object-cover" />
-          </div>
+          {actu.imageUrl ? (
+            <div className="aspect-video w-full overflow-hidden bg-slate-200">
+              <img src={actu.imageUrl} alt="" className="h-full w-full object-cover" />
+            </div>
+          ) : null}
           <div className="relative flex flex-1 flex-col p-6">
             <h2 className="font-serif text-lg font-bold text-slate-900">{actu.titre}</h2>
             <p className="mt-3 flex-1 text-sm leading-relaxed text-slate-600 line-clamp-4">

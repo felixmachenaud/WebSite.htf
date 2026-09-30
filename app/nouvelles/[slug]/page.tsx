@@ -9,8 +9,13 @@ export async function generateStaticParams() {
   return ACTUALITES.map((a) => ({ slug: a.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const actu = ACTUALITES.find((a) => a.slug === params.slug);
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const actu = ACTUALITES.find((a) => a.slug === slug);
   if (!actu) return { title: "Actualité | Hautefeuille" };
   return {
     title: `${actu.titre} | Hautefeuille`,
@@ -18,8 +23,13 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   };
 }
 
-export default function ActualitePage({ params }: { params: { slug: string } }) {
-  const actu = ACTUALITES.find((a) => a.slug === params.slug);
+export default async function ActualitePage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const actu = ACTUALITES.find((a) => a.slug === slug);
   if (!actu) notFound();
 
   return (

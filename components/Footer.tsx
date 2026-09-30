@@ -1,4 +1,4 @@
-"use client";
+import Link from "next/link";
 
 const GREEN_COLOR = "#14532d";
 
@@ -10,7 +10,6 @@ export function Footer() {
         style={{ paddingBottom: "max(3.5rem, calc(1.25rem + env(safe-area-inset-bottom, 0px)))" }}
       >
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-12 md:grid-cols-3 md:gap-0">
-          {/* Colonne gauche : branding */}
           <div className="flex flex-col items-center md:items-start md:border-r md:border-black md:pr-8">
             <img src="/images/logo.png" alt="" className="h-20 w-20 object-contain" />
             <span className="mt-4 font-serif text-2xl font-bold text-slate-900">Hautefeuille</span>
@@ -19,45 +18,20 @@ export function Footer() {
             </span>
           </div>
 
-          {/* Colonne centrale : newsletter */}
           <div className="flex flex-col md:border-r md:border-black md:px-8">
-            <h3 className="font-bold uppercase tracking-wider text-slate-900">
+            <h2 className="font-bold uppercase tracking-wider text-slate-900">
               Lettre d&apos;information
-            </h3>
+            </h2>
             <p className="mt-4 text-sm leading-relaxed text-slate-600">
-              Nouvelles, concours, projets internationaux, initiatives de solidarité... Abonnez-vous à
-              notre newsletter pour découvrir les dernières nouveautés.
+              Nouvelles, concours, projets internationaux, initiatives de solidarité... L&apos;inscription
+              à la lettre d&apos;information sera bientôt disponible.
             </p>
-            <form className="mt-6 flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
-              <input
-                type="text"
-                placeholder="Prénom *"
-                className="rounded border border-slate-300 px-4 py-2.5 text-sm"
-              />
-              <input
-                type="email"
-                placeholder="Courriel *"
-                className="rounded border border-slate-300 px-4 py-2.5 text-sm"
-              />
-              <label className="flex items-start gap-2 text-xs text-slate-600">
-                <input type="checkbox" className="mt-1" />
-                <span>J&apos;accepte les conditions et la politique de confidentialité.</span>
-              </label>
-              <button
-                type="submit"
-                className="mt-2 w-fit rounded px-6 py-2.5 font-bold uppercase text-white transition hover:opacity-90"
-                style={{ backgroundColor: GREEN_COLOR }}
-              >
-                Envoyer
-              </button>
-            </form>
           </div>
 
-          {/* Colonne droite : contact */}
           <div className="flex flex-col md:pl-8">
-            <h3 className="font-bold uppercase tracking-wider text-slate-900">
+            <h2 className="font-bold uppercase tracking-wider text-slate-900">
               Contactez-nous
-            </h3>
+            </h2>
             <p className="mt-4 font-medium text-slate-800">Collège Lycée Hautefeuille</p>
             <p className="mt-2 text-sm text-slate-600">
               5 Rue Armand Silvestre
@@ -80,12 +54,20 @@ export function Footer() {
             </a>
           </div>
         </div>
+
+        <nav
+          aria-label="Informations légales"
+          className="mx-auto mt-12 flex max-w-6xl flex-wrap gap-x-6 gap-y-2 border-t border-slate-200 pt-6 text-sm text-slate-600"
+        >
+          <Link href="/mentions-legales" className="hover:text-slate-900">
+            Mentions légales
+          </Link>
+          <Link href="/confidentialite" className="hover:text-slate-900">
+            Politique de confidentialité
+          </Link>
+        </nav>
       </footer>
-      {/* Bande verte horizontale */}
-      <div
-        className="h-3 w-full"
-        style={{ backgroundColor: GREEN_COLOR }}
-      />
+      <div className="h-3 w-full" style={{ backgroundColor: GREEN_COLOR }} />
     </div>
   );
 }

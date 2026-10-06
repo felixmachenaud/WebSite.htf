@@ -39,17 +39,6 @@ export default async function ContactPage() {
                 {footer.email}
               </a>
             </div>
-
-            <div className="pt-4">
-              <a
-                href={contact.calendlyUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded border-2 border-slate-800 bg-slate-800 px-8 py-3 font-medium text-white transition-colors hover:bg-slate-900 hover:border-slate-900"
-              >
-                {contact.calendlyLabel}
-              </a>
-            </div>
           </div>
         </div>
       </main>

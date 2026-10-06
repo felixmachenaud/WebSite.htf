@@ -35,7 +35,7 @@ Pas de compte visiteur, pas de formulaire de contact intégré, pas de newslette
 - **Mini-CMS** : édition de textes (`SiteContent`) via `/admin`, persistance Vercel Blob (prod) ou fichier local (dev)
 - **Auth admin** : mot de passe hashé scrypt, cookie HMAC, sessions Upstash Redis (prod)
 - **SEO natif Next.js** : metadata, Open Graph, sitemap, robots, favicon
-- **Contact** : liens `mailto:`, téléphone, Calendly (pas de messagerie in-app)
+- **Contact** : liens `mailto:` et téléphone (pas de messagerie in-app)
 - **Sécurité** : CSP, en-têtes HTTP, rate limit login, pas de route d'upload
 
 Hors périmètre actuel : formulaire contact, newsletter, upload médias, Sanity/Payload, analytics.
@@ -49,7 +49,7 @@ app/                    # App Router Next.js
   page.tsx              # Accueil (ScrollHijackLanding)
   a-propos/**           # Pages institutionnelles
   nouvelles/**          # Liste + détail actualités
-  contact/              # Coordonnées + Calendly
+  contact/              # Coordonnées (téléphone, courriel)
   mentions-legales/     # Texte juridique (hors CMS)
   confidentialite/      # RGPD (hors CMS)
   admin/                # Interface CMS
@@ -95,7 +95,6 @@ Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save`
 | **Vercel** | Hébergement, Blob |
 | **Upstash Redis** | Sessions admin |
 | **Google Maps** | Carte contact (chargement au clic) |
-| **Calendly** | Prise de rendez-vous (lien externe) |
 | **Gmail** (`hautefeuille92@gmail.com`) | Contact familles (mailto, sous-traitant RGPD) |
 
 Variables : voir `.env.example`.

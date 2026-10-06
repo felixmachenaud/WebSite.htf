@@ -12,7 +12,7 @@ const TABS = [
   ["projet", "Projet — citation et trois blocs"],
   ["infos", "Infos pratiques — huit rubriques"],
   ["actualites", "Actualités — liste libre"],
-  ["contact", "Contact — téléphone et rendez-vous"],
+  ["contact", "Contact — téléphone et courriel"],
   ["footer", "Footer — bas de chaque page"],
 ] as const;
 
@@ -328,8 +328,6 @@ export function Editor({ initial }: { initial: SiteContent }) {
             <Field label="Introduction" rows={3} value={content.contact.intro} onChange={(intro) => patch("contact", { ...content.contact, intro })} />
             <Field label="Titre téléphone" value={content.contact.phoneTitle} onChange={(phoneTitle) => patch("contact", { ...content.contact, phoneTitle })} />
             <Field label="Titre courriel" value={content.contact.emailTitle} onChange={(emailTitle) => patch("contact", { ...content.contact, emailTitle })} />
-            <Field label="Bouton Calendly" value={content.contact.calendlyLabel} onChange={(calendlyLabel) => patch("contact", { ...content.contact, calendlyLabel })} />
-            <Field label="URL Calendly" value={content.contact.calendlyUrl} onChange={(calendlyUrl) => patch("contact", { ...content.contact, calendlyUrl })} />
           </>
         ) : null}
         {tab === "footer" ? (

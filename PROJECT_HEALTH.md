@@ -49,12 +49,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : seules les variantes `.env*.local` étaient ignorées.
 - Action : `.env` et `.env.*` ignorés, exception `!.env.example`. L'exemple liste les noms sans valeur.
 
-### SEC-06 [MONITOR] [HIGH] 2026-09-30
+### SEC-06 [FIXED] [HIGH] 2026-09-30
 
-- Composant : `app/a-propos/page.tsx`, `components/AdresseCards.tsx`, `app/contact/page.tsx`
-- Constat : image picsum, iframes Google Maps sans action, URL Calendly non confirmée (`https://calendly.com/hautefeuille`).
-- Cause : tiers chargés sans cadre.
-- Action : picsum retiré, photo locale sur `/a-propos`. La carte Google ne se charge qu'au clic. L'URL Calendly est inchangée tant que l'école ne confirme pas le compte.
+- Composant : `app/a-propos/page.tsx`, `components/AdresseCards.tsx`, `app/contact/page.tsx`, `app/confidentialite/page.tsx`
+- Constat : image picsum, iframes Google Maps sans action ; lien Calendly non confirmé.
+- Cause : tiers chargés sans cadre ; Calendly hors besoin établissement.
+- Action : picsum retiré, photo locale sur `/a-propos`. Carte Google au clic uniquement. Calendly retiré (6 oct. 2026) — contact téléphone + courriel.
 
 ### SEC-07 [FIXED] [CRITICAL] 2026-09-30
 

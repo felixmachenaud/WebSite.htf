@@ -2,12 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getContent } from "@/lib/content-store";
-import {
-  calendlyDisplay,
-  contactEmailDisplay,
-  ecolePending,
-  hostDisplay,
-} from "@/lib/ecole-pending";
+import { contactEmailDisplay, ecolePending, hostDisplay } from "@/lib/ecole-pending";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité | Collège Lycée Hautefeuille",
@@ -46,9 +41,9 @@ export default async function ConfidentialitePage() {
             ne sont pas publiées tant qu&apos;une autorisation écrite n&apos;est pas au dossier.
           </p>
           <p className="mt-3 leading-relaxed text-slate-700">
-            Si vous écrivez à l&apos;adresse de contact ou prenez rendez-vous, le message peut
-            contenir des informations sur un élève mineur (niveau, situation familiale, motif du
-            rendez-vous). Ces informations sont alors traitées pour répondre à votre demande.
+            Si vous écrivez à l&apos;adresse de contact ou nous téléphonez, le message peut contenir
+            des informations sur un élève mineur (niveau, situation familiale, motif de la demande).
+            Ces informations sont alors traitées pour répondre à votre demande.
           </p>
 
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">
@@ -57,7 +52,7 @@ export default async function ConfidentialitePage() {
           <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
             <li>Information des familles sur l&apos;établissement : intérêt légitime.</li>
             <li>
-              Réponse aux demandes de contact et prise de rendez-vous : mesures précontractuelles
+              Réponse aux demandes de contact (courriel ou téléphone) : mesures précontractuelles
               et intérêt légitime.
             </li>
             <li>
@@ -85,10 +80,6 @@ export default async function ConfidentialitePage() {
               Google peut alors recevoir votre adresse IP.
             </li>
             <li>
-              Calendly : le bouton de rendez-vous ouvre {calendlyDisplay()} dans un nouvel onglet.
-              Calendly traite alors les données saisies sur son propre site.
-            </li>
-            <li>
               Hébergeur du site : {hostDisplay()} Les polices sont embarquées au moment de la
               construction du site et ne sont pas chargées depuis Google Fonts à la visite.
             </li>
@@ -101,7 +92,7 @@ export default async function ConfidentialitePage() {
             Durées de conservation
           </h2>
           <p className="mt-3 leading-relaxed text-slate-700">
-            Les échanges par courriel et les rendez-vous sont conservés le temps de traiter la
+            Les échanges par courriel ou téléphone sont conservés le temps de traiter la
             demande, puis selon les obligations de l&apos;établissement. Les textes et photos
             publiés restent en ligne jusqu&apos;à leur retrait. La durée exacte applicable aux
             dossiers familles est à confirmer par l&apos;établissement.

@@ -108,7 +108,7 @@ Checklist permanente par domaine. **Avant toute modification**, parcourir les se
 - Cache → Redis sessions ; pas de cache public sur routes auth
 - Images → compresser (ARCH-02)
 - Lazy loading → contenu hors viewport
-- Tiers (Maps, Calendly) → différer / clic utilisateur
+- Tiers (Google Maps) → différer / clic utilisateur
 
 ## ROBUSTESSE / FIABILITÉ
 

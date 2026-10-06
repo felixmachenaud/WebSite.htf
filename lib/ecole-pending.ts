@@ -29,10 +29,6 @@ export interface EcolePendingData {
   contactEmail: string;
   /** Email confirmé par l'établissement */
   contactEmailConfirmed: boolean;
-  /** URL Calendly de prise de rendez-vous */
-  calendlyUrl: string;
-  /** Compte Calendly confirmé par l'établissement */
-  calendlyConfirmed: boolean;
   /** Effectifs collège — valeurs actuelles du site, à confirmer par l'établissement */
   collegeStats: readonly string[];
   /** Effectifs lycée — valeurs actuelles du site, à confirmer par l'établissement */
@@ -49,8 +45,6 @@ export const ecolePending: EcolePendingData = {
   hostConfirmed: true,
   contactEmail: "hautefeuille92@gmail.com",
   contactEmailConfirmed: false,
-  calendlyUrl: "https://calendly.com/hautefeuille",
-  calendlyConfirmed: false,
   // Copie probable (CODE-05) — ne pas modifier sans confirmation écrite de l'établissement
   collegeStats: ["240 élèves", "2 classes par division de la 6e à la 3e", "19 professeurs"],
   lyceeStats: ["240 élèves", "2 classes par division de la 2de à la terminale", "19 professeurs"],
@@ -80,14 +74,6 @@ export function contactEmailDisplay(): string {
     return ecolePending.contactEmail;
   }
   return `${ecolePending.contactEmail} (${PENDING_LABEL})`;
-}
-
-/** URL Calendly avec mention si non confirmée. */
-export function calendlyDisplay(): string {
-  if (ecolePending.calendlyConfirmed) {
-    return ecolePending.calendlyUrl;
-  }
-  return `${ecolePending.calendlyUrl} (${PENDING_LABEL})`;
 }
 
 /** Texte hébergeur selon confirmation établissement. */

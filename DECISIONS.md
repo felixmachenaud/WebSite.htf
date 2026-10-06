@@ -135,3 +135,15 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 **Alternatives abandonnées** : Tout mettre dans `AGENTS.md` (trop long pour le contexte agent) ; règles uniquement en chat.
 
 **Conséquences** : `.mdc` = rappel + résumé injecté à chaque session ; documents complets lus via outil Read quand la tâche l'exige.
+
+---
+
+## 2026-10-06 — Retrait de Calendly
+
+**Décision** : Supprimer Calendly du site (contact, CMS, confidentialité). Contact par téléphone et courriel uniquement.
+
+**Raison** : Non nécessaire pour l'établissement ; simplifie RGPD et surface tiers.
+
+**Alternatives abandonnées** : Conserver le lien en attente de confirmation école.
+
+**Conséquences** : SEC-06 clôturable ; champs `calendly*` retirés de `site-content` et `ecole-pending`.

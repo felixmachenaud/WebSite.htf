@@ -1,3 +1,5 @@
+import { ecolePending } from "@/lib/ecole-pending";
+
 export interface NavItem {
   href: string;
   label: string;
@@ -172,8 +174,6 @@ export interface SiteContent {
     intro: string;
     phoneTitle: string;
     emailTitle: string;
-    calendlyLabel: string;
-    calendlyUrl: string;
   };
 }
 
@@ -232,7 +232,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     addressBoisColombes: "26 rue Pierre Joigneaux\n92270 Bois-Colombes, France",
     phone: "01 43 33 24 02",
     phoneHref: "tel:+33143332402",
-    email: "hautefeuille92@gmail.com",
+    email: ecolePending.contactEmail,
     legalMentions: "Mentions légales",
     legalPrivacy: "Politique de confidentialité",
   },
@@ -250,9 +250,9 @@ export const DEFAULT_CONTENT: SiteContent = {
       "Le collège Hautefeuille accueille les élèves de la 6e à la 3e dans un cadre bienveillant et exigeant. Notre projet éducatif vise à former des jeunes capables de s'engager avec confiance dans leur parcours scolaire et personnel.",
     collageAlt: "Vie au collège",
     resultsTitle: "Les résultats",
-    resultsBody: "100 % de réussite au brevet, 96 % de mentions",
+    resultsBody: ecolePending.collegeResults,
     practicalTitle: "Informations pratiques",
-    stats: ["240 élèves", "2 classes par division de la 6e à la 3e", "19 professeurs"],
+    stats: [...ecolePending.collegeStats],
     directionTitle: "La direction",
     direction: [
       { name: "François-Xavier Bouillet", role: "Chef d'Établissement" },
@@ -268,7 +268,7 @@ export const DEFAULT_CONTENT: SiteContent = {
       "Le lycée Hautefeuille accompagne les élèves de la seconde à la terminale vers l'excellence académique et personnelle. Un cadre propice à la réussite et à l'épanouissement.",
     collageAlt: "Vie au lycée",
     practicalTitle: "Informations pratiques",
-    stats: ["240 élèves", "2 classes par division de la 2de à la terminale", "19 professeurs"],
+    stats: [...ecolePending.lyceeStats],
     directionTitle: "La direction",
     direction: [
       { name: "François-Xavier Bouillet", role: "Chef d'Établissement et Directeur du Lycée" },
@@ -480,11 +480,9 @@ export const DEFAULT_CONTENT: SiteContent = {
     metaTitle: "Contact | Collège Lycée Hautefeuille",
     metaDescription: "Contactez le Collège Lycée Hautefeuille.",
     title: "Contact",
-    intro: "Pour toute question ou demande de rendez-vous, n'hésitez pas à nous contacter.",
+    intro: "Pour toute question, contactez-nous par téléphone ou par courriel.",
     phoneTitle: "Téléphone",
     emailTitle: "Courriel",
-    calendlyLabel: "Prendre rendez-vous (Calendly)",
-    calendlyUrl: "https://calendly.com/hautefeuille",
   },
 };
 
@@ -725,8 +723,6 @@ export function mergeContent(defaults: SiteContent, saved: unknown): SiteContent
       intro: str(contact.intro, defaults.contact.intro),
       phoneTitle: str(contact.phoneTitle, defaults.contact.phoneTitle),
       emailTitle: str(contact.emailTitle, defaults.contact.emailTitle),
-      calendlyLabel: str(contact.calendlyLabel, defaults.contact.calendlyLabel),
-      calendlyUrl: str(contact.calendlyUrl, defaults.contact.calendlyUrl),
     },
   };
 }

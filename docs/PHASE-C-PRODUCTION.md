@@ -57,7 +57,9 @@ L'installation marketplace Upstash (`upstash/upstash-kv`) ou Redis (`redis`) exi
 npx vercel integration add upstash/upstash-kv -e production -e preview
 ```
 
-Les variables `UPSTASH_REDIS_REST_URL` et `UPSTASH_REDIS_REST_TOKEN` seront injectées automatiquement. Puis redéployer :
+Le code lit en priorité `UPSTASH_REDIS_REST_URL` / `UPSTASH_REDIS_REST_TOKEN`, puis en secours `KV_REST_API_URL` / `KV_REST_API_TOKEN` (intégration Vercel KV). **Jamais** les tokens `*_READ_ONLY_*`.
+
+Puis redéployer :
 
 ```bash
 npx vercel --prod --yes

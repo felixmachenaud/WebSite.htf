@@ -12,11 +12,24 @@ type LocalStore = {
   rates: Record<string, { count: number; resetAt: number }>;
 };
 
-function redisClient(): Redis | null {
-  const url = process.env.UPSTASH_REDIS_REST_URL;
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN;
+/** Credentials REST read-write uniquement — jamais les variables *_READ_ONLY_* (Vercel KV). */
+function redisRestCredentials(): { url: string; token: string } | null {
+  const url =
+    process.env.UPSTASH_REDIS_REST_URL?.trim() ||
+    process.env.KV_REST_API_URL?.trim() ||
+    "";
+  const token =
+    process.env.UPSTASH_REDIS_REST_TOKEN?.trim() ||
+    process.env.KV_REST_API_TOKEN?.trim() ||
+    "";
   if (!url || !token) return null;
-  return new Redis({ url, token });
+  return { url, token };
+}
+
+function redisClient(): Redis | null {
+  const creds = redisRestCredentials();
+  if (!creds) return null;
+  return new Redis(creds);
 }
 
 export function sessionStoreReady(): boolean {

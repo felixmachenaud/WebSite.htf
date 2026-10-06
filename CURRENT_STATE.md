@@ -5,7 +5,8 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 | | |
 |---|---|
 | Branche active | `main` |
-| `main` | Phase A + B exécutées localement ; push remote non fait |
+| `main` | Phase A + B + C (partielle) — push `9ce09c2`, prod live |
+| Production | https://web-site-htf.vercel.app |
 | Mail école | Envoyé — réponse en attente (juridique, chiffres, email) |
 
 ---
@@ -29,7 +30,8 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 | **Email Gmail** | Affiché ; `contactEmailConfirmed: false` | Prod « propre » |
 | **Chiffres collège/lycée** | Source `ecole-pending` ; valeurs identiques | Oui — CODE-05 |
 | **Relecture direction** | Non faite (B4) | Oui — SEC-02 |
-| **Preview Vercel** | Variables non posées | Phase C |
+| **Admin CMS prod** | Redis Upstash manquant | `/admin` → 503 |
+| **Preview Vercel** | Auth + Blob OK ; Redis manquant | Phase C partielle |
 
 ---
 
@@ -58,16 +60,32 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 
 ---
 
-## Phase C / D
+## Phase C — Statut (6 oct. 2026)
 
-- **Phase C** : bloquée Preview Vercel + minimum B1/B4
-- **Phase D** : backlog vague 3
+| ID | Statut | Notes |
+|----|--------|-------|
+| C1 (PH-03) | ✅ | `NEXT_PUBLIC_SITE_URL` Production + Preview |
+| C2 Blob (CMS-01) | ✅ | Store `web-site-htf-blob`, token posé |
+| C2 Auth (AUTH-02) | ⚠️ | `AUTH_SECRET` + `ADMIN_PASSWORD_HASH` Production + Preview |
+| C2 Redis (CMS-01, AUTH-02) | ❌ | Terms marketplace Upstash — action navigateur requise |
+| C3 (SEC-02) | ⏸ | Placeholders juridiques — bloqué retour école + B4 |
+| Deploy prod | ✅ | `dpl_5E29GsLvkmivTtJ5aghDL9qvCZZD` |
+| Smoke public prod | ✅ | 26/26 (`phase-a-smoke.mjs --public-only`) |
+| Smoke admin prod | ❌ | 503 — Redis absent |
+
+Détail : `docs/PHASE-C-PRODUCTION.md`
+
+---
+
+## Phase D
+
+- Backlog vague 3
 
 ---
 
 ## Prochaines actions
 
-1. Remplir `lib/ecole-pending.ts` quand le mail arrive
-2. `contactEmailConfirmed: true` si Gmail validé
-3. Relecture direction (B4)
-4. Vercel Preview (A3) + push `main`
+1. Accepter terms Upstash + `vercel integration add upstash/upstash-kv` → redeploy → smoke admin prod
+2. Remplir `lib/ecole-pending.ts` quand le mail arrive
+3. `contactEmailConfirmed: true` si Gmail validé
+4. Relecture direction (B4) — débloquer SEC-02

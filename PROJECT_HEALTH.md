@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 6 octobre 2026 — Phase A locale exécutée (smoke 35/35) ; Preview Vercel en attente |
+| Dernière mise à jour | 6 octobre 2026 — Phase C partielle : prod live, smoke public 26/26 ; Redis admin en attente |
 
 Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
@@ -115,9 +115,9 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 ### AUTH-02 [MONITOR] [HIGH] 2026-09-30
 
 - Composant : `lib/admin-auth.ts`, `lib/admin-sessions.ts`, `app/api/admin/`
-- Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis (fichier local hors production).
-- Cause : le parcours login → édition → logout n'a pas été joué en Preview. Sans variables, `/admin` reste « non configurée » en prod.
-- Action : smoke local OK (6 oct. 2026) via `scripts/phase-a-smoke.mjs` — login, save `chrome.brand`, reload, logout, session invalidée. Poser variables Preview (`docs/PHASE-A-VERCEL-ENV.md`) et rejouer avec Redis avant ouverture.
+- Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis (fichier local hors production). Production (6 oct. 2026) : secrets posés (`AUTH_SECRET`, `ADMIN_PASSWORD_HASH` Prod + Preview) mais **Redis absent** — GET `/admin` « non configurée », POST login **503**.
+- Cause : intégration Upstash marketplace bloquée sur acceptation des conditions navigateur ; pas de `UPSTASH_REDIS_REST_*` en prod.
+- Action : accepter terms Upstash, `vercel integration add upstash/upstash-kv -e production -e preview`, redeploy, rejouer smoke admin prod (`docs/PHASE-C-PRODUCTION.md`). Smoke local OK (6 oct.) ; smoke public prod 26/26.
 
 ### CODE-01 [OPEN] [HIGH] 2026-09-30
 
@@ -234,9 +234,9 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 ### CMS-01 [MONITOR] [HIGH] 2026-09-30
 
 - Composant : `lib/site-content.ts`, `lib/content-store.ts`, `app/admin`, `app/api/admin`
-- Constat : le mini-CMS est dans le code. Build OK (22 routes, 6 oct. 2026). Smoke local : save → page publique reflète le changement.
-- Cause : pas de Blob ni Redis sur Preview Vercel ; persistance prod non validée.
-- Action : configurer Preview (`docs/PHASE-A-VERCEL-ENV.md`), smoke test Blob + Redis, puis seulement go production.
+- Constat : mini-CMS en code, build OK (22 routes). Production (6 oct. 2026) : **Blob OK** (`web-site-htf-blob`, `BLOB_READ_WRITE_TOKEN` Prod/Preview/Dev) ; **Redis manquant** — save admin et sessions non testables en prod.
+- Cause : Upstash non provisionné (terms marketplace). Persistance Blob non validée end-to-end faute de login admin prod.
+- Action : terminer Redis (voir `docs/PHASE-C-PRODUCTION.md`), redeploy, smoke save → reload page publique en prod.
 
 ### CMS-02 [MONITOR] [MEDIUM] 2026-09-30
 
@@ -273,9 +273,9 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : chaîne Browserslist / caniuse embarquée par le build.
 - Action : hors correctif Next immédiat. À revoir en vague 3 avec l'audit CI. Ne pas lancer `npm audit fix` à l'aveugle.
 
-### PH-03 [MONITOR] [MEDIUM] 2026-09-30
+### PH-03 [FIXED] [MEDIUM] 2026-09-30
 
 - Composant : `lib/site-url.ts`, `.env.example`
-- Constat : le domaine public de production n'est pas dans le dépôt. Sans `NEXT_PUBLIC_SITE_URL`, sitemap, robots et Open Graph utilisent `http://localhost:3000`.
-- Cause : aucun domaine confirmé ; dépôt local non lié à Vercel CLI (6 oct. 2026).
-- Action : renseigner `NEXT_PUBLIC_SITE_URL` en HTTPS sur Vercel Preview puis prod — procédure dans `docs/PHASE-A-VERCEL-ENV.md`. Preview documentée : `web-site-htf` / https://web-site-htf.vercel.app.
+- Constat : le domaine public de production n'était pas dans le dépôt. Sans `NEXT_PUBLIC_SITE_URL`, sitemap, robots et Open Graph utilisaient `http://localhost:3000`.
+- Cause : variable absente sur Vercel avant Phase C.
+- Action : `NEXT_PUBLIC_SITE_URL=https://web-site-htf.vercel.app` posé Production + Preview (6 oct. 2026). Vérifié : sitemap, robots, OG en HTTPS prod. Domaine custom éventuel = nouvelle variable si l'école en fournit un.

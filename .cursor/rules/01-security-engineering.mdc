@@ -1,0 +1,21 @@
+---
+description: Sécurité applicative — principes obligatoires sur tout changement code
+alwaysApply: true
+---
+
+# Sécurité (résumé exécutable)
+
+Référence complète : `docs/standards/SECURITY_ENGINEERING.md`
+
+- Toute entrée externe est non fiable ; validation **serveur** obligatoire (schéma explicite, allowlist, pas de spread body → DB)
+- Auth ≠ autorisation : vérifier session + permission sur **chaque** route/mutation admin
+- Secrets jamais en client, Git, logs ; `.env.example` = noms seulement ; rotation si fuite
+- Cookies session : HttpOnly, Secure, SameSite ; pas de tokens en localStorage pour l'auth
+- Mots de passe : Argon2id / bcrypt / scrypt uniquement ; jamais en clair en prod
+- CSRF sur mutations cookie-auth ; pas de GET state-changing
+- XSS : pas de `dangerouslySetInnerHTML` sans sanitization ; CSP en complément
+- Rate limit login et endpoints sensibles ; erreurs génériques côté client
+- Uploads : allowlist, taille, nom serveur aléatoire — **aucune route upload** sans décision explicite
+- Moindre privilège (DB, Blob, Redis, rôles admin)
+
+Workflow feature : assessment → implémentation sécurisée → review → tests négatifs → rapport concis.

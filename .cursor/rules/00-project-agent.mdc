@@ -1,0 +1,14 @@
+---
+description: Lecture obligatoire des sources de vérité avant toute modification
+alwaysApply: true
+---
+
+# Agent — avant toute modification
+
+1. Lire (ou relire si session longue) : `AGENTS.md`, `CURRENT_STATE.md`, `PROJECT_HEALTH.md`
+2. Si architecture / périmètre : `PROJECT_CONTEXT.md` ; si décision passée : `DECISIONS.md`
+3. Consulter **`docs/standards/ENGINEERING_CHECKLIST.md`** — parcourir les sections pertinentes à la tâche
+4. Toute modification code / API / auth / déploiement : appliquer **`docs/standards/SECURITY_ENGINEERING.md`**
+5. Toute modification page publique, metadata, sitemap, contenu indexable : appliquer **`docs/standards/SEO_OPTIMIZATION.md`**
+
+Principes non négociables : analyser l'existant ; diff minimal ; fail closed ; valider côté serveur ; ne pas corriger hors scope sans demande ; mettre à jour `PROJECT_HEALTH.md` après changement significatif.

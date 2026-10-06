@@ -1,12 +1,14 @@
 # PROJECT_HEALTH
 
-Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité permanente.
+Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité permanente pour bugs, risques, dette et régressions.
 
 | | |
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 30 septembre 2026 — vague 2 enregistrée, build OK, recette admin non faite |
+| Dernière mise à jour | 6 octobre 2026 — standards `docs/standards/` + `.cursor/rules/` ; Phase A prête |
+
+Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
 Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée.
 

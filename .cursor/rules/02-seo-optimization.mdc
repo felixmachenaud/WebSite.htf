@@ -1,0 +1,19 @@
+---
+description: SEO technique Next.js — pages publiques et metadata
+alwaysApply: true
+---
+
+# SEO (résumé exécutable)
+
+Référence complète : `docs/standards/SEO_OPTIMIZATION.md`
+
+- Une intention de recherche = une URL canonique ; pas de keyword stuffing
+- Contenu principal en Server Components / HTML initial (H1, texte, liens)
+- `generateMetadata` unique par page ; `metadataBase` + canonical + OG
+- Sitemap : URLs absolues, 200, indexables, pas `/admin` ; `lastModified` réel si connu
+- `robots.ts` : allow public, disallow `/admin/`, `/api/` ; noindex si besoin d'empêcher l'indexation
+- HTML sémantique (un H1, hiérarchie logique) ; `next/image` + alt descriptif
+- Performance (LCP, CLS) : images lourdes, JS client inutile, tiers différés
+- JSON-LD seulement si conforme au contenu visible
+
+Avant livraison SEO : vérifier indexation, canonicals, titres uniques, liens internes, pas de 404 dans le sitemap.

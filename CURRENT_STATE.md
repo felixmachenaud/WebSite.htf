@@ -4,9 +4,9 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 | | |
 |---|---|
-| Branche active | `vague-2` (alignée `origin/vague-2`) |
-| `main` | 3 commits en retard vs vagues 0–2 |
-| Stash | `wip-landing-avant-vagues-audit` sur `main` — **non appliqué** |
+| Branche active | `main` (Phase A commitée) |
+| `main` | Vagues 0–2 mergées ; 4 commits en avance sur `origin/main` |
+| Stash | `wip-landing-avant-vagues-audit` — **appliqué et droppé** (6 oct. 2026) |
 | Mail école | Envoyé — réponse en attente (juridique, chiffres, email, Calendly) |
 
 ---
@@ -18,7 +18,9 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 - Sécurité : CSP, en-têtes, `poweredByHeader: false`, pas de `.env` versionné
 - Mini-CMS : code complet (`/admin`, API, `SiteContent`, Blob/local)
 - Auth admin : scrypt, sessions Redis, rate limit login (code en place)
-- Build : `next build` OK au 30/09 sur `vague-2` (16 pages)
+- Build : `next build` OK sur `main` (22 routes, 6 oct. 2026)
+- Landing mobile : hero scroll natif + snap (stash appliqué, `LandingMobileHero`)
+- Smoke test local : `scripts/phase-a-smoke.mjs` — 35/35 pass (6 oct. 2026)
 - Pages juridiques : publiées avec mentions « à confirmer »
 
 ---
@@ -27,21 +29,23 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 | Élément | État | Bloquant |
 |---------|------|----------|
-| **CMS contenu** | Code OK ; persistance prod = Blob non testé en recette | Preview smoke test (CMS-01) |
-| **Admin login** | Code OK ; recette Preview non faite | AUTH-02, SEC-12 |
+| **CMS contenu** | Smoke local OK ; Preview Vercel + Blob non testés | Preview (CMS-01) |
+| **Admin login** | Smoke local OK ; Preview Redis non testé | Preview (AUTH-02) |
+| **Variables Vercel Preview** | Doc `docs/PHASE-A-VERCEL-ENV.md` ; dépôt non lié à Vercel CLI | A3 manuel (PH-03) |
 | **Mentions légales** | Publiées ; SIRET, raison sociale, responsable « à confirmer » | Prod (SEC-02) |
 | **Contact / email** | Gmail + Calendly ; non confirmés par l'école | Contenu (SEC-06, SEC-08) |
 | **Chiffres collège/lycée** | Identiques (240 / 19) — copie probable | Contenu (CODE-05) |
 | **Newsletter** | Texte placeholder footer ; pas de formulaire | Aucun (volontaire) |
 | **Messagerie** | Uniquement `mailto:` externe ; pas de module site | Aucun (hors scope) |
 | **URL canonique prod** | Fallback `localhost` sans `NEXT_PUBLIC_SITE_URL` | Preview/prod (PH-03) |
+| **Comparaison visuelle CMS** | Non faite (A6) | CMS-02 |
 
 ---
 
 ## Travaux en cours
 
 1. **Attente retour école** (juridique, effectifs, email, Calendly)
-2. **Phase A** prête à lancer dès validation merge (voir ci-dessous)
+2. **Phase A** — technique locale complète ; **Preview Vercel** reste manuelle (A3–A4)
 3. **Vague 3** non démarrée (branche inexistante)
 
 ---
@@ -53,18 +57,22 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 ### Phase A — Technique (sans attendre l'école)
 
-| ID | Étape | Tickets / notes |
-|----|-------|-----------------|
-| A1 | Merge séquentiel `vague-0` → `vague-1` → `vague-2` sur `main` | Hors registre ; PR #7, #8, vague-2 |
-| A2 | `npm ci` + `next build` sur clone propre après chaque merge | SEC-09 |
-| A3 | Poser `NEXT_PUBLIC_SITE_URL` (HTTPS) sur Vercel Preview | PH-03 |
-| A4 | Variables admin + Blob sur Preview ; smoke test login / edit / save / reload / logout | CMS-01, AUTH-02 |
-| A5 | Smoke test rate limit login (mauvais MDP, trop d'essais) | SEC-12 |
-| A6 | Comparaison visuelle pages branchées CMS vs avant | CMS-02 |
-| A7 | Recette site public (routes, 404 slug, footer, CSP, sitemap, pas X-Powered-By) | ARCH-03, SEC-04, ARCH-05, SEC-07, CODE-06 |
-| A8 | Appliquer stash `wip-landing-avant-vagues-audit` ; résoudre conflits landing | Hors registre — **après A1–A7** |
+| ID | Étape | Statut | Notes |
+|----|-------|--------|-------|
+| A1 | Merge séquentiel `vague-0` → `vague-1` → `vague-2` sur `main` | ✅ | `main` @ 94b35be |
+| A2 | `npm ci` + `next build` (clone propre + workspace) | ✅ | 22 routes, 6 oct. 2026 |
+| A3 | `NEXT_PUBLIC_SITE_URL` + variables Preview Vercel | ⚠️ | CLI `npx vercel` OK ; dépôt non lié ; doc `docs/PHASE-A-VERCEL-ENV.md` |
+| A4 | Smoke test login / edit / save / reload / logout | ✅ local / ⚠️ Preview | 35 checks ; auth via `next dev` (Redis requis en `next start` prod) |
+| A5 | Smoke test rate limit login | ✅ local | 9e tentative → 429 confirmé |
+| A6 | Comparaison visuelle pages branchées CMS vs avant | ⚠️ | Non exécutée |
+| A7 | Recette site public (routes, 404, footer, CSP, sitemap) | ✅ | `scripts/phase-a-smoke.mjs` |
+| A8 | Stash `wip-landing-avant-vagues-audit` | ✅ | Conflits résolus ; build OK ; `/` → 200 |
 
-**Statut Phase A** : ⏳ Prête à lancer (merge non encore effectué).
+**Statut Phase A** : ✅ Technique locale complète — ⚠️ Preview Vercel (env + smoke) et A6 visuel restent ouverts.
+
+**Preview URL documentée** : https://web-site-o0uxgyjme-felixmachenaud2-9491s-projects.vercel.app (6 j, peut être obsolète vs `main`).
+
+**Push remote** : non effectué (non demandé).
 
 ### Phase B — Contenu école (après retour mail)
 
@@ -86,7 +94,7 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 | C2 | Admin + Blob + Redis configurés en prod ; smoke test | CMS-01, AUTH-02 |
 | C3 | Mentions légales sans placeholder (ou accord écrit école) | SEC-02 |
 
-**Statut Phase C** : 🔒 Bloquée par Phase A + minimum Phase B (juridique).
+**Statut Phase C** : 🔒 Bloquée par Preview Phase A + minimum Phase B (juridique).
 
 ### Phase D — Vague 3 (parallèle possible, non bloquante merge)
 
@@ -106,11 +114,13 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 ## Éléments restant à faire (synthèse)
 
-- [ ] Phase A complète
+- [x] Phase A locale (A1, A2, A4–A5, A7, A8)
+- [ ] Lier Vercel + poser variables Preview + smoke Preview (A3–A4)
+- [ ] Comparaison visuelle CMS (A6)
+- [x] Commit landing stash (A8)
 - [ ] Retour et intégration mail école (Phase B)
 - [ ] Go production (Phase C)
 - [ ] Vague 3 (Phase D)
-- [ ] Mise à jour `PROJECT_HEALTH.md` après chaque étape significative
 
 ---
 
@@ -119,7 +129,7 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 | Blocage | Impact | Levier |
 |---------|--------|--------|
 | Mail école non reçu | Phase B, prod « propre » | Relance établissement |
-| Merges vagues non faits | Preview à jour, Phase A | Exécuter A1 |
-| Variables Vercel Preview absentes | Recette admin impossible | A3, A4 |
-| Stash landing | Travail accueil en suspens | A8 après recette |
+| Dépôt non lié Vercel CLI | Env Preview non posables via CLI | `vercel link` + dashboard |
+| Variables Preview absentes | Recette admin prod-like impossible | `docs/PHASE-A-VERCEL-ENV.md` |
+| Redis requis en `next start` | Smoke auth local utilise `next dev` | Normal en Preview avec Upstash |
 | Vague 3 absente | Lint, CI, perf images, a11y | Phase D séparée |

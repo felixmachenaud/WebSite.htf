@@ -5,6 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { SidebarMenu } from "./SidebarMenu";
 import type { SiteContent } from "@/lib/site-content";
+import { LandingMobileHero } from "./LandingMobileHero";
+import {
+  LANDING_IMAGES,
+  LANDING_IMAGE_FILTERS,
+  LANDING_IMAGE_OBJECT_POSITION,
+  PATH_GREEN,
+} from "./landingData";
 
 // =============================================================================
 // Landing — scroll hijack (wheel + rAF), peek + révélation (tout au scroll)
@@ -133,22 +140,6 @@ function shouldShowLandingOverlay(i: number, idx: number, m: EngineMode, vh: num
   return false;
 }
 
-const LANDING_IMAGES = [
-  "/images/landing/1.jpg",
-  "/images/landing/2.JPG",
-  "/images/landing/3.JPG",
-];
-
-/**
- * Point de fuite object-fit (cover). La 2e image est verrouillée au milieu du cadrage visible ;
- * ajuster un seul pourcentage si le sujet n’est pas au centre du fichier.
- */
-const LANDING_IMAGE_OBJECT_POSITION: readonly string[] = [
-  "50% 50%",
-  "50% 50%",
-  "50% 50%",
-];
-
 const PHASE1_DAMP = 0.5;
 const PHASE2_DAMP = 0.88;
 const PHASE1_MAX_FRAC = 0.18;
@@ -174,20 +165,9 @@ const SHADOW_REPLACED_INSET = "inset 0 -14px 28px rgba(0,0,0,0.18)";
 const GOLDEN_PATH_D =
   "M50 0 Q48 38 50 50 Q58 105 54 150 Q46 200 44 250 Q46 274 51 300";
 
-/** Vert identique au logo */
-const PATH_GREEN = "#1F7A5A";
 /** Progression sur le minimap */
 const MINIMAP_PROGRESS_DOT = "#EAB308";
 const MINIMAP_PAGE_DOT = "#9ca3af";
-
-/**
- * N&B + luminosité par image (dominante légèrement claire, pas « boue » sombre).
- */
-const LANDING_IMAGE_FILTERS: readonly string[] = [
-  "grayscale(1) brightness(1.08) contrast(0.92)",
-  "grayscale(1) brightness(1.1) contrast(0.9)",
-  "grayscale(1) brightness(1.06) contrast(0.93)",
-];
 
 const LOGO_PX_FULL = 52;
 const LOGO_PX_COMPACT = 32;
@@ -253,6 +233,16 @@ function computePathProgressPx(vh: number, p1Max: number, idx: number, m: Engine
   return idx * vh;
 }
 
+/** Molette / doigt au-dessus du bloc actus + footer ou du bandeau : scroll page natif (pas le carrousel). */
+function pointerTargetsPageChrome(clientX: number, clientY: number): boolean {
+  if (typeof document === "undefined") return false;
+  const hit = document.elementFromPoint(clientX, clientY);
+  if (!hit) return false;
+  if (hit.closest("#landing-home-below")) return true;
+  if (hit.closest("[data-landing-nav]")) return true;
+  return false;
+}
+
 // =============================================================================
 
 export function ScrollHijackLanding({
@@ -266,6 +256,16 @@ export function ScrollHijackLanding({
   /** Défilement document : le hero fixe se translate vers le haut comme une page normale. */
   const [scrollState, setScrollState] = useState({ y: 0, vh: 800 });
   const pathname = usePathname();
+  /** < md : vue mobile scroll natif (pas de moteur hijack — fluidité tactile). */
+  const [useDesktopLandingEngine, setUseDesktopLandingEngine] = useState(true);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const apply = () => setUseDesktopLandingEngine(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
 
   const landingEngineRev = useSyncExternalStore(
     subscribeLandingEngine,
@@ -291,6 +291,10 @@ export function ScrollHijackLanding({
 
   useEffect(() => {
     if (pathname !== "/") return;
+    if (!useDesktopLandingEngine) {
+      document.body.classList.remove("landing-scroll-active");
+      return;
+    }
     document.body.classList.add("landing-scroll-active");
     const syncScroll = () => {
       const y = window.scrollY;
@@ -310,7 +314,7 @@ export function ScrollHijackLanding({
       window.removeEventListener("resize", syncScroll);
       document.body.classList.remove("landing-scroll-active");
     };
-  }, [pathname]);
+  }, [pathname, useDesktopLandingEngine]);
 
   function syncMetrics() {
     if (typeof window === "undefined") return;
@@ -772,17 +776,13 @@ export function ScrollHijackLanding({
   }
 
   /**
-   * Wheel : carrousel **uniquement** quand la page est en haut (`scrollY ≈ 0`). Dès qu’il y a un
-   * défilement document (même 2 px après la dernière slide), la molette doit d’abord gérer le
-   * scroll natif — sinon on reste « coincé » : impossible de remonter sans aller au bas de page.
-   * Zone contenu (`scrollY >= vh`) : toujours natif. Dernière slide + bas : natif pour entrer dans la page.
+   * Carrousel : scroll document désactivé seulement dans la zone « hero » (voir onWheel :
+   * `pointerTargetsPageChrome` pour laisser défiler actus/nav selon la position du curseur).
    */
   function shouldHijackWheel(e: WheelEvent): boolean {
     if (typeof window === "undefined") return true;
     const vh = Math.max(vhRef.current, window.innerHeight, document.documentElement?.clientHeight ?? 0, 1);
-    const y = window.scrollY;
-    if (y >= vh - 0.5) return false;
-    if (y > 1) return false;
+    if (window.scrollY >= vh - 0.5) return false;
 
     const idx = engineIndex.current;
     const m = engineMode.current;
@@ -793,12 +793,16 @@ export function ScrollHijackLanding({
   }
 
   useEffect(() => {
-    if (pathname !== "/") return;
+    if (pathname !== "/" || !useDesktopLandingEngine) return;
 
     syncMetrics();
 
     const onWheel = (e: WheelEvent) => {
       if (menuOpen) return;
+      if (pointerTargetsPageChrome(e.clientX, e.clientY)) {
+        document.body.classList.remove("landing-scroll-active");
+        return;
+      }
       if (!shouldHijackWheel(e)) {
         document.body.classList.remove("landing-scroll-active");
         return;
@@ -828,12 +832,12 @@ export function ScrollHijackLanding({
           document.documentElement?.clientHeight ?? 0,
           1
         );
-        const sy = window.scrollY;
-        if (sy >= vh - 0.5) return;
-        if (sy > 1) return;
+        if (window.scrollY >= vh - 0.5) return;
       }
       if (lastTouchY.current == null) return;
-      const y = e.touches[0].clientY;
+      const t0 = e.touches[0];
+      if (pointerTargetsPageChrome(t0.clientX, t0.clientY)) return;
+      const y = t0.clientY;
       const raw = lastTouchY.current - y;
       const idx = engineIndex.current;
       const m = engineMode.current;
@@ -876,10 +880,10 @@ export function ScrollHijackLanding({
       window.removeEventListener("touchcancel", onTouchCancel);
       if (raf.current != null) cancelAnimationFrame(raf.current);
     };
-  }, [pathname, menuOpen]);
+  }, [pathname, menuOpen, useDesktopLandingEngine]);
 
   useLayoutEffect(() => {
-    if (pathname !== "/") return;
+    if (pathname !== "/" || !useDesktopLandingEngine) return;
     syncMetrics();
     sanitizeEngineState();
     applyTransforms();
@@ -908,7 +912,7 @@ export function ScrollHijackLanding({
       syncMinimapGray();
     });
     return () => cancelAnimationFrame(id);
-  }, [pathname]);
+  }, [pathname, useDesktopLandingEngine]);
 
   const heroShift =
     scrollState.y > 0 ? Math.min(scrollState.y, scrollState.vh) : 0;
@@ -920,7 +924,9 @@ export function ScrollHijackLanding({
 
   return (
     <>
+      {useDesktopLandingEngine ? (
       <div
+        data-landing-hero-desktop
         className={`fixed inset-0 z-[800] overflow-x-hidden will-change-transform ${
           heroShift > 2 ? "pointer-events-none" : ""
         }`}
@@ -1097,9 +1103,13 @@ export function ScrollHijackLanding({
           </svg>
         </div>
       </div>
+      ) : (
+        <LandingMobileHero overlays={overlays} />
+      )}
 
       <nav
         ref={headerNavRef}
+        data-landing-nav
         className="fixed left-0 right-0 top-0 z-[1000] flex min-h-[69px] items-center justify-between px-4 backdrop-blur-sm md:px-7"
         style={{
           backgroundColor: "rgba(209, 250, 229, 0.42)",

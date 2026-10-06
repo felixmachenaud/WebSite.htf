@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 6 octobre 2026 — standards `docs/standards/` + `.cursor/rules/` ; Phase A prête |
+| Dernière mise à jour | 6 octobre 2026 — Phase A locale exécutée (smoke 35/35) ; Preview Vercel en attente |
 
 Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
@@ -96,7 +96,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Composant : `app/api/admin/login/route.ts`, `lib/admin-sessions.ts`
 - Constat : le login limite les essais et exige l'en-tête `x-hautefeuille-admin`.
 - Cause : ces contrôles n'ont pas été exercés sur une Preview avec Redis.
-- Action : smoke test login (mauvais mot de passe, puis trop d'essais) avant d'ouvrir `/admin`.
+- Action : smoke local OK (6 oct. 2026) — 1×401, 9×429, en-tête requis. Confirmer sur Preview Vercel avec Upstash avant ouverture `/admin`.
 
 ### SEC-13 [OPEN] [MEDIUM] 2026-09-30
 
@@ -116,8 +116,8 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 
 - Composant : `lib/admin-auth.ts`, `lib/admin-sessions.ts`, `app/api/admin/`
 - Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis (fichier local hors production).
-- Cause : le parcours login → édition → logout n'a pas été joué. Sans variables, `/admin` reste « non configurée ».
-- Action : poser les variables sur la Preview, puis faire le smoke test avant toute ouverture.
+- Cause : le parcours login → édition → logout n'a pas été joué en Preview. Sans variables, `/admin` reste « non configurée » en prod.
+- Action : smoke local OK (6 oct. 2026) via `scripts/phase-a-smoke.mjs` — login, save `chrome.brand`, reload, logout, session invalidée. Poser variables Preview (`docs/PHASE-A-VERCEL-ENV.md`) et rejouer avec Redis avant ouverture.
 
 ### CODE-01 [OPEN] [HIGH] 2026-09-30
 
@@ -234,16 +234,16 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 ### CMS-01 [MONITOR] [HIGH] 2026-09-30
 
 - Composant : `lib/site-content.ts`, `lib/content-store.ts`, `app/admin`, `app/api/admin`
-- Constat : le mini-CMS est dans le code. `next build` du 30 septembre 2026 a généré `/admin` et les trois routes API.
-- Cause : pas de commit de recette, pas de Blob ni de Redis configurés, pas de smoke test.
-- Action : ne pas merger vers la production tant que le smoke test Preview n'est pas fait.
+- Constat : le mini-CMS est dans le code. Build OK (22 routes, 6 oct. 2026). Smoke local : save → page publique reflète le changement.
+- Cause : pas de Blob ni Redis sur Preview Vercel ; persistance prod non validée.
+- Action : configurer Preview (`docs/PHASE-A-VERCEL-ENV.md`), smoke test Blob + Redis, puis seulement go production.
 
 ### CMS-02 [MONITOR] [MEDIUM] 2026-09-30
 
 - Composant : pages publiques, `lib/site-content.ts`
-- Constat : les textes des pages branchées passent par `getContent()`. Les pages juridiques restent hors éditeur.
-- Cause : relecture visuelle non faite après branchement. Les couleurs de mentions restent dans `data/resultats.ts`.
-- Action : comparer l'accueil, le collège, le lycée, l'histoire, le projet et les infos pratiques avec la version d'avant.
+- Constat : les textes des pages branchées passent par `getContent()`. Les pages juridiques restent hors éditeur. Landing mobile reçoit `overlays` CMS via props (stash A8).
+- Cause : relecture visuelle non faite (A6 non exécutée). Les couleurs de mentions restent dans `data/resultats.ts`.
+- Action : comparer visuellement l'accueil (desktop hijack + mobile snap), collège, lycée, histoire, projet et infos pratiques avec la version d'avant merge.
 
 ### CMS-03 [FIXED] [HIGH] 2026-09-30
 
@@ -277,5 +277,5 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 
 - Composant : `lib/site-url.ts`, `.env.example`
 - Constat : le domaine public de production n'est pas dans le dépôt. Sans `NEXT_PUBLIC_SITE_URL`, sitemap, robots et Open Graph utilisent `http://localhost:3000`.
-- Cause : aucun domaine confirmé.
-- Action : renseigner `NEXT_PUBLIC_SITE_URL` en HTTPS sur Vercel avant la mise en ligne. HSTS dépend de cette valeur ou de `VERCEL=1`.
+- Cause : aucun domaine confirmé ; dépôt local non lié à Vercel CLI (6 oct. 2026).
+- Action : renseigner `NEXT_PUBLIC_SITE_URL` en HTTPS sur Vercel Preview puis prod — procédure dans `docs/PHASE-A-VERCEL-ENV.md`. Preview documentée : `web-site-htf` / https://web-site-htf.vercel.app.

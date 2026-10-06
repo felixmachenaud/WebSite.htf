@@ -45,6 +45,17 @@ body.landing-scroll-active {
   overscroll-behavior: none;
 }
 
+/* Mobile landing : scroll natif + snap (vue LandingMobileHero) */
+html.landing-mobile-snap {
+  scroll-snap-type: y proximity;
+}
+
+@media (min-width: 768px) {
+  html.landing-mobile-snap {
+    scroll-snap-type: none;
+  }
+}
+
 /* Page d’accueil — 1er encadré : monte depuis le bas puis reste figé (fill-mode forwards) */
 @keyframes landing-overlay-first-in {
   from {

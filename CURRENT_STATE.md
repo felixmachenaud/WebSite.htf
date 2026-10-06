@@ -4,7 +4,7 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 | | |
 |---|---|
-| Branche active | `main` (Phase A commitée) |
+| Branche active | `main` @ `1862135` (Phase A + prep Phase B) |
 | `main` | Vagues 0–2 mergées ; 4 commits en avance sur `origin/main` |
 | Stash | `wip-landing-avant-vagues-audit` — **appliqué et droppé** (6 oct. 2026) |
 | Mail école | Envoyé — réponse en attente (juridique, chiffres, email, Calendly) |
@@ -76,15 +76,19 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 
 ### Phase B — Contenu école (après retour mail)
 
-| ID | Étape | Tickets |
-|----|-------|---------|
-| B1 | Raison sociale, SIRET, responsable publication, hébergeur | SEC-02 |
-| B2 | Email Gmail confirmé ou remplacé | SEC-08 |
-| B3 | URL Calendly confirmée | SEC-06 |
-| B4 | Chiffres collège / lycée (+ taux brevet/bac si fournis) | CODE-05 |
-| B5 | Relecture direction → clôturer mentions « à confirmer » | SEC-02 |
+| ID | Étape | Statut | Fichier / notes |
+|----|-------|--------|-----------------|
+| B1 | Raison sociale, SIRET, responsable publication, hébergeur | ⚠️ prep | `lib/ecole-pending.ts` ; pages juridiques branchées |
+| B2 | Email Gmail confirmé ou remplacé | ⚠️ prep | `contactEmail` défaut Gmail ; `contactEmailConfirmed: false` |
+| B3 | URL Calendly confirmée | ⚠️ prep | `calendlyUrl` actuelle ; `calendlyConfirmed: false` |
+| B4 | Chiffres collège / lycée (+ taux brevet/bac) | ⚠️ prep | Stats dans `ecole-pending` (réf.) ; édition CMS `site-content` |
+| B5 | Relecture direction → clôturer mentions « à confirmer » | ⏸ | SEC-02 reste `[MONITOR]` — checklist `docs/PHASE-B-ECOLE.md` |
 
-**Statut Phase B** : ⏸ En attente mail école.
+**Prep faite** : `lib/ecole-pending.ts`, `docs/PHASE-B-ECOLE.md`, mentions légales et confidentialité utilisent les helpers pending.
+
+**Bloque prod Phase B** : retour mail école (B1–B4), relecture direction (B5), puis mise à jour CMS + flags `*Confirmed` dans `ecole-pending.ts`.
+
+**Statut Phase B** : ⏸ En attente mail école — infrastructure prête à intégrer les réponses.
 
 ### Phase C — Publication production
 
@@ -118,7 +122,8 @@ Photographie **actuelle** du projet (6 octobre 2026). Ce fichier est remplacé/m
 - [ ] Lier Vercel + poser variables Preview + smoke Preview (A3–A4)
 - [ ] Comparaison visuelle CMS (A6)
 - [x] Commit landing stash (A8)
-- [ ] Retour et intégration mail école (Phase B)
+- [x] Prep Phase B (`ecole-pending`, checklist, pages juridiques)
+- [ ] Retour et intégration mail école (Phase B — valeurs réelles)
 - [ ] Go production (Phase C)
 - [ ] Vague 3 (Phase D)
 

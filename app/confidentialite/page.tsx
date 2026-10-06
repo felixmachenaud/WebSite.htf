@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getContent } from "@/lib/content-store";
+import {
+  calendlyDisplay,
+  contactEmailDisplay,
+  ecolePending,
+  hostDisplay,
+} from "@/lib/ecole-pending";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité | Collège Lycée Hautefeuille",
@@ -26,7 +32,7 @@ export default async function ConfidentialitePage() {
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">Responsable</h2>
           <p className="mt-3 leading-relaxed text-slate-700">
             Le Collège Lycée Hautefeuille, 5 Rue Armand Silvestre, 92400 Courbevoie, et 26 rue
-            Pierre Joigneaux, 92270 Bois-Colombes. Contact : hautefeuille92@gmail.com. La forme
+            Pierre Joigneaux, 92270 Bois-Colombes. Contact : {contactEmailDisplay()}. La forme
             juridique exacte est à confirmer (voir les mentions légales).
           </p>
 
@@ -69,22 +75,22 @@ export default async function ConfidentialitePage() {
           </h2>
           <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-slate-700">
             <li>
-              Messagerie : les courriels envoyés à hautefeuille92@gmail.com sont traités par Google.
-              Une adresse sur le domaine de l&apos;établissement est à confirmer.
+              Messagerie : les courriels envoyés à {contactEmailDisplay()} sont traités par Google.
+              {!ecolePending.contactEmailConfirmed && (
+                <> Une adresse sur le domaine de l&apos;établissement est à confirmer.</>
+              )}
             </li>
             <li>
               Google Maps : la carte n&apos;est chargée qu&apos;après un clic sur « Afficher la carte ».
               Google peut alors recevoir votre adresse IP.
             </li>
             <li>
-              Calendly : le bouton de rendez-vous ouvre https://calendly.com/hautefeuille dans un
-              nouvel onglet. Ce compte reste à confirmer par l&apos;établissement. Calendly traite
-              alors les données saisies sur son propre site.
+              Calendly : le bouton de rendez-vous ouvre {calendlyDisplay()} dans un nouvel onglet.
+              Calendly traite alors les données saisies sur son propre site.
             </li>
             <li>
-              Hébergeur du site : Vercel Inc. (à confirmer à la mise en ligne). Les polices sont
-              embarquées au moment de la construction du site et ne sont pas chargées depuis Google
-              Fonts à la visite.
+              Hébergeur du site : {hostDisplay()} Les polices sont embarquées au moment de la
+              construction du site et ne sont pas chargées depuis Google Fonts à la visite.
             </li>
           </ul>
           <p className="mt-3 leading-relaxed text-slate-700">
@@ -113,7 +119,7 @@ export default async function ConfidentialitePage() {
           <p className="mt-3 leading-relaxed text-slate-700">
             Vous pouvez demander l&apos;accès, la rectification, l&apos;effacement, la limitation ou
             l&apos;opposition au traitement, et saisir la CNIL (cnil.fr). Adressez votre demande à
-            hautefeuille92@gmail.com en précisant l&apos;objet. Une réponse nominative du délégué
+            {contactEmailDisplay()} en précisant l&apos;objet. Une réponse nominative du délégué
             ou du contact RGPD de l&apos;établissement reste à confirmer.
           </p>
         </article>

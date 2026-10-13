@@ -51,6 +51,8 @@ export default async function MentionsLegalesPage() {
           <p className="mt-3 leading-relaxed text-slate-700">
             La direction du Collège Lycée Hautefeuille. Identité nominative :{" "}
             {legalLine(ecolePending.publicationDirector, PENDING_LABEL)}.
+            <br />
+            Courriel : dimitri.dugas-de-baudan@hautefeuille92.fr
           </p>
 
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">Hébergeur</h2>

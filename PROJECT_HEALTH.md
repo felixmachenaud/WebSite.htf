@@ -23,10 +23,10 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 
 ### SEC-02 [MONITOR] [CRITICAL] 2026-09-30
 
-- Composant : `app/mentions-legales/page.tsx`, `app/confidentialite/page.tsx`, `components/Footer.tsx`
-- Constat : aucune page juridique n'existait. Les pages sont maintenant servies et liées depuis le footer.
-- Cause : pages absentes du dépôt ; l'établissement n'a pas encore transmis la raison sociale, le SIRET, le nom du responsable de publication ni confirmé l'hébergeur.
-- Action : textes rédigés à partir des coordonnées déjà publiées, avec les champs juridiques inconnus explicitement marqués « à confirmer ». Ne pas considérer le ticket fermé tant que l'établissement n'a pas relu ces pages.
+- Composant : `app/mentions-legales/page.tsx`, `app/confidentialite/page.tsx`, `lib/ecole-pending.ts`
+- Constat : pages juridiques servies ; identité APASE, SIRET 44345731200025 et responsable de publication renseignés (13 oct. 2026).
+- Cause : relecture formelle direction et hébergeur définitif (OVH vs Vercel) encore à valider.
+- Action : faire relire mentions légales et confidentialité par la direction, puis passer à `[FIXED]`. Ajuster le bloc hébergeur si migration OVH.
 
 ### SEC-03 [FIXED] [HIGH] 2026-09-30
 
@@ -63,12 +63,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : images versionnées et prêtes à être publiées.
 - Action : fichiers retirés du dépôt. Les articles restent en texte, sans image. Ne pas réintroduire ces fichiers sans autorisation écrite de l'établissement. Les portraits de la direction sont conservés (base distincte) et décrits dans la politique de confidentialité.
 
-### SEC-08 [MONITOR] [HIGH] 2026-09-30
+### SEC-08 [FIXED] [HIGH] 2026-09-30
 
-- Composant : `app/contact/page.tsx`, `components/Footer.tsx`
+- Composant : `app/contact/page.tsx`, `components/Footer.tsx`, `lib/ecole-pending.ts`
 - Constat : contact des familles sur `hautefeuille92@gmail.com`.
-- Cause : aucune adresse de domaine d'établissement n'a été fournie.
-- Action : adresse inchangée, mentionnée comme sous-traitant dans la politique de confidentialité. Remplacer dès qu'une adresse institutionnelle est confirmée.
+- Cause : choix d'adresse à confirmer.
+- Action : Gmail confirmé par l'établissement comme contact principal du site (13 oct. 2026). `contactEmailConfirmed: true`.
 
 ### SEC-09 [FIXED] [HIGH] 2026-09-30
 
@@ -147,12 +147,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : ancienne landing conservée.
 - Action : vague 3.
 
-### CODE-05 [OPEN] [HIGH] 2026-09-30
+### CODE-05 [FIXED] [HIGH] 2026-09-30
 
-- Composant : `app/a-propos/college/page.tsx`, `app/a-propos/lycee/page.tsx`, `data/resultats.ts`
-- Constat : collège et lycée affichent les mêmes chiffres (240 élèves, 19 professeurs).
-- Cause : copie. L'établissement n'a pas confirmé les effectifs, le nombre de professeurs ni les taux de brevet/bac.
-- Action : chiffres laissés en l'état. Ne pas inventer de valeurs. Mettre à jour seulement après confirmation écrite.
+- Composant : `app/a-propos/college/page.tsx`, `app/a-propos/lycee/page.tsx`, `lib/ecole-pending.ts`, `lib/site-content.ts`
+- Constat : effectifs identiques collège/lycée (240 / 19 profs).
+- Cause : copie non vérifiée.
+- Action : effectifs confirmés — 213 collège, 111 lycée (13 oct. 2026). Lignes « professeurs » retirées des stats (photos direction suffisent). Bac déjà géré dans le CMS lycée. Resynchroniser le JSON Blob admin si d'anciennes stats persistent.
 
 ### CODE-06 [FIXED] [HIGH] 2026-09-30
 

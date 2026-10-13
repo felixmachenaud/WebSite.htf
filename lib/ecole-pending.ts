@@ -1,3 +1,5 @@
+import { hostLegalText } from "@/lib/site-hosting";
+
 /**
  * Données fournies par l'établissement — source unique pour les champs en attente (Phase B).
  * Ne pas inventer de valeurs : null = non reçu ; les helpers affichent « à confirmer par l'établissement ».
@@ -38,16 +40,17 @@ export interface EcolePendingData {
 }
 
 export const ecolePending: EcolePendingData = {
-  legalName: null,
-  legalForm: null,
-  siret: null,
-  publicationDirector: null,
-  hostConfirmed: true,
+  legalName: "ASSOC POUR PROMOT ACTIV SCOLAI ET EDUCAT (APASE)",
+  legalForm: "Association",
+  siret: "44345731200025",
+  /** Identité nominative LCEN ; courriel de contact direction : dimitri.dugas-de-baudan@hautefeuille92.fr */
+  publicationDirector: "Dimitri de Baudan",
+  /** Passer à true quand la direction valide le texte hébergeur (après choix Vercel ou OVH). */
+  hostConfirmed: false,
   contactEmail: "hautefeuille92@gmail.com",
-  contactEmailConfirmed: false,
-  // Copie probable (CODE-05) — ne pas modifier sans confirmation écrite de l'établissement
-  collegeStats: ["240 élèves", "2 classes par division de la 6e à la 3e", "19 professeurs"],
-  lyceeStats: ["240 élèves", "2 classes par division de la 2de à la terminale", "19 professeurs"],
+  contactEmailConfirmed: true,
+  collegeStats: ["213 élèves", "2 classes par division de la 6e à la 3e"],
+  lyceeStats: ["111 élèves", "2 classes par division de la 2de à la terminale"],
   collegeResults: "100 % de réussite au brevet, 96 % de mentions",
 };
 
@@ -76,12 +79,10 @@ export function contactEmailDisplay(): string {
   return `${ecolePending.contactEmail} (${PENDING_LABEL})`;
 }
 
-/** Texte hébergeur selon confirmation établissement. */
+/** Texte hébergeur : SITE_HOSTING (vercel | ovh | pending) + validation direction. */
 export function hostDisplay(): string {
-  const base =
-    "Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, États-Unis. Cet hébergeur correspond à la cible de déploiement du site";
-  if (ecolePending.hostConfirmed) {
-    return `${base}.`;
-  }
-  return `${base} et reste ${PENDING_LABEL} au moment de la mise en ligne.`;
+  const text = hostLegalText();
+  if (ecolePending.hostConfirmed) return text;
+  if (text.includes("en cours de finalisation")) return text;
+  return `${text} Texte ${PENDING_LABEL} par la direction.`;
 }

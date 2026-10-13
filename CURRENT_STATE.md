@@ -7,7 +7,7 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 | Branche active | `main` |
 | `main` | Phase A + B + C (partielle) — push `9ce09c2`, prod live |
 | Production | https://web-site-htf.vercel.app |
-| Mail école | Envoyé — réponse en attente (juridique, chiffres, email) |
+| Mail école | Données APASE / effectifs / Gmail intégrées (13 oct. 2026) — relecture juridique + OVH en attente |
 
 ---
 
@@ -26,10 +26,10 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 
 | Élément | État | Bloquant prod |
 |---------|------|---------------|
-| **Identité juridique** | Placeholders « à confirmer » (B1) | Oui — SEC-02 |
-| **Email Gmail** | Affiché ; `contactEmailConfirmed: false` | Prod « propre » |
-| **Chiffres collège/lycée** | Source `ecole-pending` ; valeurs identiques | Oui — CODE-05 |
-| **Relecture direction** | Non faite (B4) | Oui — SEC-02 |
+| **Identité juridique** | APASE + SIRET + responsable dans `ecole-pending` | Relecture B4 — SEC-02 |
+| **Email Gmail** | Confirmé (`contactEmailConfirmed: true`) | SEC-08 FIXED |
+| **Chiffres collège/lycée** | 213 / 111 dans defaults CMS | CODE-05 FIXED ; vérifier Blob admin |
+| **Relecture direction** | Non faite (B4) | SEC-02 |
 | **Admin CMS prod** | Redis Upstash manquant | `/admin` → 503 |
 | **Preview Vercel** | Auth + Blob OK ; Redis manquant | Phase C partielle |
 
@@ -83,9 +83,15 @@ Détail : `docs/PHASE-C-PRODUCTION.md`
 
 ---
 
+## Hébergement (ambivalent)
+
+- **Domaine** : OVH (DNS) — **App** : Vercel aujourd'hui, VPS OVH possible sans changer le CMS (Blob + Upstash).
+- **Mentions légales** : `SITE_HOSTING=pending` par défaut — voir `docs/DEPLOYMENT-HOSTING.md`.
+- **Décision Vercel vs OVH app** : en négociation ; puis `SITE_HOSTING=vercel|ovh` + relecture direction.
+
 ## Prochaines actions
 
-1. Accepter terms Upstash + `vercel integration add upstash/upstash-kv` → redeploy → smoke admin prod
-2. Remplir `lib/ecole-pending.ts` quand le mail arrive
-3. `contactEmailConfirmed: true` si Gmail validé
-4. Relecture direction (B4) — débloquer SEC-02
+1. Redis Upstash + smoke admin prod
+2. Relecture direction (B4) — SEC-02
+3. Domaine OVH → CNAME Vercel (scénario A) quand le nom final est fixé
+4. Push commits école + hébergement ambivalent

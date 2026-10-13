@@ -92,7 +92,8 @@ Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save`
 
 | Service | Usage |
 |---------|--------|
-| **Vercel** | Hébergement, Blob |
+| **Vercel** | Hébergement applicatif actuel, Blob CMS |
+| **OVH** | Registrar / DNS du nom de domaine ; hébergement app possible (VPS) |
 | **Upstash Redis** | Sessions admin |
 | **Google Maps** | Carte contact (chargement au clic) |
 | **Gmail** (`hautefeuille92@gmail.com`) | Contact familles (mailto, sous-traitant RGPD) |
@@ -108,6 +109,9 @@ Variables : voir `.env.example`.
 | **Dev local** | Développement | Contenu dans `.data/site-content.json` si pas de Blob ; sessions fichier local |
 | **Preview Vercel** | Recette pré-prod | Toutes les variables à poser ; smoke tests admin et site public |
 | **Production Vercel** | Site public | `NEXT_PUBLIC_SITE_URL` HTTPS obligatoire ; admin + Blob + Redis configurés |
+| **Production OVH (option)** | Même app Node | Mêmes variables ; DNS domaine chez OVH → VPS |
+
+Hébergement juridique ambivalent : `SITE_HOSTING` + `docs/DEPLOYMENT-HOSTING.md`. Domaine OVH ≠ app obligatoirement chez OVH.
 
 Branchement Git actuel : vagues d'audit `vague-0` → `vague-1` → `vague-2` à merger séquentiellement vers `main`.
 

@@ -147,3 +147,15 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 **Alternatives abandonnées** : Conserver le lien en attente de confirmation école.
 
 **Conséquences** : SEC-06 clôturable ; champs `calendly*` retirés de `site-content` et `ecole-pending`.
+
+---
+
+## 2026-10-13 — Hébergement ambivalent OVH (domaine) / Vercel ou OVH (app)
+
+**Décision** : Un seul codebase ; domaine DNS chez OVH ; application déployable sur Vercel (actuel) ou VPS OVH plus tard ; CMS Blob + Upstash restent utilisables depuis les deux ; mentions légales via `SITE_HOSTING` (`pending` | `vercel` | `ovh`).
+
+**Raison** : Négociation en cours avec les décideurs ; éviter de figer Vercel dans le juridique avant choix final.
+
+**Alternatives abandonnées** : Deux dépôts ou branche séparée OVH/Vercel.
+
+**Conséquences** : `lib/site-hosting.ts`, `docs/DEPLOYMENT-HOSTING.md` ; pas de migration Blob tant que Vercel Blob convient depuis OVH.

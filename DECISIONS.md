@@ -159,3 +159,15 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 **Alternatives abandonnées** : Deux dépôts ou branche séparée OVH/Vercel.
 
 **Conséquences** : `lib/site-hosting.ts`, `docs/DEPLOYMENT-HOSTING.md` ; pas de migration Blob tant que Vercel Blob convient depuis OVH.
+
+---
+
+## 2026-10-13 — CI lint, typecheck, build et smoke public
+
+**Décision** : Workflow GitHub Actions (`.github/workflows/ci.yml`) sur `main` et les pull requests. `next lint` est remplacé par ESLint 9 (config plate) ; script `typecheck` (`tsc --noEmit`). Après le build, smoke public existant (`scripts/phase-a-smoke.mjs --public-only`) contre `next start`. Node 20. Aucun secret dans le workflow.
+
+**Raison** : CODE-01 et CODE-02. La production est déjà en ligne, sans garde automatique sur les déploiements.
+
+**Alternatives abandonnées** : Playwright ; backend contact ou newsletter ; branchement Sanity.
+
+**Conséquences** : Les règles React Compiler `react-hooks/refs`, `set-state-in-effect` et `immutability` sont coupées sur `ScrollHijackLanding.tsx` et `components/scroll/**` (CODE-03, CODE-04). Les avertissements `no-img-element` ne bloquent pas la CI (ARCH-02). Le smoke admin reste local ou Preview. CODE-02 passe à `[FIXED]` seulement après un run GitHub vert.

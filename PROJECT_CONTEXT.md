@@ -6,7 +6,7 @@ Contexte structurel permanent du site **Collège Lycée Hautefeuille**. Ce fichi
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Client | Collège Lycée Hautefeuille (Courbevoie / Bois-Colombes) |
-| Dernière mise à jour | 6 octobre 2026 |
+| Dernière mise à jour | 13 octobre 2026 |
 
 ---
 
@@ -37,8 +37,9 @@ Pas de compte visiteur, pas de formulaire de contact intégré, pas de newslette
 - **SEO natif Next.js** : metadata, Open Graph, sitemap, robots, favicon
 - **Contact** : liens `mailto:` et téléphone (pas de messagerie in-app)
 - **Sécurité** : CSP, en-têtes HTTP, rate limit login, pas de route d'upload
+- **CI** : GitHub Actions sur `main` et les pull requests — lint, typecheck, build, smoke public, sans secrets
 
-Hors périmètre actuel : formulaire contact, newsletter, upload médias, Sanity/Payload, analytics.
+Hors périmètre actuel : formulaire contact, newsletter, upload médias, Sanity/Payload, analytics, smoke admin dans la CI.
 
 ---
 
@@ -64,6 +65,7 @@ lib/
   site-url.ts           # URL canonique
 data/resultats.ts       # Couleurs graphique bac (hors CMS)
 public/images/          # Assets statiques
+.github/workflows/ci.yml # lint, typecheck, build, smoke public
 ```
 
 Flux contenu public : `getContent()` → merge defaults + Blob/local → pages server components.
@@ -85,6 +87,7 @@ Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save`
 | Stockage contenu | Vercel Blob (JSON privé) |
 | Sessions admin | Upstash Redis REST |
 | Node | ≥ 20.9.0 |
+| CI | GitHub Actions, Node 20 |
 
 ---
 
@@ -136,4 +139,5 @@ Branchement Git actuel : vagues d'audit `vague-0` → `vague-1` → `vague-2` à
 - Images : dossiers thématiques sous `public/images/` ; README par dossier
 - SEO : `generateMetadata` par page ; URL canonique via `siteUrl()`
 - Admin : en-tête custom `x-hautefeuille-admin` requis sur les routes API
+- CI : `npm run lint`, `npm run typecheck`, `npm run build`, puis `node scripts/phase-a-smoke.mjs --public-only --base=…` sur le serveur issu du build. Pas de token Blob, Redis ni `AUTH_SECRET` dans GitHub Actions
 - Documentation agent : `AGENTS.md`, `CURRENT_STATE.md`, `PROJECT_HEALTH.md`, `docs/standards/` ; règles Cursor `.cursor/rules/*.mdc`

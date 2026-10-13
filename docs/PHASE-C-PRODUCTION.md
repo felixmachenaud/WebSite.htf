@@ -20,7 +20,7 @@ Le dépôt local est lié via `vercel link --project web-site-htf`.
 | C1 (PH-03) | `NEXT_PUBLIC_SITE_URL` Production + Preview | ✅ | `https://web-site-htf.vercel.app` |
 | C2 (CMS-01) | `BLOB_READ_WRITE_TOKEN` | ✅ | Store `web-site-htf-blob` (private, iad1) |
 | C2 (AUTH-02) | `AUTH_SECRET`, `ADMIN_PASSWORD_HASH` | ✅ | Production + Preview |
-| C2 (AUTH-02) | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | ❌ | **Bloquant admin** — voir ci-dessous |
+| C2 (AUTH-02) | `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN` | ✅ | `upstash-kv-cyan-pocket`, Pay As You Go, `fra1` (13 oct. 2026) |
 | C3 (SEC-02) | Pages juridiques sans placeholders | ⏸ | Bloqué retour école (SIRET, raison sociale, responsable) + relecture B4 |
 
 ## Variables d'environnement (état 6 oct. 2026)
@@ -31,8 +31,8 @@ Le dépôt local est lié via `vercel link --project web-site-htf`.
 | `AUTH_SECRET` | ✅ | ✅ | — |
 | `ADMIN_PASSWORD_HASH` | ✅ | ✅ | — |
 | `BLOB_READ_WRITE_TOKEN` | ✅ | ✅ | ✅ |
-| `UPSTASH_REDIS_REST_URL` | ❌ | ❌ | — |
-| `UPSTASH_REDIS_REST_TOKEN` | ❌ | ❌ | — |
+| `UPSTASH_REDIS_REST_URL` | ✅ | ✅ | Intégration Upstash, 13 oct. 2026 |
+| `UPSTASH_REDIS_REST_TOKEN` | ✅ | ✅ | Secret, non versionné |
 
 ### Mot de passe admin
 
@@ -67,6 +67,8 @@ npx vercel --prod --yes
 
 Sans Redis, `/admin` affiche « Administration non configurée » et `POST /api/admin/login` renvoie **503**.
 
+État au 13 oct. 2026 : base `upstash-kv-cyan-pocket` liée à `web-site-htf` (Production et Preview, Pay As You Go, `fra1`). Le CMS a été utilisé. Le tableau admin ci-dessous est la recette du 6 oct., avant ce branchement.
+
 ## Recette production (6 oct. 2026)
 
 ### Site public
@@ -83,7 +85,7 @@ Résultat : **26/26** (routes, CSP, footer, sitemap, assets).
 - `robots.txt` : `Sitemap: https://web-site-htf.vercel.app/sitemap.xml`
 - Open Graph : `og:image` en HTTPS production
 
-### Admin (partiel — Redis manquant)
+### Admin (recette du 6 oct. — avant Redis)
 
 | Test | Attendu | Obtenu |
 |------|---------|--------|

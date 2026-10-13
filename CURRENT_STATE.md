@@ -1,6 +1,6 @@
 # CURRENT_STATE
 
-Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `PROJECT_HEALTH.md`.
+Photographie **actuelle** du projet (13 octobre 2026). Anomalies détaillées : `PROJECT_HEALTH.md`.
 
 | | |
 |---|---|
@@ -30,8 +30,9 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 | **Email Gmail** | Confirmé (`contactEmailConfirmed: true`) | SEC-08 FIXED |
 | **Chiffres collège/lycée** | 213 / 111 dans defaults CMS | CODE-05 FIXED ; vérifier Blob admin |
 | **Relecture direction** | Non faite (B4) | SEC-02 |
-| **Admin CMS prod** | Redis Upstash manquant | `/admin` → 503 |
-| **Preview Vercel** | Auth + Blob OK ; Redis manquant | Phase C partielle |
+| **Admin CMS prod** | Redis Upstash posé ; CMS utilisé (13 oct.) | Smoke 401/429 non rejoué |
+| **Preview Vercel** | Auth, Blob et Redis (Production + Preview) | Phase C partielle |
+| **CI** | Workflow dans ce lot ; chaîne locale verte | Premier run GitHub — CODE-02 |
 
 ---
 
@@ -67,11 +68,11 @@ Photographie **actuelle** du projet (6 octobre 2026). Anomalies détaillées : `
 | C1 (PH-03) | ✅ | `NEXT_PUBLIC_SITE_URL` Production + Preview |
 | C2 Blob (CMS-01) | ✅ | Store `web-site-htf-blob`, token posé |
 | C2 Auth (AUTH-02) | ⚠️ | `AUTH_SECRET` + `ADMIN_PASSWORD_HASH` Production + Preview |
-| C2 Redis (CMS-01, AUTH-02) | ❌ | Terms marketplace Upstash — action navigateur requise |
+| C2 Redis (CMS-01, AUTH-02) | ✅ | `upstash-kv-cyan-pocket`, Pay As You Go, `fra1`, Production + Preview |
 | C3 (SEC-02) | ⏸ | Placeholders juridiques — bloqué retour école + B4 |
-| Deploy prod | ✅ | `dpl_5E29GsLvkmivTtJ5aghDL9qvCZZD` |
+| Deploy prod | ✅ | Redis pris en compte ; CMS utilisé (13 oct.) |
 | Smoke public prod | ✅ | 26/26 (`phase-a-smoke.mjs --public-only`) |
-| Smoke admin prod | ❌ | 503 — Redis absent |
+| Smoke admin prod | ⚠️ | Connexion CMS constatée ; script 401/429 non rejoué |
 
 Détail : `docs/PHASE-C-PRODUCTION.md`
 
@@ -89,9 +90,18 @@ Détail : `docs/PHASE-C-PRODUCTION.md`
 - **Mentions légales** : `SITE_HOSTING=pending` par défaut — voir `docs/DEPLOYMENT-HOSTING.md`.
 - **Décision Vercel vs OVH app** : en négociation ; puis `SITE_HOSTING=vercel|ovh` + relecture direction.
 
+## CI
+
+Workflow `.github/workflows/ci.yml` (push `main`, pull requests) : `npm ci`, `npm run lint`, `npm run typecheck`, `npm run build`, smoke public. Node 20. Aucun secret.
+
+Vérifié en local le 13 oct. 2026 (Node 24), sans `.env.local` : lint 0 erreur (35 avertissements), `tsc` OK, build 22 routes, smoke public **26/26**. Le workflow épingle Node 20. Le run GitHub se confirme après le push de ce lot.
+
+Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et de Redis.
+
+---
+
 ## Prochaines actions
 
-1. Redis Upstash + smoke admin prod
+1. Confirmer le run GitHub de la CI (CODE-02) et rejouer le smoke admin (401/429)
 2. Relecture direction (B4) — SEC-02
 3. Domaine OVH → CNAME Vercel (scénario A) quand le nom final est fixé
-4. Push commits école + hébergement ambivalent

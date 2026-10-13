@@ -119,7 +119,7 @@ Checklist permanente par domaine. **Avant toute modification**, parcourir les se
 ## TESTS / QA
 
 - Build → `npm ci` + `next build` sur clone propre
-- Lint / typecheck → CODE-01, CODE-02 (vague 3)
+- Lint / typecheck / build / smoke public → `.github/workflows/ci.yml` (CODE-02 à confirmer sur GitHub)
 - Auth admin → smoke Preview (AUTH-02, CMS-01)
 - Régression → enregistrer dans PROJECT_HEALTH
 

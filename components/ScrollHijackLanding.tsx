@@ -582,7 +582,7 @@ export function ScrollHijackLanding({
     const vh = Math.max(vhRef.current, 1);
     const p1Max = Math.max(p1MaxRef.current, 1);
     const eps2 = epsPhase2(vh);
-    let m = engineMode.current;
+    const m = engineMode.current;
 
     if (m.mode === "fwd_p1") {
       if (m.curY > 0) {

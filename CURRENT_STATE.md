@@ -32,7 +32,7 @@ Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : 
 | **Relecture direction** | Non faite (B4) | SEC-02 |
 | **Admin CMS prod** | Redis Upstash posé ; CMS utilisé (13 oct.) | Smoke 401/429 non rejoué |
 | **Preview Vercel** | Auth, Blob et Redis (Production + Preview) | Phase C partielle |
-| **CI** | Lockfile picomatch réaligné (14 oct.) ; `npm ci` Linux reproduit en local | Run GitHub à confirmer — CODE-02 |
+| **CI** | Verte sur `main` (14 oct., run `38520821227`) | — |
 
 ---
 
@@ -94,7 +94,7 @@ Détail : `docs/PHASE-C-PRODUCTION.md`
 
 Workflow `.github/workflows/ci.yml` (push `main`, pull requests) : `npm ci`, `npm run lint`, `npm run typecheck`, `npm run build`, smoke public. Node 20. Aucun secret.
 
-Le premier run (13 oct.) a échoué sur `npm ci` : le lockfile gardait `picomatch` 2.3.1 et 4.0.3, que npm 10.8.2 sur Ubuntu ne reconnaît plus. Le 14 oct., ces correctifs sont figés (2.3.2 et 4.0.7) et `npm ci` avec Node 20 / npm 10.8.2 passe en ciblant Linux. Le run GitHub de ce lot reste à confirmer.
+Le premier run (13 oct.) a échoué sur `npm ci`. Le 14 oct., `picomatch` est figé en 2.3.2 et 4.0.7. Le run [38520821227](https://github.com/felixmachenaud/WebSite.htf/actions/runs/38520821227) est vert : `npm ci`, lint, `tsc`, build, smoke public.
 
 Le reste de la chaîne a été vérifié en local le 13 oct. (Node 24), sans `.env.local` : lint 0 erreur, `tsc` OK, build 22 routes, smoke public **26/26**.
 
@@ -104,6 +104,6 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ## Prochaines actions
 
-1. Confirmer le run GitHub de la CI (CODE-02) et rejouer le smoke admin (401/429)
+1. Rejouer le smoke admin (401/429) et le save → page publique
 2. Relecture direction (B4) — SEC-02
 3. Domaine OVH → CNAME Vercel (scénario A) quand le nom final est fixé

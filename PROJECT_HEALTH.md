@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 14 octobre 2026 — lockfile picomatch réaligné pour `npm ci` ; run GitHub à confirmer |
+| Dernière mise à jour | 14 octobre 2026 — CI verte sur main (run 38520821227) |
 
 Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
@@ -126,12 +126,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : Next 16 n'expose plus la commande `lint` ; pas de `eslint.config`.
 - Action : `eslint.config.mjs` (ESLint 9, `eslint-config-next` core-web-vitals + typescript). Script `lint` = `eslint .`. `npm run lint` sort 0 le 13 oct. 2026 (35 avertissements, 0 erreur). `no-require-imports` coupé sur `*.js` / `*.mjs` (`next.config.js`, scripts). Règles React Compiler coupées seulement sur la landing scroll (CODE-03, CODE-04).
 
-### CODE-02 [MONITOR] [HIGH] 2026-09-30
+### CODE-02 [FIXED] [HIGH] 2026-09-30
 
 - Composant : CI et tests
-- Constat : script `typecheck` et workflow `.github/workflows/ci.yml` ajoutés (lint, tsc, build, smoke public). Le run du 13 oct. échoue à `npm ci` (picomatch). Lockfile réaligné le 14 oct. ; le run GitHub de ce correctif n'est pas encore observé.
-- Cause : lockfile incompatible avec npm 10.8.2 sur Ubuntu.
-- Action : confirmer le workflow vert sur `main`, puis passer à `[FIXED]`. Le smoke admin reste hors CI (AUTH-02).
+- Constat : pas de tests, pas de CI, pas de script `typecheck` au moment de l'audit.
+- Cause : outillage absent, puis lockfile `picomatch` refusé par `npm ci` sur Ubuntu (13 oct. 2026).
+- Action : workflow `.github/workflows/ci.yml` (lint, tsc, build, smoke public). `picomatch` figé en 2.3.2 et 4.0.7. Run GitHub vert le 14 oct. 2026 : https://github.com/felixmachenaud/WebSite.htf/actions/runs/38520821227. Le smoke admin reste hors CI (AUTH-02).
 
 ### CODE-03 [OPEN] [MEDIUM] 2026-09-30
 

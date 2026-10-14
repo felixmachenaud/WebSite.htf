@@ -182,4 +182,4 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 
 **Alternatives abandonnées** : `npm audit fix` ; supprimer le lockfile et tout réinstaller ; changer Node dans la CI.
 
-**Conséquences** : Les outils qui veulent picomatch 2 (micromatch, anymatch, readdirp) gardent la branche 2. Ceux qui veulent la branche 4 (tinyglobby) reçoivent 4.0.7. SEC-11 reste ouvert : d'autres avis hauts de dev ne sont pas traités.
+**Conséquences** : Les outils qui veulent picomatch 2 (micromatch, anymatch, readdirp) gardent la branche 2. Ceux qui veulent la branche 4 (tinyglobby) reçoivent 4.0.7. SEC-11 reste ouvert : d'autres avis hauts de dev ne sont pas traités. Run GitHub vert le 14 oct. 2026 (`38520821227`). CODE-02 `[FIXED]`.

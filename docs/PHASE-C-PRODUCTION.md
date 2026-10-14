@@ -85,19 +85,25 @@ Résultat : **26/26** (routes, CSP, footer, sitemap, assets).
 - `robots.txt` : `Sitemap: https://web-site-htf.vercel.app/sitemap.xml`
 - Open Graph : `og:image` en HTTPS production
 
-### Admin (recette du 6 oct. — avant Redis)
+### Admin
 
-| Test | Attendu | Obtenu |
-|------|---------|--------|
-| GET `/admin` | Formulaire connexion | « Administration non configurée » |
-| POST login (mauvais MDP) | 401 | 503 |
-| POST login (bon MDP) | 200 | 503 |
+| Test | Attendu | Obtenu (14 oct. 2026) |
+|------|---------|------------------------|
+| POST login (mauvais MDP) | 401 | ✅ 401 |
+| POST login (rate limit) | 429 | ✅ 429 (8e échec cumulé après A4.2, IP Vercel) |
+| Save → `/` → revert brand | 200 + HTML + restauration | ⏸ local OK ; prod après déploiement merge + mot de passe |
 
-Rejouer après pose Redis :
+Recette du 6 oct. (sans Redis) : `/admin` « non configurée », login 503.
+
+Rejouer après pose Redis (401/429 sans secret ; save si mot de passe admin connu) :
 
 ```bash
-node scripts/phase-a-smoke.mjs --base=https://web-site-htf.vercel.app
+node scripts/phase-a-smoke.mjs --admin-only --base=https://web-site-htf.vercel.app
+# save + revert brand :
+ADMIN_SMOKE_PASSWORD='…' node scripts/phase-a-smoke.mjs --admin-only --base=https://web-site-htf.vercel.app
 ```
+
+Le save partiel merge désormais le Blob existant (`saveContent` lit `getContent()` avant écriture) ; le script restaure `chrome.brand` après A4.5.
 
 ## SEC-02 — publication partielle
 

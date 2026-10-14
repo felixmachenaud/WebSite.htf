@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { getContent } from "@/lib/content-store";
-import { contactEmailDisplay, ecolePending, hostDisplay } from "@/lib/ecole-pending";
+import {
+  contactEmailDisplay,
+  ecolePending,
+  hostDisplay,
+  legalIdentityLine,
+} from "@/lib/ecole-pending";
 
 export const metadata: Metadata = {
   title: "Politique de confidentialité | Collège Lycée Hautefeuille",
@@ -20,15 +25,15 @@ export default async function ConfidentialitePage() {
             Politique de confidentialité
           </h1>
           <p className="mt-4 text-sm text-slate-500">
-            Dernière mise à jour : 30 septembre 2026. Texte à relire par l&apos;établissement avant
-            la mise en production.
+            Dernière mise à jour : 30 septembre 2026. Relecture formelle par la direction en cours
+            (B4). Le renvoi à l&apos;hébergeur reprend le texte provisoire des mentions légales.
           </p>
 
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">Responsable</h2>
           <p className="mt-3 leading-relaxed text-slate-700">
             Le Collège Lycée Hautefeuille, 5 Rue Armand Silvestre, 92400 Courbevoie, et 26 rue
-            Pierre Joigneaux, 92270 Bois-Colombes. Contact : {contactEmailDisplay()}. La forme
-            juridique exacte est à confirmer (voir les mentions légales).
+            Pierre Joigneaux, 92270 Bois-Colombes. Contact : {contactEmailDisplay()}. Identité
+            juridique : {legalIdentityLine()} (détail sur les mentions légales).
           </p>
 
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">

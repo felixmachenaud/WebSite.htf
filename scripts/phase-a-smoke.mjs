@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 /**
  * Phase A smoke tests (A4–A7). Run after `npm run build`.
- * Usage: node scripts/phase-a-smoke.mjs [--public-only] [--base http://127.0.0.1:3456]
+ * Usage:
+ *   node scripts/phase-a-smoke.mjs
+ *   node scripts/phase-a-smoke.mjs --public-only --base=https://example.com
+ *   node scripts/phase-a-smoke.mjs --admin-only --base=https://example.com
+ *     (401/429 sans secret ; save/login si ADMIN_SMOKE_PASSWORD est défini)
  */
 import { spawn, execSync } from "node:child_process";
 import { randomBytes } from "node:crypto";
@@ -11,8 +15,11 @@ import path from "node:path";
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const PUBLIC_ONLY = process.argv.includes("--public-only");
+const ADMIN_ONLY = process.argv.includes("--admin-only");
 const BASE_ARG = process.argv.find((a) => a.startsWith("--base="));
-const EXTERNAL_BASE = BASE_ARG ? BASE_ARG.slice("--base=".length) : null;
+const EXTERNAL_BASE = BASE_ARG ? BASE_ARG.slice("--base=".length).replace(/\/$/, "") : null;
+const ADMIN_SMOKE_PASSWORD = process.env.ADMIN_SMOKE_PASSWORD?.trim() || "";
+const LOCAL_SMOKE_PASSWORD = "PhaseATest2026!";
 
 const results = [];
 let failed = 0;
@@ -137,41 +144,56 @@ function loginHeaders(base, ip = "smoke-local") {
   return { ...adminHeaders(base), "x-forwarded-for": ip };
 }
 
-async function testAuthFlow(base, passwordHash, authSecret) {
-  console.log("\n── A4–A5 Auth admin (login, rate limit, save, logout) ──");
+function readBrandFromHomeHtml(html) {
+  const match =
+    html.match(/\/images\/logo\.png[^>]*>\s*<span class="truncate">([^<]+)<\/span>/i) ||
+    html.match(/"brand":"([^"]+)"/);
+  return match?.[1]?.trim() || null;
+}
+
+async function fetchPublicBrand(base) {
+  const res = await fetch(`${base}/`, { headers: { "cache-control": "no-cache" } });
+  const html = await res.text();
+  return readBrandFromHomeHtml(html);
+}
+
+async function testWrongPassword(base) {
+  console.log("\n── A4.2 Auth admin — mauvais mot de passe ──");
+  await testWrongPasswordMaybeAfterCooldown(base, { allowCooldown: false });
+}
+
+async function testLoginRateLimit(base, { first429At = 9 } = {}) {
+  console.log("\n── A5 Auth admin — rate limit login ──");
   const jar = new CookieJar();
-
-  const wrong = await fetchWithJar(`${base}/api/admin/login`, jar, {
-    method: "POST",
-    headers: loginHeaders(base, "smoke-wrong"),
-    body: JSON.stringify({ password: "wrong-password-phase-a" }),
-  });
-  if (wrong.status === 401) {
-    pass("A4.2", "Mauvais mot de passe → 401");
-  } else {
-    fail("A4.2", `expected 401, got ${wrong.status}`);
-  }
-
   let rateLimited = false;
-  for (let i = 1; i <= 9; i++) {
+  for (let i = 1; i <= first429At; i++) {
     const res = await fetchWithJar(`${base}/api/admin/login`, jar, {
       method: "POST",
       headers: loginHeaders(base, "smoke-rate"),
       body: JSON.stringify({ password: `wrong-rate-${i}` }),
     });
-    if (i < 9) {
+    if (i < first429At) {
       if (res.status !== 401) {
         fail("A5", `tentative ${i}: expected 401, got ${res.status}`);
       }
     } else if (res.status === 429) {
-      pass("A5", "9e tentative → 429");
+      pass("A5", `${i}e tentative (cumul IP) → 429`);
       rateLimited = true;
     } else {
-      fail("A5", `9e tentative: expected 429, got ${res.status}`);
+      fail("A5", `${i}e tentative: expected 429, got ${res.status}`);
     }
   }
   if (!rateLimited) {
-    /* already failed */
+    fail("A5", "aucune réponse 429 observée");
+  }
+}
+
+async function testSaveSessionLogout(base, password) {
+  console.log("\n── A4.3–A4.7 Auth admin — login, save, public, logout ──");
+  const originalBrand = await fetchPublicBrand(base);
+  if (!originalBrand) {
+    fail("A4-setup-brand", "Impossible de lire chrome.brand sur / avant save");
+    return;
   }
 
   const freshJar = new CookieJar();
@@ -179,56 +201,124 @@ async function testAuthFlow(base, passwordHash, authSecret) {
   const ok = await fetchWithJar(`${base}/api/admin/login`, freshJar, {
     method: "POST",
     headers: hdrs,
-    body: JSON.stringify({ password: "PhaseATest2026!" }),
+    body: JSON.stringify({ password }),
   });
   if (ok.status === 200) {
     pass("A4.3", "Bon mot de passe → 200");
   } else {
     fail("A4.3", `expected 200, got ${ok.status} — ${await ok.text()}`);
-    return null;
+    return;
   }
 
   const testBrand = `PhaseA-${Date.now()}`;
-  const saveRes = await fetchWithJar(`${base}/api/admin/save`, freshJar, {
-    method: "POST",
-    headers: hdrs,
-    body: JSON.stringify({ chrome: { brand: testBrand } }),
-  });
-  if (saveRes.status === 200) {
-    pass("A4.4", "Save chrome.brand → 200");
-  } else {
-    fail("A4.4", `expected 200, got ${saveRes.status} — ${await saveRes.text()}`);
-    return testBrand;
+  try {
+    const saveRes = await fetchWithJar(`${base}/api/admin/save`, freshJar, {
+      method: "POST",
+      headers: hdrs,
+      body: JSON.stringify({ chrome: { brand: testBrand } }),
+    });
+    if (saveRes.status === 200) {
+      pass("A4.4", "Save chrome.brand → 200");
+    } else {
+      fail("A4.4", `expected 200, got ${saveRes.status} — ${await saveRes.text()}`);
+      return;
+    }
+
+    await sleep(800);
+    const homeHtml = await fetch(`${base}/`, { headers: { "cache-control": "no-cache" } }).then((r) => r.text());
+    if (homeHtml.includes(testBrand)) {
+      pass("A4.5", "Page publique reflète chrome.brand après save");
+    } else {
+      fail("A4.5", `brand « ${testBrand} » absent du HTML /`);
+    }
+
+    const oldCookie = freshJar.header();
+    await fetchWithJar(`${base}/api/admin/logout`, freshJar, {
+      method: "POST",
+      headers: hdrs,
+    });
+    pass("A4.6", "Logout → OK");
+
+    const staleSave = await fetch(`${base}/api/admin/save`, {
+      method: "POST",
+      headers: { ...hdrs, cookie: oldCookie ?? "" },
+      body: JSON.stringify({ chrome: { brand: "Hijacked" } }),
+    });
+    if (staleSave.status === 401) {
+      pass("A4.7", "Session expirée ne peut plus save → 401");
+    } else {
+      fail("A4.7", `expected 401 after logout, got ${staleSave.status}`);
+    }
+  } finally {
+    const revertJar = new CookieJar();
+    const revertLogin = await fetchWithJar(`${base}/api/admin/login`, revertJar, {
+      method: "POST",
+      headers: loginHeaders(base, "smoke-revert"),
+      body: JSON.stringify({ password }),
+    });
+    if (revertLogin.status !== 200) {
+      fail("A4-revert", `restauration brand : login ${revertLogin.status}`);
+      return;
+    }
+    const revertSave = await fetchWithJar(`${base}/api/admin/save`, revertJar, {
+      method: "POST",
+      headers: loginHeaders(base, "smoke-revert"),
+      body: JSON.stringify({ chrome: { brand: originalBrand } }),
+    });
+    if (revertSave.status === 200) {
+      pass("A4-revert", `chrome.brand restauré (« ${originalBrand} »)`);
+    } else {
+      fail("A4-revert", `restauration brand → ${revertSave.status}`);
+    }
+    await fetchWithJar(`${base}/api/admin/logout`, revertJar, {
+      method: "POST",
+      headers: loginHeaders(base, "smoke-revert"),
+    });
   }
+}
 
-  await sleep(300);
-  const homeRes = await fetch(`${base}/`, { headers: { "cache-control": "no-cache" } });
-  const homeHtml = await homeRes.text();
-  if (homeHtml.includes(testBrand)) {
-    pass("A4.5", "Page publique reflète chrome.brand après save");
-  } else {
-    fail("A4.5", `brand « ${testBrand} » absent du HTML /`);
-  }
+async function testAuthFlow(base, password) {
+  await testWrongPassword(base);
+  await testLoginRateLimit(base, { first429At: 9 });
+  await testSaveSessionLogout(base, password);
+}
 
-  const oldCookie = freshJar.header();
-  await fetchWithJar(`${base}/api/admin/logout`, freshJar, {
+const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 + 5000;
+
+async function testWrongPasswordMaybeAfterCooldown(base, { allowCooldown = false } = {}) {
+  let wrong = await fetch(`${base}/api/admin/login`, {
     method: "POST",
-    headers: hdrs,
+    headers: loginHeaders(base, "smoke-wrong"),
+    body: JSON.stringify({ password: "wrong-password-phase-a" }),
   });
-  pass("A4.6", "Logout → OK");
-
-  const staleSave = await fetch(`${base}/api/admin/save`, {
-    method: "POST",
-    headers: { ...hdrs, cookie: oldCookie ?? "" },
-    body: JSON.stringify({ chrome: { brand: "Hijacked" } }),
-  });
-  if (staleSave.status === 401) {
-    pass("A4.7", "Session expirée ne peut plus save → 401");
-  } else {
-    fail("A4.7", `expected 401 after logout, got ${staleSave.status}`);
+  if (allowCooldown && wrong.status === 429) {
+    console.log(`  … IP encore limitée — attente ${Math.round(RATE_LIMIT_WINDOW_MS / 60000)} min (sans nouvelle requête login)`);
+    await sleep(RATE_LIMIT_WINDOW_MS);
+    wrong = await fetch(`${base}/api/admin/login`, {
+      method: "POST",
+      headers: loginHeaders(base, "smoke-wrong"),
+      body: JSON.stringify({ password: "wrong-password-phase-a" }),
+    });
   }
+  if (wrong.status === 401) {
+    pass("A4.2", "Mauvais mot de passe → 401");
+  } else {
+    fail("A4.2", `expected 401, got ${wrong.status}`);
+  }
+}
 
-  return testBrand;
+async function testExternalAdmin(base) {
+  console.log(`\n── Admin externe : ${base} ──`);
+  console.log("   (Vercel : IP client réelle — rate limit cumulé sur une seule IP)");
+  await testWrongPasswordMaybeAfterCooldown(base, { allowCooldown: true });
+  if (ADMIN_SMOKE_PASSWORD) {
+    console.log("\n   Ordre prod : save/revert avant A5 (sinon 429 bloque le login).");
+    await testSaveSessionLogout(base, ADMIN_SMOKE_PASSWORD);
+    await testLoginRateLimit(base, { first429At: 9 });
+    return;
+  }
+  await testLoginRateLimit(base, { first429At: 8 });
+  console.log("\n  ⏭ A4.3–A4.7 ignorés — définir ADMIN_SMOKE_PASSWORD pour login/save/revert.");
 }
 
 async function testPublicRoutes(base) {
@@ -354,6 +444,17 @@ async function main() {
     process.exit(1);
   }
 
+  if (ADMIN_ONLY && EXTERNAL_BASE) {
+    await testExternalAdmin(EXTERNAL_BASE);
+    printSummary();
+    process.exit(failed > 0 ? 1 : 0);
+  }
+
+  if (ADMIN_ONLY) {
+    console.error("Usage: node scripts/phase-a-smoke.mjs --admin-only --base=https://…");
+    process.exit(1);
+  }
+
   let unconfiguredChild = null;
   let configuredChild = null;
 
@@ -391,7 +492,7 @@ async function main() {
     console.log("   Note: next start exige Redis en production (sessionStoreReady).");
     configuredChild = startServer(authPort, authEnv, "dev");
     await waitForServer(authBase, 90_000);
-    await testAuthFlow(authBase, passwordHash, authSecret);
+    await testAuthFlow(authBase, LOCAL_SMOKE_PASSWORD);
     stopServer(configuredChild);
     configuredChild = null;
     await sleep(1000);

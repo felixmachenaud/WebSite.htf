@@ -15,7 +15,7 @@ Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : 
 
 - Site public : routes App Router complètes
 - Contact : téléphone + courriel uniquement (**Calendly retiré**)
-- SEO, sécurité, mini-CMS, auth admin (code + smoke local)
+- SEO, sécurité, mini-CMS, auth admin (smoke local 36/36 ; prod 401/429)
 - Pages juridiques branchées sur `lib/ecole-pending.ts`
 - Defaults CMS (`site-content`) synchronisés avec `ecole-pending` (email, stats, brevet)
 - Build OK (22 routes) ; smoke `scripts/phase-a-smoke.mjs` 35/35
@@ -29,8 +29,8 @@ Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : 
 | **Identité juridique** | APASE + SIRET + responsable dans `ecole-pending` | Relecture B4 — SEC-02 |
 | **Email Gmail** | Confirmé (`contactEmailConfirmed: true`) | SEC-08 FIXED |
 | **Chiffres collège/lycée** | 213 / 111 dans defaults CMS | CODE-05 FIXED ; vérifier Blob admin |
-| **Relecture direction** | Non faite (B4) | SEC-02 |
-| **Admin CMS prod** | Redis Upstash posé ; CMS utilisé (13 oct.) | Smoke 401/429 non rejoué |
+| **Relecture direction** | Dossier `docs/RELECTURE-DIRECTION-B4.md` prêt ; hébergeur hors périmètre | SEC-02 |
+| **Admin CMS prod** | Smoke prod 8/8 (14 oct.) : 401, save/revert, 429 | Déployer fix `saveContent` si commit local pas encore en prod |
 | **Preview Vercel** | Auth, Blob et Redis (Production + Preview) | Phase C partielle |
 | **CI** | Verte sur `main` (14 oct., run `38520821227`) | — |
 
@@ -50,10 +50,10 @@ Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : 
 
 | ID | Statut | Notes |
 |----|--------|-------|
-| B1 Juridique | ⚠️ | Infra OK ; valeurs `null` dans `ecole-pending.ts` |
+| B1 Juridique | ⚠️ | APASE / SIRET / responsable renseignés ; validation écrite B4 |
 | B2 Email | ⚠️ | Gmail par défaut ; flag confirmation à passer quand mail reçu |
 | B3 Chiffres | ⚠️ | Defaults branchés ; valeurs à confirmer par l'école |
-| B4 Relecture | ⏸ | Direction — SEC-02 reste `[MONITOR]` |
+| B4 Relecture | ⏸ | Envoyer `docs/RELECTURE-DIRECTION-B4.md` ; accord écrit hors hébergeur → SEC-02 |
 
 **Exécuté sans mail école** : retrait Calendly, centralisation `ecole-pending` → `site-content`, pages juridiques/contact/confidentialité à jour, checklist `docs/PHASE-B-ECOLE.md`.
 
@@ -72,7 +72,7 @@ Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : 
 | C3 (SEC-02) | ⏸ | Placeholders juridiques — bloqué retour école + B4 |
 | Deploy prod | ✅ | Redis pris en compte ; CMS utilisé (13 oct.) |
 | Smoke public prod | ✅ | 26/26 (`phase-a-smoke.mjs --public-only`) |
-| Smoke admin prod | ⚠️ | Connexion CMS constatée ; script 401/429 non rejoué |
+| Smoke admin prod | ✅ | 8/8 (`--admin-only` + `ADMIN_SMOKE_PASSWORD`, 14 oct.) |
 
 Détail : `docs/PHASE-C-PRODUCTION.md`
 
@@ -104,6 +104,6 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ## Prochaines actions
 
-1. Rejouer le smoke admin (401/429) et le save → page publique
-2. Relecture direction (B4) — SEC-02
+1. Commit/déployer correctifs locaux (saveContent, smoke `--admin-only`, juridique B4) si pas encore sur `main`
+2. Relecture direction (B4) — transmettre `docs/RELECTURE-DIRECTION-B4.md` — SEC-02
 3. Domaine OVH → CNAME Vercel (scénario A) quand le nom final est fixé

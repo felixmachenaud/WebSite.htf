@@ -40,7 +40,8 @@ export async function getContent(): Promise<SiteContent> {
 }
 
 export async function saveContent(input: unknown): Promise<"ok" | "unavailable"> {
-  const merged = mergeContent(DEFAULT_CONTENT, input);
+  const current = await getContent();
+  const merged = mergeContent(current, input);
   const body = JSON.stringify(merged);
   if (blobConfigured()) {
     await put(BLOB_PATH, body, {

@@ -140,4 +140,5 @@ Branchement Git actuel : vagues d'audit `vague-0` → `vague-1` → `vague-2` à
 - SEO : `generateMetadata` par page ; URL canonique via `siteUrl()`
 - Admin : en-tête custom `x-hautefeuille-admin` requis sur les routes API
 - CI : `npm run lint`, `npm run typecheck`, `npm run build`, puis `node scripts/phase-a-smoke.mjs --public-only --base=…` sur le serveur issu du build. Pas de token Blob, Redis ni `AUTH_SECRET` dans GitHub Actions. Lockfile : `picomatch` 2.3.2 et 4.0.7 via `overrides`, pour que `npm ci` passe avec npm 10 sur Ubuntu
+- Smoke admin prod/preview : `node scripts/phase-a-smoke.mjs --admin-only --base=<URL>` (401/429) ; login/save/revert si `ADMIN_SMOKE_PASSWORD` (local, jamais committer). Sur Vercel, respecter 15 min entre deux runs (même IP)
 - Documentation agent : `AGENTS.md`, `CURRENT_STATE.md`, `PROJECT_HEALTH.md`, `docs/standards/` ; règles Cursor `.cursor/rules/*.mdc`

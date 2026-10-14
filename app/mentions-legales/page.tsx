@@ -27,8 +27,10 @@ export default async function MentionsLegalesPage() {
             Mentions légales
           </h1>
           <p className="mt-4 text-sm text-slate-500">
-            Dernière mise à jour : 30 septembre 2026. Les éléments marqués « à confirmer »
-            doivent être relus par l&apos;établissement avant la mise en production.
+            Dernière mise à jour : 30 septembre 2026. Identité APASE, SIRET et responsable de
+            publication : octobre 2026. Relecture formelle par la direction en cours (B4). Le
+            paragraphe hébergeur reste provisoire tant que le choix Vercel / OVH n&apos;est pas
+            acté.
           </p>
 
           <h2 className="mt-10 font-serif text-xl font-semibold text-slate-900">Éditeur</h2>

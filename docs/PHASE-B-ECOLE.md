@@ -52,11 +52,15 @@ Ne pas inventer de SIRET, raison sociale, effectifs ou taux. Mettre à jour seul
 
 ## B4 — Relecture direction et clôture SEC-02
 
-| Étape | Bloque prod |
-|-------|-------------|
-| Relecture mentions légales et confidentialité | Oui (Phase C) |
-| Renseigner B1 + `contactEmailConfirmed` | Oui |
-| Mettre SEC-02 à `[FIXED]` | **Uniquement après accord écrit école** |
+**Dossier à transmettre à la direction** : [`docs/RELECTURE-DIRECTION-B4.md`](RELECTURE-DIRECTION-B4.md) (URLs, checklist, hébergeur hors périmètre).
+
+| Étape | Statut (oct. 2026) |
+|-------|---------------------|
+| B1 identité APASE / SIRET / responsable dans `ecole-pending.ts` | ✅ Renseigné |
+| B2 `contactEmailConfirmed` | ✅ |
+| Relecture mentions + confidentialité (hors paragraphe hébergeur) | ⏸ Accord écrit direction |
+| `SITE_HOSTING` + `hostConfirmed` | ⏸ Après choix Vercel / OVH |
+| SEC-02 → `[FIXED]` | **Uniquement après accord écrit B4** |
 
 ---
 
@@ -72,9 +76,9 @@ Ne pas inventer de SIRET, raison sociale, effectifs ou taux. Mettre à jour seul
 
 ## Bloquants prod Phase B (synthèse)
 
-- [ ] Raison sociale, forme juridique, SIRET
-- [ ] Responsable de publication nominatif
-- [ ] Email confirmé (`contactEmailConfirmed: true`)
-- [ ] Effectifs collège et lycée distincts et validés
-- [ ] Taux brevet et bac confirmés
-- [ ] Relecture écrite direction → SEC-02 clôturable
+- [x] Raison sociale, forme juridique, SIRET (APASE — relecture B4)
+- [x] Responsable de publication nominatif (relecture B4)
+- [x] Email confirmé (`contactEmailConfirmed: true`)
+- [x] Effectifs collège / lycée 213 / 111 (affichage prod OK — confirmation école recommandée)
+- [ ] Taux brevet et bac confirmés par écrit (contenu affiché, validation formelle B4+)
+- [ ] Relecture écrite direction (mentions + confidentialité, **hébergeur exclu**) → SEC-02

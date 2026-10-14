@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 14 octobre 2026 — CI verte sur main (run 38520821227) |
+| Dernière mise à jour | 14 octobre 2026 — smoke admin prod 401/429 ; merge save Blob ; CI verte (run 38520821227) |
 
 Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
@@ -24,9 +24,9 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 ### SEC-02 [MONITOR] [CRITICAL] 2026-09-30
 
 - Composant : `app/mentions-legales/page.tsx`, `app/confidentialite/page.tsx`, `lib/ecole-pending.ts`
-- Constat : pages juridiques servies ; identité APASE, SIRET 44345731200025 et responsable de publication renseignés (13 oct. 2026).
-- Cause : relecture formelle direction et hébergeur définitif (OVH vs Vercel) encore à valider.
-- Action : faire relire mentions légales et confidentialité par la direction, puis passer à `[FIXED]`. Ajuster le bloc hébergeur si migration OVH.
+- Constat : pages en ligne ; APASE, SIRET 44345731200025, responsable Dimitri de Baudan, Gmail confirmé. Intro pages alignée « relecture B4 en cours » ; confidentialité cite `legalIdentityLine()`. Dossier direction : `docs/RELECTURE-DIRECTION-B4.md` (hébergeur exclu de la relecture).
+- Cause : accord écrit direction absent ; paragraphe hébergeur provisoire (`SITE_HOSTING=pending`) jusqu’à choix Vercel/OVH.
+- Action : transmettre le dossier B4, obtenir validation écrite (hors hébergeur), puis `[FIXED]`. Mettre à jour hébergeur seul quand `SITE_HOSTING` + `hostConfirmed`.
 
 ### SEC-03 [FIXED] [HIGH] 2026-09-30
 
@@ -91,12 +91,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : ESLint 8 et chaîne associée.
 - Action : `npm run lint` passe (13 oct. 2026, ESLint 9 + config plate). `picomatch` est monté aux correctifs 2.3.2 et 4.0.7 (14 oct.). Les avis hauts restants côté outils de dev (`brace-expansion`, `browserslist`) restent en vague 3. Pas de `npm audit fix`.
 
-### SEC-12 [MONITOR] [MEDIUM] 2026-09-30
+### SEC-12 [FIXED] [MEDIUM] 2026-09-30
 
 - Composant : `app/api/admin/login/route.ts`, `lib/admin-sessions.ts`
 - Constat : le login limite les essais et exige l'en-tête `x-hautefeuille-admin`.
-- Cause : ces contrôles n'ont pas été exercés sur une Preview avec Redis.
-- Action : smoke local OK (6 oct. 2026) — 1×401, 9×429, en-tête requis. Confirmer sur Preview Vercel avec Upstash avant ouverture `/admin`.
+- Cause : recette prod absente jusqu'au branchement Redis (13 oct. 2026).
+- Action : smoke local (6 oct.) ; prod (14 oct.) — 401 mauvais MDP, 429 après cumul IP (8e tentative post-401 sur Vercel). Script : `--admin-only --base=https://web-site-htf.vercel.app`.
 
 ### SEC-13 [OPEN] [MEDIUM] 2026-09-30
 
@@ -112,12 +112,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : brochure publique, comportement voulu.
 - Action : conserver. L'accès admin existe ; les visiteurs restent sans compte.
 
-### AUTH-02 [MONITOR] [HIGH] 2026-09-30
+### AUTH-02 [FIXED] [HIGH] 2026-09-30
 
 - Composant : `lib/admin-auth.ts`, `lib/admin-sessions.ts`, `app/api/admin/`
-- Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis. Production (13 oct. 2026) : base `upstash-kv-cyan-pocket` (Pay As You Go, `fra1`) liée à `web-site-htf` en Production et Preview. Le CMS a été utilisé. Le script login 401/429 n'a pas été rejoué.
-- Cause : Upstash était absent jusqu'au branchement marketplace du 13 oct. 2026.
-- Action : rejouer le smoke admin prod (`docs/PHASE-C-PRODUCTION.md`), puis passer à `[FIXED]` si 401, 429 et save passent.
+- Constat : hash scrypt, cookie opaque, pepper `AUTH_SECRET`, sessions Redis. Prod (14 oct.) : smoke `--admin-only` 8/8 — 401, login 200, save, page publique, logout, 401 post-logout, revert brand, 429 rate limit.
+- Cause : recette prod reportée jusqu’à Redis + fenêtre rate limit.
+- Action : conserver `ADMIN_SMOKE_PASSWORD` hors dépôt ; respecter ~15 min entre runs prod depuis la même IP.
 
 ### CODE-01 [FIXED] [HIGH] 2026-09-30
 
@@ -231,12 +231,12 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : ResponsiveContainer mesuré avant layout.
 - Action : vague 3.
 
-### CMS-01 [MONITOR] [HIGH] 2026-09-30
+### CMS-01 [FIXED] [HIGH] 2026-09-30
 
 - Composant : `lib/site-content.ts`, `lib/content-store.ts`, `app/admin`, `app/api/admin`
-- Constat : mini-CMS en code, build OK (22 routes). Production (13 oct. 2026) : Blob OK et Redis OK. Le CMS a été utilisé. Le smoke save → rechargement public n'a pas été rejoué par le script.
-- Cause : Upstash était non provisionné jusqu'au 13 oct. 2026.
-- Action : rejouer le smoke save → reload, puis passer à `[FIXED]`.
+- Constat : `saveContent` merge sur `getContent()`. Prod (14 oct.) : save `chrome.brand` → HTML `/` → revert « Hautefeuille » via smoke admin.
+- Cause : ancien save écrasait le Blob avec defaults + patch seul.
+- Action : déployer le fix `saveContent` si pas encore sur `main` prod ; resynchroniser Blob admin si d’anciennes stats persistaient (CODE-05).
 
 ### CMS-02 [MONITOR] [MEDIUM] 2026-09-30
 

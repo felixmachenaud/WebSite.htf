@@ -171,3 +171,15 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 **Alternatives abandonnées** : Playwright ; backend contact ou newsletter ; branchement Sanity.
 
 **Conséquences** : Les règles React Compiler `react-hooks/refs`, `set-state-in-effect` et `immutability` sont coupées sur `ScrollHijackLanding.tsx` et `components/scroll/**` (CODE-03, CODE-04). Les avertissements `no-img-element` ne bloquent pas la CI (ARCH-02). Le smoke admin reste local ou Preview. CODE-02 passe à `[FIXED]` seulement après un run GitHub vert.
+
+---
+
+## 2026-10-14 — picomatch figé pour que `npm ci` passe sur Ubuntu
+
+**Décision** : `overrides` npm : `picomatch@2` = 2.3.2 et `picomatch@4` = 4.0.7. Aucun autre paquet n'est monté. Pas de `npm audit fix`.
+
+**Raison** : Le run GitHub du 13 oct. échoue en 13 secondes. npm 10.8.2 (Node 20, Ubuntu) refuse le lockfile : `picomatch@2.3.1` ne satisfait pas `picomatch@4.0.7`, et `picomatch@2.3.2` manque. Ce sont des correctifs de ligne déjà couverts par les plages existantes. Le même `npm ci` passait sur macOS.
+
+**Alternatives abandonnées** : `npm audit fix` ; supprimer le lockfile et tout réinstaller ; changer Node dans la CI.
+
+**Conséquences** : Les outils qui veulent picomatch 2 (micromatch, anymatch, readdirp) gardent la branche 2. Ceux qui veulent la branche 4 (tinyglobby) reçoivent 4.0.7. SEC-11 reste ouvert : d'autres avis hauts de dev ne sont pas traités.

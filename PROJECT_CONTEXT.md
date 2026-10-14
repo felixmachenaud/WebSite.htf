@@ -6,7 +6,7 @@ Contexte structurel permanent du site **Collège Lycée Hautefeuille**. Ce fichi
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Client | Collège Lycée Hautefeuille (Courbevoie / Bois-Colombes) |
-| Dernière mise à jour | 13 octobre 2026 |
+| Dernière mise à jour | 14 octobre 2026 |
 
 ---
 
@@ -139,5 +139,5 @@ Branchement Git actuel : vagues d'audit `vague-0` → `vague-1` → `vague-2` à
 - Images : dossiers thématiques sous `public/images/` ; README par dossier
 - SEO : `generateMetadata` par page ; URL canonique via `siteUrl()`
 - Admin : en-tête custom `x-hautefeuille-admin` requis sur les routes API
-- CI : `npm run lint`, `npm run typecheck`, `npm run build`, puis `node scripts/phase-a-smoke.mjs --public-only --base=…` sur le serveur issu du build. Pas de token Blob, Redis ni `AUTH_SECRET` dans GitHub Actions
+- CI : `npm run lint`, `npm run typecheck`, `npm run build`, puis `node scripts/phase-a-smoke.mjs --public-only --base=…` sur le serveur issu du build. Pas de token Blob, Redis ni `AUTH_SECRET` dans GitHub Actions. Lockfile : `picomatch` 2.3.2 et 4.0.7 via `overrides`, pour que `npm ci` passe avec npm 10 sur Ubuntu
 - Documentation agent : `AGENTS.md`, `CURRENT_STATE.md`, `PROJECT_HEALTH.md`, `docs/standards/` ; règles Cursor `.cursor/rules/*.mdc`

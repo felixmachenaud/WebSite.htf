@@ -6,7 +6,7 @@ Registre des anomalies du site Collège Lycée Hautefeuille. Source de vérité 
 |---|---|
 | Dépôt | `felixmachenaud/WebSite.htf` |
 | Référence d'audit | 30 septembre 2026, commit `6841649` |
-| Dernière mise à jour | 13 octobre 2026 — CI locale verte ; Redis admin en prod ; run GitHub à confirmer |
+| Dernière mise à jour | 14 octobre 2026 — lockfile picomatch réaligné pour `npm ci` ; run GitHub à confirmer |
 
 Documentation associée : `PROJECT_CONTEXT.md`, `CURRENT_STATE.md` (phases A–D), `DECISIONS.md`, `AGENTS.md`, `docs/standards/` (checklist, sécurité, SEO), `.cursor/rules/*.mdc`.
 
@@ -75,7 +75,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Composant : `package-lock.json`
 - Constat : `npm ci` échouait (picomatch).
 - Cause : lockfile incohérent avec la résolution npm.
-- Action : lockfile régénéré avec la montée Next / PostCSS. `npm ci` doit passer sur un clone propre.
+- Action : lockfile régénéré avec la montée Next / PostCSS (30 sept.). Récidive le 13 oct. 2026 : `npm ci` sur Ubuntu (npm 10.8.2) refuse `picomatch` 2.3.1 / 4.0.3. Le 14 oct., `overrides` figent 2.3.2 et 4.0.7. `npm ci --os linux` passe en local. Ne pas lancer `npm audit fix`.
 
 ### SEC-10 [FIXED] [HIGH] 2026-09-30
 
@@ -89,7 +89,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Composant : dépendances de développement (`eslint`, `eslint-config-next`, `glob`)
 - Constat : avis hauts limités aux outils de dev au moment de l'audit.
 - Cause : ESLint 8 et chaîne associée.
-- Action : `npm run lint` passe (13 oct. 2026, ESLint 9 + config plate). Les avis hauts restants côté outils de dev (`brace-expansion`, `browserslist`, `picomatch`) restent en vague 3.
+- Action : `npm run lint` passe (13 oct. 2026, ESLint 9 + config plate). `picomatch` est monté aux correctifs 2.3.2 et 4.0.7 (14 oct.). Les avis hauts restants côté outils de dev (`brace-expansion`, `browserslist`) restent en vague 3. Pas de `npm audit fix`.
 
 ### SEC-12 [MONITOR] [MEDIUM] 2026-09-30
 
@@ -129,8 +129,8 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 ### CODE-02 [MONITOR] [HIGH] 2026-09-30
 
 - Composant : CI et tests
-- Constat : script `typecheck` et workflow `.github/workflows/ci.yml` ajoutés (lint, tsc, build, smoke public). Chaîne locale verte le 13 oct. 2026, y compris un build sans `.env.local` et un smoke public 26/26. Le run GitHub n'est pas encore observé.
-- Cause : outillage absent jusqu'à cette date.
+- Constat : script `typecheck` et workflow `.github/workflows/ci.yml` ajoutés (lint, tsc, build, smoke public). Le run du 13 oct. échoue à `npm ci` (picomatch). Lockfile réaligné le 14 oct. ; le run GitHub de ce correctif n'est pas encore observé.
+- Cause : lockfile incompatible avec npm 10.8.2 sur Ubuntu.
 - Action : confirmer le workflow vert sur `main`, puis passer à `[FIXED]`. Le smoke admin reste hors CI (AUTH-02).
 
 ### CODE-03 [OPEN] [MEDIUM] 2026-09-30

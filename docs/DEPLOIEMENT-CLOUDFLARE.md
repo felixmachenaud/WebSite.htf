@@ -17,6 +17,17 @@ Aucun `account_id` dans le code : le compte est celui connecté à Wrangler (`np
 - `worker.ts` : Worker OpenNext entouré de `lib/indexing.ts` (robots fermé + `X-Robots-Tag: noindex` hors production). Test : `npm run test:indexing`.
 - `scripts/deploy.mjs` : affiche le compte, rebuild pour la cible, déploie ; la production exige de taper `production`.
 
+## Déploiement automatique
+
+Chaque merge sur `main` déclenche, après une CI verte, `.github/workflows/deploy-cloudflare.yml` : test d'indexation, build OpenNext, déploiement de `hautefeuille-preview`, smoke public sur l'URL de l'aperçu. Relance manuelle : onglet Actions › Deploy Cloudflare › Run workflow.
+
+Secrets GitHub à créer une fois (Félix) :
+
+1. Cloudflare › My Profile › API Tokens › Create Token › modèle « Edit Cloudflare Workers », compte de Félix.
+2. `gh secret set CLOUDFLARE_API_TOKEN` (coller le jeton) et `gh secret set CLOUDFLARE_ACCOUNT_ID --body <id du compte affiché par wrangler whoami>`.
+
+La production (compte de l'école) n'est jamais déployée automatiquement.
+
 ## Aperçu (compte de Félix)
 
 ```sh

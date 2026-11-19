@@ -92,7 +92,8 @@ Registre : concis, factuel, chronologique, versionné dans Git.
 - Pas de secrets dans Git ; contrat dans `.env.example` uniquement
 - Merge vagues : ordre **0 → 1 → 2** ; stash landing **après** recette Phase A
 - Messagerie = `mailto:` / téléphone externe ; pas de formulaire intégré sauf demande explicite
-- CI : `.github/workflows/ci.yml` sur `main` et les pull requests (`npm ci`, lint, typecheck, build, smoke public). Aucun secret dans le workflow. Smoke admin hors CI. Ne pas lancer `npm audit fix`. Les correctifs `picomatch` sont figés dans `package.json` (`overrides`).
+- CI : `.github/workflows/ci.yml` sur `main` et les pull requests (`npm ci`, lint, typecheck, build, smoke public). Aucun secret dans ce workflow.
+- Déploiement : `.github/workflows/deploy-cloudflare.yml` déploie l'aperçu Cloudflare après une CI verte sur `main` (secrets GitHub `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`). La production Cloudflare reste manuelle. Smoke admin hors CI. Ne pas lancer `npm audit fix`. Les correctifs `picomatch` sont figés dans `package.json` (`overrides`).
 
 ---
 

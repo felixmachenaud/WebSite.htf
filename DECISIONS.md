@@ -201,3 +201,9 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 
 - Décision (Félix) : on abandonne Vercel ; toutes les modifications doivent aboutir sur le Worker Cloudflare.
 - Conséquences : `npm run deploy:htf:preview` remplace le déploiement Vercel. Le contenu CMS enregistré dans Vercel Blob et les sessions Upstash restent à migrer (ARCH-09). Le projet Vercel et son déploiement automatique sur `main` sont à débrancher par Félix.
+
+## 2026-11-19 — Déploiement automatique de l'aperçu Cloudflare
+
+- Décision (Félix) : chaque merge sur `main` doit aboutir sur le Worker.
+- Mise en œuvre : workflow séparé `deploy-cloudflare.yml`, déclenché par `workflow_run` après une CI verte sur `main` ; la CI reste sans secret. Secrets GitHub `CLOUDFLARE_API_TOKEN` (jeton « Edit Cloudflare Workers ») et `CLOUDFLARE_ACCOUNT_ID`, posés par Félix.
+- Limite : seul l'aperçu (compte Félix) est automatique ; la production sur le compte de l'école reste manuelle avec confirmation.

@@ -294,12 +294,14 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : deux sources contradictoires ; donnée juridique, non modifiée.
 - Action : faire confirmer l'adresse par l'école, puis corriger les 4 occurrences.
 
-### CMS-05 [OPEN] [MEDIUM] 2026-11-19
+### CMS-05 [MONITOR] [MEDIUM] 2026-11-19
 
 - Composant : `lib/site-content.ts` (`mergeContent`), Blob prod
 - Constat : les nouveaux textes (maquette `références/`) sont des valeurs par défaut. Tout champ déjà enregistré via l'admin dans le Blob garde l'ancien texte (ex. 3 premiers encadrés de l'accueil, libellés du menu).
 - Cause : les valeurs sauvegardées priment sur les défauts.
 - Action : après déploiement, vérifier l'admin prod et ressaisir ou réinitialiser les champs concernés.
+- Constat prod (19 nov., après `cd2f601`) : confirmé — menu, encadrés 1–3, titres et textes de collège, lycée, valeurs, qui sommes-nous, infos, actualités restent à l'ancien texte.
+- Correctif : bouton admin « Rétablir les textes par défaut de cet onglet » (remet les defaults dans l'éditeur, publication via « Enregistrer » ; liste des actualités conservée). Testé en local. Reste : déployer, puis réinitialiser les onglets Accueil, Collège, Lycée, Histoire, Projet, Infos, Actualités en prod. Attention : l'onglet remet aussi à défaut les champs volontairement modifiés par l'école (ex. direction, résultats).
 
 ### ARCH-08 [OPEN] [LOW] 2026-11-19
 

@@ -316,3 +316,11 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Constat : citations, agenda, FAQ, documents PDF, formulaire de don, réseau des anciens et frais de scolarité de la maquette n'existent pas encore ; les liens renvoient vers `/contact`. Les chiffres « en chiffres » sont copiés des defaults CMS.
 - Cause : contenus non fournis par l'école ; textes statiques hors CMS (non éditables dans l'admin).
 - Action : collecter les contenus réels auprès de l'école ; passer ces pages dans `lib/site-content.ts` si l'école doit les éditer elle-même.
+
+### ARCH-09 [OPEN] [MEDIUM] 2026-11-19
+
+- Composant : Cloudflare Workers (`wrangler.jsonc`, `open-next.config.ts`, `lib/content-store.ts`)
+- Constat : l'aperçu Workers n'a ni CMS ni admin ; le cache OpenNext est en lecture seule ; les images statiques (servies par la couche assets) n'ont pas l'en-tête `X-Robots-Tag` (robots.txt fermé quand même).
+- Cause : choix d'aperçu sans données de prod (voir DECISIONS 2026-11-19).
+- Action : avant une production sur Workers, stockage CMS + sessions + secrets propres au compte, `r2IncrementalCache` + `d1NextTagCache`, Cloudflare Access sur `/admin`.
+- Priorité relevée (décision « Cloudflare cible unique », 19 nov.) : sans ce chantier, le site sur Workers n'a pas d'admin ; le contenu enregistré dans Vercel Blob est à exporter avant d'arrêter Vercel.

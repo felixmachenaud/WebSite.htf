@@ -1,0 +1,32 @@
+// Worker Cloudflare du site Hautefeuille (Next.js via OpenNext).
+// Trois cibles, un code :
+// - racine        = local (opennextjs-cloudflare preview) ;
+// - env.preview   = compte de Félix (workers.dev, jamais indexé) ;
+// - env.production = compte du client (domaine réel, indexé).
+// Pas d'account_id : le compte est celui connecté à Wrangler. Wrangler n'hérite pas des vars entre cibles.
+// Commentaires sur des lignes à part (scripts/deploy.mjs).
+// NEXT_PUBLIC_SITE_URL est lue par scripts/deploy.mjs et injectée au build (inlinée par Next).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hautefeuille-local",
+  "main": "worker.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "vars": { "INDEXING": "off" },
+  "observability": { "enabled": true },
+  "env": {
+    "preview": {
+      "name": "hautefeuille-preview",
+      "workers_dev": true,
+      "vars": { "INDEXING": "off", "NEXT_PUBLIC_SITE_URL": "https://hautefeuille-preview.felixmachenaud2.workers.dev" },
+    },
+    "production": {
+      "name": "hautefeuille",
+      // À la mise en ligne, remplacer workers_dev par le domaine de l'école :
+      // "routes": [{ "pattern": "www.domaine-ecole.fr", "custom_domain": true }],
+      "workers_dev": true,
+      "vars": { "INDEXING": "on", "NEXT_PUBLIC_SITE_URL": "" },
+    },
+  },
+}

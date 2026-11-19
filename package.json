@@ -11,28 +11,35 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "hash-admin-password": "node scripts/hash-admin-password.mjs"
+    "hash-admin-password": "node scripts/hash-admin-password.mjs",
+    "test:indexing": "node --test scripts/indexing.test.mjs",
+    "cf:build": "opennextjs-cloudflare build",
+    "cf:preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy:htf:preview": "node scripts/deploy.mjs preview",
+    "deploy:htf:production": "node scripts/deploy.mjs production"
   },
   "dependencies": {
     "@upstash/redis": "^1.39.0",
     "@vercel/blob": "^2.8.0",
     "gsap": "^3.14.2",
     "lucide-react": "^0.577.0",
-    "next": "16.3.7",
+    "next": "^16.4.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "recharts": "^3.8.0"
   },
   "devDependencies": {
+    "@opennextjs/cloudflare": "^1.20.17",
     "@types/node": "^22.10.2",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
     "autoprefixer": "^10.4.20",
     "eslint": "^9.39.1",
-    "eslint-config-next": "16.3.7",
+    "eslint-config-next": "^16.4.6",
     "postcss": "8.5.28",
     "tailwindcss": "^3.4.17",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "^4.165.0"
   },
   "overrides": {
     "picomatch@2": "2.3.2",

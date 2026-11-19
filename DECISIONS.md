@@ -189,3 +189,15 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 - Contexte : 9 pages ajoutées depuis `références/site Hautefeuille maquette chemin v2` (valeurs, vie à Hautefeuille, familles, témoignages, documentation, soutenez-nous, inscriptions).
 - Décision : un gabarit unique `components/ContentPage.tsx` + textes dans `data/pages.ts`, hors CMS, sous `/a-propos/`. Nouvelles entrées de menu ajoutées en fin de liste (fusion CMS par index).
 - Raison : livrer la structure de la maquette sans étendre l'éditeur admin ; contenus réels encore à fournir (CONT-03).
+
+## 2026-11-19 — Aperçu Cloudflare Workers via OpenNext
+
+- Contexte : demande de déployer le site sur Cloudflare Workers ; production actuelle sur Vercel.
+- Décision : `@opennextjs/cloudflare` 1.20.17 + `wrangler` 4.165.0 (devDependencies). OpenNext exige Next ≥ 16.4.5 : Next et `eslint-config-next` passent de 16.3.7 à 16.4.6. Méthode du skill `deploiement-cloudflare` (aperçu compte Félix, production compte école, indexation fermée hors production, `scripts/deploy.mjs`).
+- Aperçu sans CMS : ni jeton Blob ni Redis, pour ne jamais écrire dans le contenu de la prod Vercel depuis l'aperçu. Cache OpenNext en lecture seule (pas de R2/D1 à créer).
+- Reste : stockage CMS et cache revalidable propres à Cloudflare avant toute production sur Workers.
+
+## 2026-11-19 — Cloudflare Workers, cible unique
+
+- Décision (Félix) : on abandonne Vercel ; toutes les modifications doivent aboutir sur le Worker Cloudflare.
+- Conséquences : `npm run deploy:htf:preview` remplace le déploiement Vercel. Le contenu CMS enregistré dans Vercel Blob et les sessions Upstash restent à migrer (ARCH-09). Le projet Vercel et son déploiement automatique sur `main` sont à débrancher par Félix.

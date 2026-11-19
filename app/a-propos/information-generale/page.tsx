@@ -7,12 +7,12 @@ import { getContent } from "@/lib/content-store";
 import type { InfoSection } from "@/lib/site-content";
 
 const GREEN = "#14532d";
-const HEADER = "/images/informations-generales-header.jpg";
-const UNIFORM_IMAGE = "/images/informations-generales/collage-2.jpg";
+const HEADER = "/images/photos/htf-0057309.jpg";
+const UNIFORM_IMAGE = "/images/photos/htf-0057397.jpg";
 const INSTALLATION_IMAGES = [
-  "/images/informations-generales/collage3-1.jpg",
-  "/images/informations-generales/collage3.2.jpg",
-  "/images/informations-generales/collage-3.3.jpg",
+  "/images/photos/htf-0057648.jpg",
+  "/images/photos/htf-0057756.jpg",
+  "/images/photos/htf-0058172.jpg",
 ];
 
 export async function generateMetadata(): Promise<Metadata> {

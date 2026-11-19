@@ -334,6 +334,15 @@ async function testPublicRoutes(base) {
     "/a-propos/histoire",
     "/a-propos/projet-educatif",
     "/a-propos/information-generale",
+    "/a-propos/projet-educatif/viser-l-excellence",
+    "/a-propos/projet-educatif/s-ouvrir-au-monde",
+    "/a-propos/projet-educatif/donner-du-sens",
+    "/a-propos/vie-a-hautefeuille",
+    "/a-propos/familles",
+    "/a-propos/temoignages",
+    "/a-propos/documentation",
+    "/a-propos/soutenez-nous",
+    "/a-propos/inscriptions",
   ];
   for (const route of routes200) {
     const res = await fetch(`${base}${route}`);

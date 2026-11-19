@@ -4,8 +4,8 @@ import { InstitutionalParagraph } from "@/components/InstitutionalParagraph";
 import { getContent } from "@/lib/content-store";
 
 const COLLEGE_IMAGES = {
-  header: "/images/college/header.jpg",
-  collage: ["/images/college/collage-1.jpeg", "/images/college/collage-2.jpg", "/images/college/collage-3.JPG"],
+  header: "/images/photos/htf-0057424.jpg",
+  collage: ["/images/photos/htf-0057463.jpg", "/images/photos/htf-0057486.jpg", "/images/photos/htf-0057397.jpg"],
   direction: ["/images/college/direction-1.jpg", "/images/college/direction-2.jpg", "/images/college/direction-3.jpg"],
 };
 

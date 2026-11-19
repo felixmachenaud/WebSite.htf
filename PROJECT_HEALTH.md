@@ -279,3 +279,38 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Constat : le domaine public de production n'était pas dans le dépôt. Sans `NEXT_PUBLIC_SITE_URL`, sitemap, robots et Open Graph utilisaient `http://localhost:3000`.
 - Cause : variable absente sur Vercel avant Phase C.
 - Action : `NEXT_PUBLIC_SITE_URL=https://web-site-htf.vercel.app` posé Production + Preview (6 oct. 2026). Vérifié : sitemap, robots, OG en HTTPS prod. Domaine custom éventuel = nouvelle variable si l'école en fournit un.
+
+### CONT-01 [OPEN] [HIGH] 2026-11-19
+
+- Composant : `public/images/photos/`, `public/images/landing/chemin-*.jpg`
+- Constat : le site affiche désormais des photos d'élèves identifiables (reportage HAUTEFEUILLE26, 27 fichiers).
+- Cause : demande client d'intégrer « Photos sélectionnées » et « Photos chemin Htf ». La règle projet impose une autorisation écrite (droit à l'image).
+- Action : obtenir de l'école la confirmation écrite que les autorisations parentales couvrent ces photos avant la mise en production.
+
+### CONT-02 [OPEN] [MEDIUM] 2026-11-19
+
+- Composant : `lib/site-content.ts` (footer, infos), `app/mentions-legales`, `app/confidentialite`
+- Constat : la maquette `références/` donne « 63-65 rue Armand Silvestre » pour le collège ; le site affiche « 5 Rue Armand Silvestre ».
+- Cause : deux sources contradictoires ; donnée juridique, non modifiée.
+- Action : faire confirmer l'adresse par l'école, puis corriger les 4 occurrences.
+
+### CMS-05 [OPEN] [MEDIUM] 2026-11-19
+
+- Composant : `lib/site-content.ts` (`mergeContent`), Blob prod
+- Constat : les nouveaux textes (maquette `références/`) sont des valeurs par défaut. Tout champ déjà enregistré via l'admin dans le Blob garde l'ancien texte (ex. 3 premiers encadrés de l'accueil, libellés du menu).
+- Cause : les valeurs sauvegardées priment sur les défauts.
+- Action : après déploiement, vérifier l'admin prod et ressaisir ou réinitialiser les champs concernés.
+
+### ARCH-08 [OPEN] [LOW] 2026-11-19
+
+- Composant : `public/images/` (dossiers sources)
+- Constat : les dossiers bruts `Photos sélectionnées` (332 Mo) et `Photos chemin Htf` (~120 Mo) sont non suivis dans `public/` du checkout principal ; s'ils sont commités, ils partent dans le déploiement.
+- Cause : dépôt manuel des originaux.
+- Action : les sortir de `public/` (ou les ignorer dans Git). Les versions web (≈2000 px) sont dans `public/images/photos/` et `public/images/landing/`. Les anciennes images de `college/`, `lycee/`, `projet-educatif/`, `informations-generales*/` ne sont plus référencées (sauf portraits direction et histoire/collage-1).
+
+### CONT-03 [OPEN] [MEDIUM] 2026-11-19
+
+- Composant : `data/pages.ts` (pages issues de la maquette)
+- Constat : citations, agenda, FAQ, documents PDF, formulaire de don, réseau des anciens et frais de scolarité de la maquette n'existent pas encore ; les liens renvoient vers `/contact`. Les chiffres « en chiffres » sont copiés des defaults CMS.
+- Cause : contenus non fournis par l'école ; textes statiques hors CMS (non éditables dans l'admin).
+- Action : collecter les contenus réels auprès de l'école ; passer ces pages dans `lib/site-content.ts` si l'école doit les éditer elle-même.

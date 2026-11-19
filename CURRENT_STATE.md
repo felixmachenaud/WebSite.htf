@@ -102,6 +102,15 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ---
 
+## Wording et photos (19 nov. 2026, branche `claude/site-architecture-photos-86defe`)
+
+- Textes repris de la maquette `références/site Hautefeuille maquette chemin v2` dans les defaults CMS, sur la structure de routes actuelle : menu (Qui sommes-nous, Nos valeurs, Informations pratiques), accueil en 7 étapes (devise, 3 valeurs, collège, lycée, vie à Hautefeuille), collège, lycée, valeurs, histoire, infos pratiques, actualités.
+- Accueil : photos de « Photos chemin Htf » (mêmes visuels que la maquette), en couleur. Pages intérieures : photos de « Photos sélectionnées », redimensionnées dans `public/images/photos/`.
+- 9 pages ajoutées depuis la maquette (gabarit `components/ContentPage.tsx`, textes `data/pages.ts`, statiques hors CMS) : `/a-propos/projet-educatif/{viser-l-excellence,s-ouvrir-au-monde,donner-du-sens}`, `/a-propos/{vie-a-hautefeuille,familles,temoignages,documentation,soutenez-nous,inscriptions}`. Menu, sitemap, encadrés d'accueil et lien « Inscriptions » de l'en-tête branchés. Smoke public local 35/35.
+- À lever avant prod : CONT-01 (droit à l'image), CONT-02 (adresse), CMS-05 (Blob).
+
+---
+
 ## Prochaines actions
 
 1. Commit/déployer correctifs locaux (saveContent, smoke `--admin-only`, juridique B4) si pas encore sur `main`

@@ -183,3 +183,9 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 **Alternatives abandonnées** : `npm audit fix` ; supprimer le lockfile et tout réinstaller ; changer Node dans la CI.
 
 **Conséquences** : Les outils qui veulent picomatch 2 (micromatch, anymatch, readdirp) gardent la branche 2. Ceux qui veulent la branche 4 (tinyglobby) reçoivent 4.0.7. SEC-11 reste ouvert : d'autres avis hauts de dev ne sont pas traités. Run GitHub vert le 14 oct. 2026 (`38520821227`). CODE-02 `[FIXED]`.
+
+## 2026-11-19 — Pages de la maquette en contenu statique
+
+- Contexte : 9 pages ajoutées depuis `références/site Hautefeuille maquette chemin v2` (valeurs, vie à Hautefeuille, familles, témoignages, documentation, soutenez-nous, inscriptions).
+- Décision : un gabarit unique `components/ContentPage.tsx` + textes dans `data/pages.ts`, hors CMS, sous `/a-propos/`. Nouvelles entrées de menu ajoutées en fin de liste (fusion CMS par index).
+- Raison : livrer la structure de la maquette sans étendre l'éditeur admin ; contenus réels encore à fournir (CONT-03).

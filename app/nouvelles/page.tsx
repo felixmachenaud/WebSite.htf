@@ -5,7 +5,7 @@ import { Footer } from "@/components/Footer";
 import { ActualitesGrid } from "@/components/ActualitesGrid";
 import { getContent } from "@/lib/content-store";
 
-const HEADER_IMAGE = "/images/nouvelles/header.png";
+const HEADER_IMAGE = "/images/photos/htf-0057688.jpg";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { actualitesPage } = await getContent();

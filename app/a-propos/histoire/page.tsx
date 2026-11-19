@@ -3,10 +3,10 @@ import Link from "next/link";
 import { getContent } from "@/lib/content-store";
 
 const IMAGES = {
-  hero: "/images/college/header.jpg",
+  hero: "/images/photos/htf-0057764.jpg",
   fondation: "/images/histoire/collage-1.jpg?v=2",
-  vieScolaire: "/images/college/collage-1.jpeg",
-  activites: "/images/lycee/collage-1.jpg",
+  vieScolaire: "/images/photos/htf-0057342.jpg",
+  activites: "/images/photos/htf-0057624.jpg",
 };
 
 export async function generateMetadata(): Promise<Metadata> {

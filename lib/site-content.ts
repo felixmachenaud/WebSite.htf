@@ -181,11 +181,18 @@ const NAV: NavItem[] = [
   { href: "/", label: "Accueil" },
   { href: "/a-propos/college", label: "Collège" },
   { href: "/a-propos/lycee", label: "Lycée" },
-  { href: "/a-propos/information-generale", label: "Information générale" },
-  { href: "/a-propos/histoire", label: "Histoire" },
-  { href: "/a-propos/projet-educatif", label: "Notre projet éducatif" },
+  { href: "/a-propos/information-generale", label: "Informations pratiques" },
+  { href: "/a-propos/histoire", label: "Qui sommes-nous" },
+  { href: "/a-propos/projet-educatif", label: "Nos valeurs" },
   { href: "/nouvelles", label: "Actualités" },
   { href: "/contact", label: "Contact" },
+  // Ajouts en fin de liste : les libellés CMS sont fusionnés par index.
+  { href: "/a-propos/vie-a-hautefeuille", label: "La vie à Hautefeuille" },
+  { href: "/a-propos/familles", label: "Les familles" },
+  { href: "/a-propos/temoignages", label: "Témoignages" },
+  { href: "/a-propos/documentation", label: "Documentation" },
+  { href: "/a-propos/soutenez-nous", label: "Soutenez-nous" },
+  { href: "/a-propos/inscriptions", label: "Inscriptions" },
 ];
 
 export const DEFAULT_CONTENT: SiteContent = {
@@ -202,26 +209,50 @@ export const DEFAULT_CONTENT: SiteContent = {
   landing: {
     overlays: [
       {
-        title: "LE VOYAGE DE VOTRE ENFANT COMMENCE PAR UN PREMIER PAS",
-        body: "Et jusqu'à ce que vous atteigniez l'objectif, vous parcourrez un chemin plein d'expériences et d'opportunités.",
+        title: "Viser l'excellence académique, s'ouvrir au monde et aux autres, donner du sens à sa vie",
+        body: "Fondé par des parents en 1985, Hautefeuille est un établissement privé de garçons, sous contrat d'association avec l'État, qui accueille les élèves de la 6e à la terminale à Courbevoie et à Bois-Colombes.",
         href: "/a-propos/histoire/",
-        buttonLabel: "Notre histoire",
+        buttonLabel: "Qui sommes-nous",
       },
       {
-        title: "ENRACINÉ DANS LA FAMILLE",
-        body: "Vous apprendrez à vous débrouiller avec liberté et responsabilité.",
+        title: "Viser l'excellence",
+        body: "À Hautefeuille, l'exigence intellectuelle va de pair avec l'attention portée à chaque élève.",
+        href: "/a-propos/projet-educatif/viser-l-excellence/",
+        buttonLabel: "En savoir plus",
+      },
+      {
+        title: "S'ouvrir au monde et aux autres",
+        body: "Au collège et au lycée, les garçons apprennent à vivre ensemble, à servir et à s'ouvrir aux autres.",
+        href: "/a-propos/projet-educatif/s-ouvrir-au-monde/",
+        buttonLabel: "Découvrir",
+      },
+      {
+        title: "Donner du sens à sa vie",
+        body: "Une formation qui prend en compte toute la personne : intelligence, cœur et âme.",
+        href: "/a-propos/projet-educatif/donner-du-sens/",
+        buttonLabel: "Découvrir",
+      },
+      {
+        title: "Notre collège",
+        body: "De la 6e à la 3e, un cadre structurant et adapté aux garçons.",
+        href: "/a-propos/college/",
+        buttonLabel: "Découvrir",
+      },
+      {
+        title: "Notre lycée",
+        body: "De la seconde à la terminale, à Bois-Colombes : un lycée à taille humaine pour préparer le bac et construire son orientation.",
         href: "/a-propos/lycee/",
-        buttonLabel: "Le lycée",
+        buttonLabel: "Découvrir",
       },
       {
-        title: "IL NE MARCHERA JAMAIS SEUL",
-        body: "Car en cours de route, il acquerra les valeurs de solidarité, de respect et d'amitié.",
-        href: "/a-propos/projet-educatif/",
-        buttonLabel: "Projet éducatif",
+        title: "La vie à Hautefeuille",
+        body: "Sport, musique, théâtre, étude, engagement, voyages : six façons de grandir en dehors de la classe.",
+        href: "/a-propos/vie-a-hautefeuille/",
+        buttonLabel: "Découvrir",
       },
     ],
   },
-  home: { welcomeTitle: "Bienvenue à Hautefeuille" },
+  home: { welcomeTitle: "Nos actualités" },
   footer: {
     newsletterTitle: "Lettre d'information",
     newsletterBody:
@@ -245,9 +276,9 @@ export const DEFAULT_CONTENT: SiteContent = {
   college: {
     metaTitle: "Collège | Collège Lycée Hautefeuille",
     metaDescription: "Le collège Hautefeuille - 100% de réussite au brevet, 96% de mentions.",
-    title: "Collège",
+    title: "Notre collège",
     intro:
-      "Le collège Hautefeuille accueille les élèves de la 6e à la 3e dans un cadre bienveillant et exigeant. Notre projet éducatif vise à former des jeunes capables de s'engager avec confiance dans leur parcours scolaire et personnel.",
+      "De la 6e à la 3e, un cadre structurant et adapté aux garçons. Les classes de 6e à 4e sont à Courbevoie ; la 3e est accueillie dans le bâtiment du lycée, à Bois-Colombes, première étape vers la seconde. Préceptorat, aide méthodologique, suivi des devoirs et étude du soir : chaque élève est accompagné, en lien régulier avec les familles.",
     collageAlt: "Vie au collège",
     resultsTitle: "Les résultats",
     resultsBody: ecolePending.collegeResults,
@@ -262,10 +293,11 @@ export const DEFAULT_CONTENT: SiteContent = {
   },
   lycee: {
     metaTitle: "Lycée | Collège Lycée Hautefeuille",
-    metaDescription: "Le lycée Hautefeuille - accompagnement vers l'excellence.",
-    title: "Lycée",
+    metaDescription:
+      "De la seconde à la terminale, à Bois-Colombes : un lycée à taille humaine pour préparer le bac et construire son orientation.",
+    title: "Notre lycée",
     intro:
-      "Le lycée Hautefeuille accompagne les élèves de la seconde à la terminale vers l'excellence académique et personnelle. Un cadre propice à la réussite et à l'épanouissement.",
+      "De la seconde à la terminale, à Bois-Colombes : un lycée à taille humaine pour préparer le bac et construire son orientation. Enseignements de spécialité, préparation au bac, préceptorat, aide à l'orientation et accompagnement Parcoursup.",
     collageAlt: "Vie au lycée",
     practicalTitle: "Informations pratiques",
     stats: [...ecolePending.lyceeStats],
@@ -311,31 +343,33 @@ export const DEFAULT_CONTENT: SiteContent = {
     },
   },
   projet: {
-    metaTitle: "Notre projet éducatif | Collège Lycée Hautefeuille",
-    metaDescription: "Le projet éducatif de Hautefeuille.",
-    title: "Notre projet éducatif",
+    metaTitle: "Nos valeurs | Collège Lycée Hautefeuille",
+    metaDescription:
+      "Viser l'excellence académique, s'ouvrir au monde et aux autres, donner du sens à sa vie : les valeurs du projet éducatif de Hautefeuille.",
+    title: "Nos valeurs",
     quote: "L'éducation est l'art de conduire les jeunes à la vérité. — Saint Jean Bosco",
     sections: [
       {
-        title: "Éducation globale",
-        text: "Notre projet éducatif vise à former des jeunes dans toutes les dimensions de leur personne : intellectuelle, humaine, spirituelle et sociale. Nous accompagnons chaque élève pour qu'il développe ses talents et grandisse en confiance.",
+        title: "Viser l'excellence",
+        text: "À Hautefeuille, l'exigence intellectuelle va de pair avec l'attention portée à chaque élève. Les programmes de l'Éducation nationale sont enrichis pour développer l'esprit critique et la capacité de juger : une culture qui aide à penser, l'étude encadrée pour apprendre à s'organiser et à travailler seul, et un suivi personnel du précepteur avec l'élève et ses parents.",
       },
       {
-        title: "Formation du caractère",
-        text: "La formation du caractère est au cœur de notre pédagogie. Nous encourageons l'effort, la persévérance et le sens des responsabilités. Chaque élève apprend à se dépasser et à donner le meilleur de lui-même.",
+        title: "S'ouvrir au monde et aux autres",
+        text: "Au collège et au lycée, les garçons apprennent à vivre ensemble, à servir et à s'ouvrir aux autres. Les amitiés nouées à Hautefeuille durent souvent toute la vie. Actions solidaires, sorties, conférences, théâtre, musique, voyages scolaires et projets à l'étranger élargissent les horizons.",
       },
       {
-        title: "Ouverture au monde",
-        text: "S'ouvrir au monde et aux autres est une priorité. Voyages, échanges, projets culturels et solidaires permettent aux élèves de développer leur curiosité et leur empathie.",
+        title: "Donner du sens à sa vie",
+        text: "Hautefeuille propose une formation qui prend en compte toute la personne : intelligence, cœur et âme. Chaque garçon est aidé à découvrir ses talents et à construire sa vie. Le préceptorat, l'aumônerie et des temps de réflexion proposés à chacun, dans le respect de sa liberté, et la pratique des vertus humaines au quotidien : effort, loyauté, sens des responsabilités.",
       },
     ],
   },
   infos: {
-    metaTitle: "Informations générales | Collège Lycée Hautefeuille",
-    metaDescription: "Informations pratiques : transport, uniforme, calendrier, etc.",
-    title: "Informations générales",
+    metaTitle: "Informations pratiques | Collège Lycée Hautefeuille",
+    metaDescription:
+      "Tout ce qu'il faut savoir au quotidien, pour le collège et le lycée : accès, uniforme, horaires, restauration, calendrier.",
+    title: "Informations pratiques",
     welcome: "Bienvenue à l'année scolaire 2025 / 2026",
-    kicker: "Informations générales",
+    kicker: "Informations pratiques",
     indexTitle: "Index",
     mapButton: "Afficher la carte Google Maps",
     collegeCardTitle: "Collège",
@@ -366,13 +400,13 @@ export const DEFAULT_CONTENT: SiteContent = {
         id: "materiel-scolaire",
         label: "Matériel scolaire",
         title: "Matériel scolaire",
-        body: "Listes de fournitures par niveau et recommandations pour bien équiper votre enfant tout au long de l'année.",
+        body: "Fournitures et manuels : listes par niveau, de la 6e à la terminale.",
       },
       {
         id: "menu-scolaire",
         label: "Menu scolaire",
         title: "Menu scolaire",
-        body: "Menus de la cantine, équilibre alimentaire et informations sur les inscriptions.",
+        body: "Fonctionnement de la cantine et menus de la semaine.",
       },
       {
         id: "services",
@@ -384,23 +418,23 @@ export const DEFAULT_CONTENT: SiteContent = {
         id: "calendrier",
         label: "Calendrier",
         title: "Calendrier",
-        body: "Vacances scolaires, jours fériés et dates importantes de l'année scolaire.",
+        body: "Vacances, réunions de parents, conseils de classe, événements.",
       },
       {
         id: "extrascolaire",
         label: "Extrascolaire",
         title: "Extrascolaire",
-        body: "Activités proposées en dehors des cours : sport, culture et projets collectifs.",
+        body: "Sport, musique, théâtre, étude, engagement, voyages : six façons de grandir en dehors de la classe. Esprit d'équipe et dépassement de soi, pratique instrumentale et chant, prendre confiance et s'exprimer en public, un temps de travail encadré chaque soir, servir les autres ici et ailleurs, découvrir d'autres horizons.",
       },
     ],
   },
   histoire: {
-    metaTitle: "Histoire | Collège Lycée Hautefeuille",
+    metaTitle: "Qui sommes-nous | Collège Lycée Hautefeuille",
     metaDescription:
       "L'histoire, l'identité et les fondements éducatifs de Hautefeuille. Une école née d'une conviction en 1985.",
-    heroTitle: "L'histoire de Hautefeuille",
+    heroTitle: "Qui sommes-nous",
     heroLead:
-      "Une école née d'une conviction : former des jeunes exigeants, ouverts au monde et capables de donner du sens à leur vie.",
+      "Fondé par des parents en 1985, Hautefeuille est un établissement privé de garçons, sous contrat d'association avec l'État, qui accueille les élèves de la 6e à la terminale à Courbevoie et à Bois-Colombes.",
     accroche: "Viser l'excellence académique, s'ouvrir au monde et aux autres, donner du sens à sa vie.",
     convictionTitle: "Une école née d'une conviction",
     convictionP1:
@@ -440,7 +474,7 @@ export const DEFAULT_CONTENT: SiteContent = {
     conclusionTitle: "Fidélité aux fondamentaux, renouvellement permanent",
     conclusionBody:
       "Hautefeuille reste fidèle à ses racines tout en s'adaptant aux défis de chaque époque. Une équipe éducative généreuse et engagée œuvre au quotidien pour offrir à chaque élève une formation intellectuelle, humaine et chrétienne de qualité.",
-    ctaProjet: "Découvrir notre projet éducatif",
+    ctaProjet: "Découvrir nos valeurs",
     ctaRencontrer: "Nous rencontrer",
   },
   actualites: [
@@ -472,7 +506,7 @@ export const DEFAULT_CONTENT: SiteContent = {
   actualitesPage: {
     metaTitle: "Actualités | Collège Lycée Hautefeuille",
     metaDescription: "Les dernières actualités du Collège Lycée Hautefeuille.",
-    title: "Actualités",
+    title: "Toutes les actualités",
     backLabel: "Retour aux actualités",
     readPrefix: "Lire",
   },

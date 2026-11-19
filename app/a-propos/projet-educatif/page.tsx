@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
 import { getContent } from "@/lib/content-store";
 
 const IMAGES = [
-  "/images/projet-educatif/collage-1.jpg",
-  "/images/projet-educatif/collage-2.jpeg",
-  "/images/projet-educatif/collage-3.jpeg",
+  "/images/photos/htf-0057487.jpg",
+  "/images/photos/htf-0057786.jpg",
+  "/images/photos/htf-0057883.jpg",
+];
+
+const VALUE_PAGES = [
+  "/a-propos/projet-educatif/viser-l-excellence",
+  "/a-propos/projet-educatif/s-ouvrir-au-monde",
+  "/a-propos/projet-educatif/donner-du-sens",
 ];
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,7 +27,7 @@ export default async function ProjetEducatifPage() {
   const rest = quote.slice(1);
   return (
     <main className="min-h-screen bg-page safe-navbar-pt">
-      <PageHeader title={projet.title} imageUrl="/images/projet-educatif/header.jpg.webp" />
+      <PageHeader title={projet.title} imageUrl="/images/photos/htf-0057772.jpg" />
       <section className="px-6 py-16 md:px-12" style={{ backgroundColor: "var(--page-bg)" }} aria-label={projet.title}>
         <p className="mx-auto max-w-2xl font-serif text-lg font-bold italic leading-relaxed text-slate-800 md:text-xl md:whitespace-nowrap">
           <span className="quote-lettrine"><span className="quote-lettrine-char">{initial}</span></span>
@@ -39,6 +46,14 @@ export default async function ProjetEducatifPage() {
             <div className={`px-6 py-12 md:px-12 ${i % 2 === 0 ? "order-1 md:order-2" : ""}`}>
               <h2 className="font-serif text-2xl font-bold uppercase tracking-wider text-slate-900">{section.title}</h2>
               <p className="mt-6 font-sans text-base leading-relaxed text-slate-700">{section.text}</p>
+              {VALUE_PAGES[i] ? (
+                <Link
+                  href={VALUE_PAGES[i]}
+                  className="mt-6 inline-block font-sans text-sm font-semibold text-[#14532d] underline-offset-4 hover:underline"
+                >
+                  En savoir plus →
+                </Link>
+              ) : null}
             </div>
           </section>
         ))}

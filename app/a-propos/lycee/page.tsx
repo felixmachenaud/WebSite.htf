@@ -6,8 +6,8 @@ import { InstitutionalParagraph } from "@/components/InstitutionalParagraph";
 import { getContent } from "@/lib/content-store";
 
 const LYCEE_IMAGES = {
-  header: "/images/lycee/header.JPG",
-  collage: ["/images/lycee/collage-1.jpg", "/images/lycee/collage-2.jpg", "/images/lycee/collage-3.jpg"],
+  header: "/images/photos/htf-0058001.jpg",
+  collage: ["/images/photos/htf-0058172.jpg", "/images/photos/htf-0057581.jpg", "/images/photos/htf-0057506.jpg"],
   direction: ["/images/lycee/direction-1.jpg", "/images/lycee/direction-2.jpg", "/images/lycee/direction-3.jpg"],
 };
 

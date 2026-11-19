@@ -11,7 +11,7 @@ export default async function AProposPage() {
   const { about } = await getContent();
   return (
     <main className="min-h-screen bg-page safe-navbar-pt">
-      <PageHeader title={about.title} imageUrl="/images/college/header.jpg" />
+      <PageHeader title={about.title} imageUrl="/images/photos/htf-0057752.jpg" />
       <div className="mx-auto max-w-3xl px-6 py-16">
         <p className="text-center font-serif text-2xl leading-relaxed text-slate-800 md:text-3xl">
           {about.quote}

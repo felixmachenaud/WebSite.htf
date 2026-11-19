@@ -35,6 +35,12 @@ export function Navbar({ chrome }: { chrome: SiteContent["chrome"] }) {
           <span className="truncate">{chrome.brand}</span>
         </Link>
         <div className="hidden min-w-[200px] items-center justify-end gap-4 md:flex lg:gap-6">
+          <Link
+            href="/a-propos/inscriptions"
+            className="font-medium uppercase tracking-wider text-slate-800 hover:text-slate-600"
+          >
+            Inscriptions
+          </Link>
           <a
             href={chrome.ecoleDirecteHref}
             target="_blank"

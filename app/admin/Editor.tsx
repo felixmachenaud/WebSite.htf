@@ -18,6 +18,19 @@ const TABS = [
 
 type TabId = (typeof TABS)[number][0];
 
+/** Sections du contenu remises aux valeurs par défaut, par onglet. La liste des actualités n'est jamais touchée. */
+const RESET_KEYS: Record<TabId, (keyof SiteContent)[]> = {
+  accueil: ["chrome", "landing", "home"],
+  college: ["college"],
+  lycee: ["lycee"],
+  histoire: ["histoire"],
+  projet: ["projet"],
+  infos: ["infos"],
+  actualites: ["actualitesPage"],
+  contact: ["contact"],
+  footer: ["footer"],
+};
+
 function Field({
   label,
   value,
@@ -42,7 +55,7 @@ function Field({
   );
 }
 
-export function Editor({ initial }: { initial: SiteContent }) {
+export function Editor({ initial, defaults }: { initial: SiteContent; defaults: SiteContent }) {
   const [content, setContent] = useState(initial);
   const [tab, setTab] = useState<TabId>("accueil");
   const [message, setMessage] = useState("");
@@ -50,6 +63,18 @@ export function Editor({ initial }: { initial: SiteContent }) {
 
   function patch<K extends keyof SiteContent>(key: K, value: SiteContent[K]) {
     setContent((current) => ({ ...current, [key]: value }));
+  }
+
+  function resetTab() {
+    const label = TABS.find(([id]) => id === tab)?.[1] ?? tab;
+    const scope = tab === "actualites" ? " (titres de page uniquement, la liste des actualités est conservée)" : "";
+    if (!window.confirm(`Rétablir les textes par défaut pour « ${label} »${scope} ? Rien n'est publié avant « Enregistrer ».`)) return;
+    setContent((current) => {
+      const next = { ...current };
+      for (const key of RESET_KEYS[tab]) Object.assign(next, { [key]: structuredClone(defaults[key]) });
+      return next;
+    });
+    setMessage("Textes par défaut rétablis dans l'éditeur. Cliquez sur « Enregistrer » pour les publier.");
   }
 
   async function save() {
@@ -346,6 +371,9 @@ export function Editor({ initial }: { initial: SiteContent }) {
       <div className="mt-4 flex items-center gap-4">
         <button type="button" onClick={save} disabled={pending} className="rounded bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-60">
           Enregistrer
+        </button>
+        <button type="button" onClick={resetTab} disabled={pending} className="rounded border border-slate-300 bg-white px-4 py-2 text-sm text-slate-700 disabled:opacity-60">
+          Rétablir les textes par défaut de cet onglet
         </button>
         {message ? <p className="text-sm text-slate-700">{message}</p> : null}
       </div>

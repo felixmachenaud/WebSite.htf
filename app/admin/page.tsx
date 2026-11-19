@@ -1,6 +1,7 @@
 import { authConfig, readSessionToken } from "@/lib/admin-auth";
 import { sessionExists, sessionStoreReady } from "@/lib/admin-sessions";
 import { getContent } from "@/lib/content-store";
+import { DEFAULT_CONTENT } from "@/lib/site-content";
 import { Editor } from "./Editor";
 import { LoginForm } from "./LoginForm";
 
@@ -24,5 +25,5 @@ export default async function AdminPage() {
     return <LoginForm />;
   }
 
-  return <Editor initial={await getContent()} />;
+  return <Editor initial={await getContent()} defaults={DEFAULT_CONTENT} />;
 }

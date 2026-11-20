@@ -86,7 +86,7 @@ Registre : concis, factuel, chronologique, versionné dans Git.
 
 ## Spécificités projet
 
-- Contenu éditable → `lib/site-content.ts` + Blob ; pages juridiques → code statique
+- Contenu éditable → `lib/site-content.ts` + R2 Cloudflare (`lib/content-store.ts`) ; pages juridiques → code statique
 - Pas de route d'upload sans décision explicite
 - Pas de photos d'élèves sans autorisation écrite
 - Pas de secrets dans Git ; contrat dans `.env.example` uniquement

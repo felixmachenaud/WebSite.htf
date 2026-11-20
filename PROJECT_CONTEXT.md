@@ -32,8 +32,8 @@ Pas de compte visiteur, pas de formulaire de contact intégré, pas de newslette
 ## Fonctionnalités principales
 
 - **Site public** : accueil (landing scroll), pages institutionnelles, actualités, contact, mentions légales, confidentialité
-- **Mini-CMS** : édition de textes (`SiteContent`) via `/admin`, persistance Vercel Blob (prod) ou fichier local (dev)
-- **Auth admin** : mot de passe hashé scrypt, cookie HMAC, sessions Upstash Redis (prod)
+- **Mini-CMS** : édition de textes (`SiteContent`) via `/admin`, persistance R2 Cloudflare (liaison `CMS_BUCKET`) ou fichier local (dev)
+- **Auth admin** : Cloudflare Access (courriel + code à 6 chiffres), jeton vérifié par le Worker (`lib/admin-auth.ts`)
 - **SEO natif Next.js** : metadata, Open Graph, sitemap, robots, favicon
 - **Contact** : liens `mailto:` et téléphone (pas de messagerie in-app)
 - **Sécurité** : CSP, en-têtes HTTP, rate limit login, pas de route d'upload
@@ -59,18 +59,17 @@ app/                    # App Router Next.js
 components/             # UI (Navbar, Footer, landing, etc.)
 lib/
   site-content.ts       # Schéma SiteContent + defaults
-  content-store.ts      # Lecture/écriture Blob ou .data/
+  content-store.ts      # Lecture/écriture R2 ou .data/
   admin-auth.ts         # Auth cookie + scrypt
-  admin-sessions.ts     # Sessions Redis / fichier local
   site-url.ts           # URL canonique
 data/resultats.ts       # Couleurs graphique bac (hors CMS)
 public/images/          # Assets statiques
 .github/workflows/ci.yml # lint, typecheck, build, smoke public
 ```
 
-Flux contenu public : `getContent()` → merge defaults + Blob/local → pages server components.
+Flux contenu public : `getContent()` → merge defaults + R2/local → pages server components.
 
-Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save` → Blob.
+Flux admin : connexion Cloudflare Access → `Editor.tsx` → POST `/api/admin/save` → R2 + `revalidatePath` (cache OpenNext R2 + D1).
 
 ---
 
@@ -83,9 +82,9 @@ Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save`
 | Langage | TypeScript 5 |
 | Animations | GSAP (landing) |
 | Graphiques | Recharts (page Lycée) |
-| Hébergement cible | Vercel |
-| Stockage contenu | Vercel Blob (JSON privé) |
-| Sessions admin | Upstash Redis REST |
+| Hébergement cible | Cloudflare Workers |
+| Stockage contenu | R2 Cloudflare (JSON privé) |
+| Accès admin | Cloudflare Access (One-time PIN) |
 | Node | ≥ 20.9.0 |
 | CI | GitHub Actions, Node 20 |
 
@@ -95,9 +94,8 @@ Flux admin : login → session Redis → `Editor.tsx` → POST `/api/admin/save`
 
 | Service | Usage |
 |---------|--------|
-| **Vercel** | Hébergement applicatif actuel, Blob CMS |
+| **Cloudflare Workers** | Hébergement (OpenNext), R2, D1, Access |
 | **OVH** | Registrar / DNS du nom de domaine ; hébergement app possible (VPS) |
-| **Upstash Redis** | Sessions admin |
 | **Google Maps** | Carte contact (chargement au clic) |
 | **Gmail** (`hautefeuille92@gmail.com`) | Contact familles (mailto, sous-traitant RGPD) |
 
@@ -109,7 +107,7 @@ Variables : voir `.env.example`.
 
 | Env | Rôle | Particularités |
 |-----|------|----------------|
-| **Dev local** | Développement | Contenu dans `.data/site-content.json` si pas de Blob ; sessions fichier local |
+| **Dev local** | Développement | Contenu dans `.data/site-content.json` hors Worker ; sessions fichier local |
 | **Preview Vercel** | Recette pré-prod | Toutes les variables à poser ; smoke tests admin et site public |
 | **Production Vercel** | Site public | `NEXT_PUBLIC_SITE_URL` HTTPS obligatoire ; admin + Blob + Redis configurés |
 | **Production OVH (option)** | Même app Node | Mêmes variables ; DNS domaine chez OVH → VPS |

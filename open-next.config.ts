@@ -1,9 +1,11 @@
 import { defineCloudflareConfig } from "@opennextjs/cloudflare";
-import staticAssetsIncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/static-assets-incremental-cache";
+import r2IncrementalCache from "@opennextjs/cloudflare/overrides/incremental-cache/r2-incremental-cache";
+import d1NextTagCache from "@opennextjs/cloudflare/overrides/tag-cache/d1-next-tag-cache";
 
-// shortcut: cache en lecture seule (pages prérendues au build, pas de revalidatePath).
-// Suffit tant que le CMS n'est pas branché sur Cloudflare ; passer à r2IncrementalCache + d1NextTagCache ensuite.
+// Pages prérendues stockées dans R2 (NEXT_INC_CACHE_R2_BUCKET), invalidations dans D1 (NEXT_TAG_CACHE_D1) :
+// revalidatePath après un enregistrement admin régénère les pages avec le nouveau contenu.
 export default defineCloudflareConfig({
-  incrementalCache: staticAssetsIncrementalCache,
+  incrementalCache: r2IncrementalCache,
+  tagCache: d1NextTagCache,
   enableCacheInterception: true,
 });

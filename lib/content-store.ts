@@ -1,25 +1,17 @@
-import { get, put } from "@vercel/blob";
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
+import { bindings } from "@/lib/cloudflare-bindings";
 import { DEFAULT_CONTENT, mergeContent, type SiteContent } from "@/lib/site-content";
 
-const BLOB_PATH = "hautefeuille-site-content.json";
+/** Clé de l'objet R2 (liaison CMS_BUCKET) qui contient les textes enregistrés depuis /admin. */
+export const CMS_KEY = "site-content.json";
 const LOCAL_FILE = path.join(process.cwd(), ".data", "site-content.json");
+/** Copie du R2 téléchargée par scripts/deploy.mjs avant le build : les pages prérendues partent du contenu en ligne. */
+const BUILD_SNAPSHOT = path.join(process.cwd(), ".data", "cms-snapshot.json");
 
-function blobConfigured(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
-}
-
-async function readBlob(): Promise<unknown | null> {
-  const result = await get(BLOB_PATH, { access: "private", useCache: false });
-  if (!result || result.statusCode !== 200) return null;
-  const text = await new Response(result.stream).text();
-  return JSON.parse(text) as unknown;
-}
-
-async function readLocal(): Promise<unknown | null> {
+async function readJsonFile(file: string): Promise<unknown | null> {
   try {
-    return JSON.parse(await readFile(LOCAL_FILE, "utf8")) as unknown;
+    return JSON.parse(await readFile(file, "utf8")) as unknown;
   } catch {
     return null;
   }
@@ -27,11 +19,16 @@ async function readLocal(): Promise<unknown | null> {
 
 export async function getContent(): Promise<SiteContent> {
   try {
-    if (blobConfigured()) {
-      return mergeContent(DEFAULT_CONTENT, await readBlob());
+    if (process.env.NEXT_PHASE === "phase-production-build") {
+      return mergeContent(DEFAULT_CONTENT, await readJsonFile(BUILD_SNAPSHOT));
+    }
+    const { CMS_BUCKET } = await bindings();
+    if (CMS_BUCKET) {
+      const object = await CMS_BUCKET.get(CMS_KEY);
+      return mergeContent(DEFAULT_CONTENT, object ? (JSON.parse(await object.text()) as unknown) : null);
     }
     if (process.env.NODE_ENV !== "production") {
-      return mergeContent(DEFAULT_CONTENT, await readLocal());
+      return mergeContent(DEFAULT_CONTENT, await readJsonFile(LOCAL_FILE));
     }
   } catch {
     return DEFAULT_CONTENT;
@@ -41,15 +38,10 @@ export async function getContent(): Promise<SiteContent> {
 
 export async function saveContent(input: unknown): Promise<"ok" | "unavailable"> {
   const current = await getContent();
-  const merged = mergeContent(current, input);
-  const body = JSON.stringify(merged);
-  if (blobConfigured()) {
-    await put(BLOB_PATH, body, {
-      access: "private",
-      addRandomSuffix: false,
-      allowOverwrite: true,
-      contentType: "application/json",
-    });
+  const body = JSON.stringify(mergeContent(current, input));
+  const { CMS_BUCKET } = await bindings();
+  if (CMS_BUCKET) {
+    await CMS_BUCKET.put(CMS_KEY, body, { httpMetadata: { contentType: "application/json" } });
     return "ok";
   }
   if (process.env.NODE_ENV === "production") return "unavailable";

@@ -6,6 +6,10 @@
 // Pas d'account_id : le compte est celui connecté à Wrangler. Wrangler n'hérite pas des vars entre cibles.
 // Commentaires sur des lignes à part (scripts/deploy.mjs).
 // NEXT_PUBLIC_SITE_URL est lue par scripts/deploy.mjs et injectée au build (inlinée par Next).
+// CMS : CMS_BUCKET (R2, textes enregistrés depuis /admin),
+// NEXT_INC_CACHE_R2_BUCKET + NEXT_TAG_CACHE_D1 (pages en cache, invalidées à chaque enregistrement).
+// Admin : Cloudflare Access (courriel + code à 6 chiffres) ; ACCESS_TEAM_DOMAIN et ACCESS_AUD de l'application Access.
+// Wrangler n'hérite pas des liaisons : elles sont répétées dans chaque cible. Racine = ressources locales simulées.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "hautefeuille-local",
@@ -13,20 +17,41 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
-  "vars": { "INDEXING": "off" },
+  "vars": { "INDEXING": "off", "ACCESS_TEAM_DOMAIN": "", "ACCESS_AUD": "" },
+  "r2_buckets": [
+    { "binding": "CMS_BUCKET", "bucket_name": "hautefeuille-cms-local" },
+    { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "hautefeuille-cache-local" },
+  ],
+  "d1_databases": [{ "binding": "NEXT_TAG_CACHE_D1", "database_name": "hautefeuille-tags-local", "database_id": "local" }],
   "observability": { "enabled": true },
   "env": {
     "preview": {
       "name": "hautefeuille-preview",
       "workers_dev": true,
-      "vars": { "INDEXING": "off", "NEXT_PUBLIC_SITE_URL": "https://hautefeuille-preview.felixmachenaud2.workers.dev" },
+      "vars": {
+        "INDEXING": "off",
+        "NEXT_PUBLIC_SITE_URL": "https://hautefeuille-preview.felixmachenaud2.workers.dev",
+        "ACCESS_TEAM_DOMAIN": "withered-resonance-2f87.cloudflareaccess.com",
+        "ACCESS_AUD": "3548eb5b398405c2a225c7fd931b4f4e834cd62dc2a32733067466878379a402",
+      },
+      "r2_buckets": [
+        { "binding": "CMS_BUCKET", "bucket_name": "hautefeuille-cms-preview" },
+        { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "hautefeuille-cache-preview" },
+      ],
+      "d1_databases": [{ "binding": "NEXT_TAG_CACHE_D1", "database_name": "hautefeuille-tags-preview", "database_id": "ac62a5ac-c0d8-4d12-93c7-f338430c98f4" }],
     },
     "production": {
       "name": "hautefeuille",
       // À la mise en ligne, remplacer workers_dev par le domaine de l'école :
       // "routes": [{ "pattern": "www.domaine-ecole.fr", "custom_domain": true }],
       "workers_dev": true,
-      "vars": { "INDEXING": "on", "NEXT_PUBLIC_SITE_URL": "" },
+      "vars": { "INDEXING": "on", "NEXT_PUBLIC_SITE_URL": "", "ACCESS_TEAM_DOMAIN": "", "ACCESS_AUD": "" },
+      // Identifiant D1 à coller après création sur le compte de l'école (deploy.mjs refuse s'il est vide).
+      "r2_buckets": [
+        { "binding": "CMS_BUCKET", "bucket_name": "hautefeuille-cms" },
+        { "binding": "NEXT_INC_CACHE_R2_BUCKET", "bucket_name": "hautefeuille-cache" },
+      ],
+      "d1_databases": [{ "binding": "NEXT_TAG_CACHE_D1", "database_name": "hautefeuille-tags", "database_id": "" }],
     },
   },
 }

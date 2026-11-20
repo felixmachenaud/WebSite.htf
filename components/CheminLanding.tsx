@@ -268,7 +268,7 @@ export function CheminLanding({ news, footer, chrome }: Props) {
                 </div>
               </section>
               <section className="scene" data-scene="1" aria-label="Prendre confiance">
-                <img src={`${IMG}/prendre-confiance.jpg`} alt="Des élèves de Hautefeuille sautent de joie dans la cour, l'un brandit un trophée" />
+                <img src={`${IMG}/prendre-confiance.jpg`} alt="Un élève lève la main pendant un cours d'allemand, la professeure face à la classe" />
                 <div className="shade" />
                 <div className="copy right">
                   <span className="eyebrow">01 — PRENDRE CONFIANCE</span>
@@ -364,7 +364,11 @@ export function CheminLanding({ news, footer, chrome }: Props) {
           <div className="news-grid">
             {news.map((item) => (
               <article key={item.id} className="news-card">
-                {item.imageUrl ? <img src={item.imageUrl} alt="" loading="lazy" width={640} height={430} /> : null}
+                {item.imageUrl ? (
+                  <div className="news-photo">
+                    <img src={item.imageUrl} alt="" loading="lazy" width={640} height={430} />
+                  </div>
+                ) : null}
                 {formatDate(item.date) ? <time dateTime={item.date}>{formatDate(item.date)}</time> : null}
                 <h3>{item.titre}</h3>
                 <Link className="dark-link" href={`/nouvelles/${item.slug}`}>

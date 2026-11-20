@@ -5,13 +5,6 @@ export interface NavItem {
   label: string;
 }
 
-export interface LandingOverlay {
-  title: string;
-  body: string;
-  href: string;
-  buttonLabel: string;
-}
-
 export interface DirectionPerson {
   name: string;
   role: string;
@@ -72,8 +65,6 @@ export interface SiteContent {
     contactLabel: string;
     nav: NavItem[];
   };
-  landing: { overlays: LandingOverlay[] };
-  home: { welcomeTitle: string };
   footer: {
     newsletterTitle: string;
     newsletterBody: string;
@@ -177,22 +168,17 @@ export interface SiteContent {
   };
 }
 
+// Libellés CMS fusionnés par index : garder cet ordre stable une fois le CMS en service.
 const NAV: NavItem[] = [
   { href: "/", label: "Accueil" },
-  { href: "/a-propos/college", label: "Collège" },
-  { href: "/a-propos/lycee", label: "Lycée" },
-  { href: "/a-propos/information-generale", label: "Informations pratiques" },
-  { href: "/a-propos/histoire", label: "Qui sommes-nous" },
+  { href: "/a-propos", label: "Qui sommes-nous ?" },
   { href: "/a-propos/projet-educatif", label: "Nos valeurs" },
-  { href: "/nouvelles", label: "Actualités" },
-  { href: "/contact", label: "Contact" },
-  // Ajouts en fin de liste : les libellés CMS sont fusionnés par index.
-  { href: "/a-propos/vie-a-hautefeuille", label: "La vie à Hautefeuille" },
-  { href: "/a-propos/familles", label: "Les familles" },
-  { href: "/a-propos/temoignages", label: "Témoignages" },
-  { href: "/a-propos/documentation", label: "Documentation" },
-  { href: "/a-propos/soutenez-nous", label: "Soutenez-nous" },
+  { href: "/a-propos/college", label: "Le Collège" },
+  { href: "/a-propos/lycee", label: "Le Lycée" },
+  { href: "/nouvelles", label: "La vie à Hautefeuille" },
+  { href: "/a-propos/information-generale", label: "Informations pratiques" },
   { href: "/a-propos/inscriptions", label: "Inscriptions" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export const DEFAULT_CONTENT: SiteContent = {
@@ -206,53 +192,6 @@ export const DEFAULT_CONTENT: SiteContent = {
     contactLabel: "Contact",
     nav: NAV,
   },
-  landing: {
-    overlays: [
-      {
-        title: "Viser l'excellence académique, s'ouvrir au monde et aux autres, donner du sens à sa vie",
-        body: "Fondé par des parents en 1985, Hautefeuille est un établissement privé de garçons, sous contrat d'association avec l'État, qui accueille les élèves de la 6e à la terminale à Courbevoie et à Bois-Colombes.",
-        href: "/a-propos/histoire/",
-        buttonLabel: "Qui sommes-nous",
-      },
-      {
-        title: "Viser l'excellence",
-        body: "À Hautefeuille, l'exigence intellectuelle va de pair avec l'attention portée à chaque élève.",
-        href: "/a-propos/projet-educatif/viser-l-excellence/",
-        buttonLabel: "En savoir plus",
-      },
-      {
-        title: "S'ouvrir au monde et aux autres",
-        body: "Au collège et au lycée, les garçons apprennent à vivre ensemble, à servir et à s'ouvrir aux autres.",
-        href: "/a-propos/projet-educatif/s-ouvrir-au-monde/",
-        buttonLabel: "Découvrir",
-      },
-      {
-        title: "Donner du sens à sa vie",
-        body: "Une formation qui prend en compte toute la personne : intelligence, cœur et âme.",
-        href: "/a-propos/projet-educatif/donner-du-sens/",
-        buttonLabel: "Découvrir",
-      },
-      {
-        title: "Notre collège",
-        body: "De la 6e à la 3e, un cadre structurant et adapté aux garçons.",
-        href: "/a-propos/college/",
-        buttonLabel: "Découvrir",
-      },
-      {
-        title: "Notre lycée",
-        body: "De la seconde à la terminale, à Bois-Colombes : un lycée à taille humaine pour préparer le bac et construire son orientation.",
-        href: "/a-propos/lycee/",
-        buttonLabel: "Découvrir",
-      },
-      {
-        title: "La vie à Hautefeuille",
-        body: "Sport, musique, théâtre, étude, engagement, voyages : six façons de grandir en dehors de la classe.",
-        href: "/a-propos/vie-a-hautefeuille/",
-        buttonLabel: "Découvrir",
-      },
-    ],
-  },
-  home: { welcomeTitle: "Nos actualités" },
   footer: {
     newsletterTitle: "Lettre d'information",
     newsletterBody:
@@ -477,7 +416,34 @@ export const DEFAULT_CONTENT: SiteContent = {
     ctaProjet: "Découvrir nos valeurs",
     ctaRencontrer: "Nous rencontrer",
   },
+  // Les trois premières sont affichées sur l'accueil.
   actualites: [
+    {
+      id: "2",
+      slug: "rome-latin",
+      titre: "Une semaine à Rome qui fait parler le latin",
+      excerpt:
+        "À l'occasion du week-end de l'Ascension, nos élèves latinistes de seconde ont eu la chance de séjourner à Rome, au sein de l'Académie Vivarium Novum. Cette institution unique accueille chaque année des étudiants venus du monde entier pour s'immerger pleinement dans la langue et la culture latines.",
+      imageUrl: "/images/accueil/news-rome.jpg",
+      date: "2025-06-25",
+    },
+    {
+      id: "3",
+      slug: "cinquiemes-montmartre",
+      titre: "Les cinquièmes à Montmartre",
+      excerpt:
+        "Pour la deuxième année consécutive, les élèves de cinquième se sont rendus à la Basilique du Sacré-Cœur de Montmartre pour une journée et une nuit d'adoration. Ce temps fort de l'année, désormais bien ancré dans le parcours des collégiens, propose une alternance entre des temps de prière devant le Saint-Sacrement et des moments de cohésion et d'amitiés partagés à travers des activités sportives. Une manière concrète pour les garçons de se mettre à l'écoute du Cœur de Jésus, tout en vivant pleinement la joie et l'esprit d'équipe.",
+      imageUrl: "/images/accueil/news-montmartre.jpg",
+      date: "2025-05-05",
+    },
+    {
+      id: "4",
+      slug: "notre-dame",
+      titre: "Hautefeuille à Notre Dame !",
+      excerpt: "Visite de Hautefeuille à Notre-Dame de Paris.",
+      imageUrl: "/images/accueil/news-notredame.jpg",
+      date: "2025-02-20",
+    },
     {
       id: "1",
       slug: "goodies-40-ans",
@@ -486,27 +452,11 @@ export const DEFAULT_CONTENT: SiteContent = {
         "À l'occasion des 40 ans de Hautefeuille, découvrez nos goodies ! 👉 Rendez-vous sur notre boutique HelloAsso : https://www.helloasso.com/associations/vouloir-l-education/boutiques/40-ans-hautefeuille 📦 Offrez-les autour de vous ou gardez un souvenir : chaque achat soutient…",
       imageUrl: "/images/nouvelles/goodies-40-ans.jpg",
     },
-    {
-      id: "2",
-      slug: "rome-latin",
-      titre: "Une semaine à Rome qui fait parler le latin",
-      excerpt:
-        "À l'occasion du week-end de l'Ascension, nos élèves latinistes de seconde ont eu la chance de séjourner à Rome, au sein de l'Académie Vivarium Novum. Cette institution unique accueille chaque année des étudiants venus du monde entier pour s'immerger pleinement dans la langue et la culture latines.",
-      imageUrl: "",
-    },
-    {
-      id: "3",
-      slug: "cinquiemes-montmartre",
-      titre: "Les cinquièmes à Montmartre",
-      excerpt:
-        "Pour la deuxième année consécutive, les élèves de cinquième se sont rendus à la Basilique du Sacré-Cœur de Montmartre pour une journée et une nuit d'adoration. Ce temps fort de l'année, désormais bien ancré dans le parcours des collégiens, propose une alternance entre des temps de prière devant le Saint-Sacrement et des moments de cohésion et d'amitiés partagés à travers des activités sportives. Une manière concrète pour les garçons de se mettre à l'écoute du Cœur de Jésus, tout en vivant pleinement la joie et l'esprit d'équipe.",
-      imageUrl: "",
-    },
   ],
   actualitesPage: {
-    metaTitle: "Actualités | Collège Lycée Hautefeuille",
+    metaTitle: "La vie à Hautefeuille | Collège Lycée Hautefeuille",
     metaDescription: "Les dernières actualités du Collège Lycée Hautefeuille.",
-    title: "Toutes les actualités",
+    title: "La vie à Hautefeuille",
     backLabel: "Retour aux actualités",
     readPrefix: "Lire",
   },
@@ -553,6 +503,7 @@ function readActualites(saved: unknown, defaults: ActualiteItem[]): ActualiteIte
       titre: str(row.titre, fallback.titre),
       excerpt: str(row.excerpt, fallback.excerpt),
       imageUrl: str(row.imageUrl, fallback.imageUrl),
+      date: str(row.date, "") || undefined,
     };
   });
 }
@@ -583,8 +534,6 @@ export function mergeContent(defaults: SiteContent, saved: unknown): SiteContent
   const s = isRecord(saved) ? saved : {};
   const chrome = isRecord(s.chrome) ? s.chrome : {};
   const footer = isRecord(s.footer) ? s.footer : {};
-  const home = isRecord(s.home) ? s.home : {};
-  const landing = isRecord(s.landing) ? s.landing : {};
   const about = isRecord(s.about) ? s.about : {};
   const college = isRecord(s.college) ? s.college : {};
   const lycee = isRecord(s.lycee) ? s.lycee : {};
@@ -609,18 +558,6 @@ export function mergeContent(defaults: SiteContent, saved: unknown): SiteContent
         label: str(isRecord(savedItem) ? savedItem.label : undefined, item.label),
       })),
     },
-    landing: {
-      overlays: mergeFixed(defaults.landing.overlays, landing.overlays, (item, savedItem) => {
-        const row = isRecord(savedItem) ? savedItem : {};
-        return {
-          title: str(row.title, item.title),
-          body: str(row.body, item.body),
-          href: str(row.href, item.href) || item.href,
-          buttonLabel: str(row.buttonLabel, item.buttonLabel),
-        };
-      }),
-    },
-    home: { welcomeTitle: str(home.welcomeTitle, defaults.home.welcomeTitle) },
     footer: {
       newsletterTitle: str(footer.newsletterTitle, defaults.footer.newsletterTitle),
       newsletterBody: str(footer.newsletterBody, defaults.footer.newsletterBody),

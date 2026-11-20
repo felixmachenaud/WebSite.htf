@@ -4,6 +4,8 @@ import Link from "next/link";
 import { SafeSectionImage } from "@/components/SafeSectionImage";
 import { AdresseCards } from "@/components/AdresseCards";
 import { getContent } from "@/lib/content-store";
+import { ContentSections } from "@/components/ContentPage";
+import { CONTENT_PAGES } from "@/data/pages";
 import type { InfoSection } from "@/lib/site-content";
 
 const GREEN = "#14532d";
@@ -84,6 +86,7 @@ export default async function InformationGeneralePage() {
           ))}
         </div>
       </div>
+      <ContentSections sections={[["documentation", CONTENT_PAGES.documentation]]} />
     </main>
   );
 }

@@ -26,9 +26,95 @@ export function contentPageMetadata(page: ContentPageData): Metadata {
   return { title: `${page.title} | Collège Lycée Hautefeuille`, description: page.intro };
 }
 
-/** Gabarit des pages issues de la maquette `références/` : bandeau photo, intro, cartes, encadré, étape suivante. */
-export function ContentPage({ page }: { page: ContentPageData }) {
+/**
+ * Bloc de contenu issu de la maquette `références/` : intro, cartes, chiffres, encadré.
+ * Sert seul (ContentPage) ou comme section d'une page regroupée (`id` = ancre).
+ */
+export function ContentSection({
+  page,
+  id,
+  heading = true,
+  intro = true,
+}: {
+  page: ContentPageData;
+  id?: string;
+  heading?: boolean;
+  intro?: boolean;
+}) {
   const cols = page.cards.length % 3 === 0 ? "md:grid-cols-3" : "md:grid-cols-2";
+  return (
+    <section id={id} className="scroll-mt-28">
+      {heading ? <h2 className="font-serif text-3xl font-bold text-slate-900 md:text-4xl">{page.title}</h2> : null}
+      {intro ? (
+        <p className={`${heading ? "mt-4" : "mt-8"} max-w-3xl font-sans text-lg leading-relaxed text-slate-800`}>{page.intro}</p>
+      ) : null}
+
+      <div className={`mt-10 grid gap-6 ${cols}`}>
+        {page.cards.map((card) => (
+          <article key={card.title} className="flex flex-col rounded-xl bg-slate-100 p-6">
+            <h3 className="font-sans text-lg font-semibold" style={{ color: GREEN }}>
+              {card.title}
+            </h3>
+            <p className="mt-3 flex-1 font-sans text-[0.95rem] leading-relaxed text-slate-700">{card.text}</p>
+            {card.link ? (
+              <SmartLink
+                href={card.link.href}
+                className="mt-4 font-sans text-sm font-semibold underline-offset-4 hover:underline"
+                style={{ color: GREEN }}
+              >
+                {card.link.label} →
+              </SmartLink>
+            ) : null}
+          </article>
+        ))}
+      </div>
+
+      {page.stats ? (
+        <div className="mt-10 rounded-xl px-6 py-8 text-white" style={{ backgroundColor: GREEN }}>
+          <h3 className="font-sans text-xl font-semibold">{page.stats.title}</h3>
+          <dl className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-4">
+            {page.stats.items.map((stat) => (
+              <div key={stat.label} className="flex flex-col-reverse">
+                <dt className="mt-2 font-sans text-sm text-white/85">{stat.label}</dt>
+                <dd className="font-sans text-3xl font-bold">{stat.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ) : null}
+
+      {page.band ? (
+        <div className="mt-10 rounded-xl border border-slate-200 bg-white px-6 py-8">
+          <h3 className="font-serif text-xl font-bold text-slate-900">{page.band.title}</h3>
+          <p className="mt-3 font-sans leading-relaxed text-slate-700">{page.band.text}</p>
+          {page.band.link ? (
+            <SmartLink
+              href={page.band.link.href}
+              className="mt-5 inline-block rounded-full border px-5 py-2 font-sans text-sm font-semibold transition-colors hover:bg-slate-50"
+              style={{ color: GREEN, borderColor: GREEN }}
+            >
+              {page.band.link.label}
+            </SmartLink>
+          ) : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+/** Suite de blocs ajoutés au bas d'une page regroupée. */
+export function ContentSections({ sections }: { sections: [string, ContentPageData][] }) {
+  return (
+    <div className="mx-auto max-w-5xl space-y-20 px-6 py-16 md:py-20">
+      {sections.map(([id, page]) => (
+        <ContentSection key={id} id={id} page={page} />
+      ))}
+    </div>
+  );
+}
+
+/** Gabarit de page : bandeau photo, fil d'Ariane, bloc principal, sections regroupées, étape suivante. */
+export function ContentPage({ page, sections = [] }: { page: ContentPageData; sections?: [string, ContentPageData][] }) {
   return (
     <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader title={page.title} imageUrl={page.image} imageAlt={page.imageAlt} />
@@ -47,60 +133,11 @@ export function ContentPage({ page }: { page: ContentPageData }) {
             </li>
           </ol>
         </nav>
-
-        <p className="mt-8 max-w-3xl font-sans text-lg leading-relaxed text-slate-800">{page.intro}</p>
-
-        <section className={`mt-10 grid gap-6 ${cols}`}>
-          {page.cards.map((card) => (
-            <article key={card.title} className="flex flex-col rounded-xl bg-slate-100 p-6">
-              <h2 className="font-sans text-lg font-semibold" style={{ color: GREEN }}>
-                {card.title}
-              </h2>
-              <p className="mt-3 flex-1 font-sans text-[0.95rem] leading-relaxed text-slate-700">{card.text}</p>
-              {card.link ? (
-                <SmartLink
-                  href={card.link.href}
-                  className="mt-4 font-sans text-sm font-semibold underline-offset-4 hover:underline"
-                  style={{ color: GREEN }}
-                >
-                  {card.link.label} →
-                </SmartLink>
-              ) : null}
-            </article>
-          ))}
-        </section>
-
-        {page.stats ? (
-          <section className="mt-10 rounded-xl px-6 py-8 text-white" style={{ backgroundColor: GREEN }}>
-            <h2 className="font-sans text-xl font-semibold">{page.stats.title}</h2>
-            <dl className="mt-6 grid grid-cols-2 gap-6 md:grid-cols-4">
-              {page.stats.items.map((stat) => (
-                <div key={stat.label} className="flex flex-col-reverse">
-                  <dt className="mt-2 font-sans text-sm text-white/85">{stat.label}</dt>
-                  <dd className="font-sans text-3xl font-bold">{stat.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        ) : null}
-
-        {page.band ? (
-          <section className="mt-10 rounded-xl border border-slate-200 bg-white px-6 py-8">
-            <h2 className="font-serif text-xl font-bold text-slate-900">{page.band.title}</h2>
-            <p className="mt-3 font-sans leading-relaxed text-slate-700">{page.band.text}</p>
-            {page.band.link ? (
-              <SmartLink
-                href={page.band.link.href}
-                className="mt-5 inline-block rounded-full border px-5 py-2 font-sans text-sm font-semibold transition-colors hover:bg-slate-50"
-                style={{ color: GREEN, borderColor: GREEN }}
-              >
-                {page.band.link.label}
-              </SmartLink>
-            ) : null}
-          </section>
-        ) : null}
-
-        <div className="mt-14 flex justify-center">
+        <ContentSection page={page} heading={false} />
+      </div>
+      {sections.length ? <ContentSections sections={sections} /> : null}
+      {page.next ? (
+        <div className="flex justify-center px-6 pb-16">
           <SmartLink
             href={page.next.href}
             className="rounded-full px-7 py-3 font-sans text-sm font-semibold text-white transition-opacity hover:opacity-90"
@@ -109,7 +146,7 @@ export function ContentPage({ page }: { page: ContentPageData }) {
             {page.next.label} →
           </SmartLink>
         </div>
-      </div>
+      ) : null}
     </main>
   );
 }

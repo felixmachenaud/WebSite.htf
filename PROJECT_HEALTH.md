@@ -324,3 +324,18 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : choix d'aperçu sans données de prod (voir DECISIONS 2026-11-19).
 - Action : avant une production sur Workers, stockage CMS + sessions + secrets propres au compte, `r2IncrementalCache` + `d1NextTagCache`, Cloudflare Access sur `/admin`.
 - Priorité relevée (décision « Cloudflare cible unique », 19 nov.) : sans ce chantier, le site sur Workers n'a pas d'admin ; le contenu enregistré dans Vercel Blob est à exporter avant d'arrêter Vercel.
+- 20 nov. : Félix va supprimer le projet Vercel. `lib/content-store.ts` (`@vercel/blob`) et `lib/admin-sessions.ts` (Upstash) restent le code du CMS : sans migration vers R2 + KV/D1, l'admin n'a plus de stockage. Exporter `hautefeuille-site-content.json` du Blob avant suppression.
+
+### CONT-04 [OPEN] [MEDIUM] 2026-11-20
+
+- Composant : `lib/site-content.ts` (actualités), `components/CheminLanding.tsx`
+- Constat : l'actualité « Hautefeuille à Notre Dame ! » (20 février 2025) est reprise du prototype avec un texte d'une ligne ; les photos d'actualités et de l'accueil viennent du prototype (droit à l'image : voir CONT-01).
+- Cause : le prototype ne fournit que titre, date et photo.
+- Action : obtenir de l'école le texte complet de l'article, ou le retirer.
+
+### UX-01 [OPEN] [LOW] 2026-11-20
+
+- Composant : `components/Navbar.tsx`, `components/Footer.tsx` vs `app/chemin.css`
+- Constat : l'accueil suit la charte du prototype (vert #183e31, or #e4bd52, crème, Georgia) ; les pages intérieures gardent l'en-tête vert clair et le pied de page blanc.
+- Cause : demande limitée à l'accueil ; les pages intérieures suivent la maquette `références/`.
+- Action : si le client veut une charte unique, aligner Navbar et Footer sur l'en-tête et le pied du prototype.

@@ -20,7 +20,7 @@ type TabId = (typeof TABS)[number][0];
 
 /** Sections du contenu remises aux valeurs par défaut, par onglet. La liste des actualités n'est jamais touchée. */
 const RESET_KEYS: Record<TabId, (keyof SiteContent)[]> = {
-  accueil: ["chrome", "landing", "home"],
+  accueil: ["chrome"],
   college: ["college"],
   lycee: ["lycee"],
   histoire: ["histoire"],
@@ -110,7 +110,6 @@ export function Editor({ initial, defaults }: { initial: SiteContent; defaults: 
       <div className="mt-6 space-y-4 rounded bg-white p-5 shadow-sm">
         {tab === "accueil" ? (
           <>
-            <Field label="Titre sous le bandeau d'accueil" value={content.home.welcomeTitle} onChange={(welcomeTitle) => patch("home", { welcomeTitle })} />
             <Field label="Nom dans le menu" value={content.chrome.brand} onChange={(brand) => patch("chrome", { ...content.chrome, brand })} />
             <Field label="Libellé École directe" value={content.chrome.ecoleDirecte} onChange={(ecoleDirecte) => patch("chrome", { ...content.chrome, ecoleDirecte })} />
             <Field label="Libellé Contact dans la barre" value={content.chrome.contactLabel} onChange={(contactLabel) => patch("chrome", { ...content.chrome, contactLabel })} />
@@ -124,27 +123,6 @@ export function Editor({ initial, defaults }: { initial: SiteContent; defaults: 
                   patch("chrome", { ...content.chrome, nav });
                 }}
               />
-            ))}
-            {content.landing.overlays.map((overlay, index) => (
-              <div key={index} className="space-y-3 border-t border-slate-200 pt-4">
-                <p className="text-sm font-semibold">Encadré {index + 1} du bandeau</p>
-                <Field label="Titre" value={overlay.title} onChange={(title) => {
-                  const overlays = content.landing.overlays.map((entry, i) => (i === index ? { ...entry, title } : entry));
-                  patch("landing", { overlays });
-                }} />
-                <Field label="Texte" rows={3} value={overlay.body} onChange={(body) => {
-                  const overlays = content.landing.overlays.map((entry, i) => (i === index ? { ...entry, body } : entry));
-                  patch("landing", { overlays });
-                }} />
-                <Field label="Lien" value={overlay.href} onChange={(href) => {
-                  const overlays = content.landing.overlays.map((entry, i) => (i === index ? { ...entry, href } : entry));
-                  patch("landing", { overlays });
-                }} />
-                <Field label="Bouton" value={overlay.buttonLabel} onChange={(buttonLabel) => {
-                  const overlays = content.landing.overlays.map((entry, i) => (i === index ? { ...entry, buttonLabel } : entry));
-                  patch("landing", { overlays });
-                }} />
-              </div>
             ))}
           </>
         ) : null}

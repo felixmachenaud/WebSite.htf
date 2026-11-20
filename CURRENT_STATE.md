@@ -1,12 +1,12 @@
 # CURRENT_STATE
 
-Photographie **actuelle** du projet (14 octobre 2026). Anomalies détaillées : `PROJECT_HEALTH.md`.
+Photographie **actuelle** du projet (20 novembre 2026). Anomalies détaillées : `PROJECT_HEALTH.md`.
 
 | | |
 |---|---|
 | Branche active | `main` |
 | `main` | Phase A + B + C (partielle) — push `9ce09c2`, prod live |
-| Production | https://web-site-htf.vercel.app |
+| Hébergement | **Cloudflare Workers uniquement** — aperçu https://hautefeuille-preview.felixmachenaud2.workers.dev ; Vercel abandonné (projet à supprimer par Félix après export du Blob, ARCH-09) |
 | Mail école | Données APASE / effectifs / Gmail intégrées (13 oct. 2026) — relecture juridique + OVH en attente |
 
 ---
@@ -84,11 +84,11 @@ Détail : `docs/PHASE-C-PRODUCTION.md`
 
 ---
 
-## Hébergement (ambivalent)
+## Hébergement
 
-- **Domaine** : OVH (DNS) — **App** : Vercel aujourd'hui, VPS OVH possible sans changer le CMS (Blob + Upstash).
-- **Mentions légales** : `SITE_HOSTING=pending` par défaut — voir `docs/DEPLOYMENT-HOSTING.md`.
-- **Décision Vercel vs OVH app** : en négociation ; puis `SITE_HOSTING=vercel|ovh` + relecture direction.
+- **App** : Cloudflare Workers (seule cible, `docs/DEPLOIEMENT-CLOUDFLARE.md`). **Domaine** : OVH (DNS) possible.
+- **Mentions légales** : hébergeur Cloudflare, Inc. (`lib/site-hosting.ts`), à valider par la direction (`hostConfirmed`).
+- Docs Vercel (`DEPLOYMENT-HOSTING`, `PHASE-A-VERCEL-ENV`, `PHASE-C-PRODUCTION`) : historiques, obsolètes.
 
 ## CI
 
@@ -120,8 +120,18 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ---
 
+## Accueil prototype et pages regroupées (20 nov. 2026, branche `claude/landing-page-site-rebuild-4a5314`)
+
+- Accueil = réplique du prototype validé (`hautefeuille-chemin-prototype…chatgpt.site`) : mêmes textes, mise en page, ruban doré, 8 visuels (`public/images/accueil/`), CSS du prototype isolée sous `.chemin` (`app/chemin.css`), composant `components/CheminLanding.tsx`. Seul écart voulu : les photos défilent de bas en haut (comme l'ancien accueil) au lieu du fondu. Retirés : mentions « prototype », lien « version de référence ». Boutons du prototype non reliés → branchés sur les pages du site.
+- Ancien accueil supprimé (`ScrollHijackLanding`, `components/scroll/`, `landing.overlays` du CMS et de l'admin, images `landing/` et `path/`).
+- Pages intérieures regroupées (14 → 7 pages de contenu) : Qui sommes-nous (histoire + familles + témoignages), Nos valeurs (3 valeurs détaillées en place), Collège, Lycée, La vie à Hautefeuille (`/nouvelles` : activités + actualités), Informations pratiques (+ documentation), Inscriptions (+ soutenez-nous). Anciennes URL → redirections 308 (`next.config.js`). Menu CMS réordonné.
+- Actualités par défaut : Rome, Montmartre, Notre-Dame (ajoutée, texte court) avec photos et dates du prototype, puis goodies.
+
+---
+
 ## Prochaines actions
 
 1. Commit/déployer correctifs locaux (saveContent, smoke `--admin-only`, juridique B4) si pas encore sur `main`
 2. Relecture direction (B4) — transmettre `docs/RELECTURE-DIRECTION-B4.md` — SEC-02
-3. Domaine OVH → CNAME Vercel (scénario A) quand le nom final est fixé
+3. Exporter le contenu Vercel Blob avant de supprimer le projet Vercel ; CMS sur Cloudflare (ARCH-09)
+4. Domaine de l'école → `routes` custom_domain dans `wrangler.jsonc` quand le nom final est fixé

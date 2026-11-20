@@ -1,0 +1,14 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "overused-font",
+        "value": "arial",
+        "createdAt": "2026-11-20T08:02:57.487Z",
+        "reason": "Arial comes verbatim from the client-validated prototype (hautefeuille-chemin-prototype) that Félix asked to copy identically; app/chemin.css is that prototype's CSS"
+      }
+    ]
+  }
+}

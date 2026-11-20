@@ -331,17 +331,9 @@ async function testPublicRoutes(base) {
     "/nouvelles",
     "/a-propos/college",
     "/a-propos/lycee",
-    "/a-propos/histoire",
     "/a-propos/projet-educatif",
     "/a-propos/information-generale",
-    "/a-propos/projet-educatif/viser-l-excellence",
-    "/a-propos/projet-educatif/s-ouvrir-au-monde",
-    "/a-propos/projet-educatif/donner-du-sens",
-    "/a-propos/vie-a-hautefeuille",
-    "/a-propos/familles",
-    "/a-propos/temoignages",
-    "/a-propos/documentation",
-    "/a-propos/soutenez-nous",
+    "/a-propos",
     "/a-propos/inscriptions",
   ];
   for (const route of routes200) {
@@ -351,6 +343,13 @@ async function testPublicRoutes(base) {
     } else {
       fail(`A7-route${route}`, `expected 200, got ${res.status}`);
     }
+  }
+
+  // Anciennes pages regroupées : redirection permanente vers leur nouvelle section.
+  for (const route of ["/a-propos/histoire", "/a-propos/familles", "/a-propos/vie-a-hautefeuille", "/a-propos/soutenez-nous"]) {
+    const res = await fetch(`${base}${route}`, { redirect: "manual" });
+    if (res.status === 308) pass(`A7-redirect${route}`, `308 → ${res.headers.get("location")}`);
+    else fail(`A7-redirect${route}`, `expected 308, got ${res.status}`);
   }
 
   const unknown = await fetch(`${base}/nouvelles/slug-inconnu`);

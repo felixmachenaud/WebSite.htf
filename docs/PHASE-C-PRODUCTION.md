@@ -1,5 +1,7 @@
 # Phase C — Publication production (web-site-htf)
 
+> **Obsolète (20 nov. 2026)** : Vercel est abandonné, le site est hébergé sur Cloudflare Workers uniquement. Voir `docs/DEPLOIEMENT-CLOUDFLARE.md`.
+
 > **Ne jamais committer de valeurs secrètes.** Ce document liste les noms, l'état et la procédure — pas les tokens ni mots de passe.
 
 ## Projet Vercel

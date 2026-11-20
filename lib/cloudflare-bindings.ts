@@ -9,10 +9,11 @@ type Bindings = { CMS_BUCKET?: CmsBucket };
 
 /**
  * Liaisons Cloudflare du Worker (R2 du CMS), ou {} hors Worker.
- * Jamais pendant `next build` : le local de Wrangler pourrait injecter des données de test dans le build.
+ * Jamais pendant `next build` (le local de Wrangler pourrait injecter des données de test dans le build)
+ * ni en `next dev` (fichier .data/ à la place, sans lancer de workerd local).
  */
 export async function bindings(): Promise<Bindings> {
-  if (process.env.NEXT_PHASE === "phase-production-build") return {};
+  if (process.env.NEXT_PHASE === "phase-production-build" || process.env.NODE_ENV === "development") return {};
   try {
     const { env } = await getCloudflareContext({ async: true });
     return env as unknown as Bindings;

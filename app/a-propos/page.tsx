@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getContent } from "@/lib/content-store";
 import { ContentSections } from "@/components/ContentPage";
+import { ValeursSection } from "@/components/ValeursSection";
 import { CONTENT_PAGES } from "@/data/pages";
 
 const IMAGES = {
@@ -16,9 +17,9 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: histoire.metaTitle, description: histoire.metaDescription };
 }
 
-/** Qui sommes-nous : histoire et fondements (CMS), puis familles et témoignages (maquette). */
+/** Qui sommes-nous : histoire, fondements, valeurs (CMS), puis familles et témoignages (maquette). */
 export default async function AProposPage() {
-  const { histoire } = await getContent();
+  const { histoire, projet } = await getContent();
   return (
     <main className="min-h-screen bg-page safe-navbar-pt">
       <section className="relative">
@@ -108,12 +109,14 @@ export default async function AProposPage() {
         </div>
       </section>
 
+      <ValeursSection projet={projet} />
+
       <section className="border-t border-slate-200 bg-white py-24">
         <div className="mx-auto max-w-2xl px-6 text-center">
           <h2 className="font-serif text-2xl font-bold text-slate-900 md:text-3xl">{histoire.conclusionTitle}</h2>
           <p className="mt-8 font-sans text-base leading-relaxed text-slate-700 md:text-lg">{histoire.conclusionBody}</p>
           <div className="mt-12 flex flex-wrap justify-center gap-4">
-            <Link href="/a-propos/projet-educatif" className="rounded-sm border-2 border-slate-800 bg-transparent px-8 py-3 font-sans text-sm font-medium text-slate-800 transition-colors hover:bg-slate-800 hover:text-white">
+            <Link href="#valeurs" className="rounded-sm border-2 border-slate-800 bg-transparent px-8 py-3 font-sans text-sm font-medium text-slate-800 transition-colors hover:bg-slate-800 hover:text-white">
               {histoire.ctaProjet}
             </Link>
             <Link href="/a-propos/information-generale" className="rounded-sm border-2 border-slate-800 bg-transparent px-8 py-3 font-sans text-sm font-medium text-slate-800 transition-colors hover:bg-slate-800 hover:text-white">

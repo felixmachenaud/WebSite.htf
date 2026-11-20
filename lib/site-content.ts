@@ -172,10 +172,8 @@ export interface SiteContent {
 const NAV: NavItem[] = [
   { href: "/", label: "Accueil" },
   { href: "/a-propos", label: "Qui sommes-nous ?" },
-  { href: "/a-propos/projet-educatif", label: "Nos valeurs" },
   { href: "/a-propos/college", label: "Le Collège" },
   { href: "/a-propos/lycee", label: "Le Lycée" },
-  { href: "/nouvelles", label: "La vie à Hautefeuille" },
   { href: "/a-propos/information-generale", label: "Informations pratiques" },
   { href: "/a-propos/inscriptions", label: "Inscriptions" },
   { href: "/contact", label: "Contact" },

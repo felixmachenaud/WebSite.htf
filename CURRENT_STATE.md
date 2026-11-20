@@ -127,6 +127,8 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 - Pages intérieures regroupées (14 → 7 pages de contenu) : Qui sommes-nous (histoire + familles + témoignages), Nos valeurs (3 valeurs détaillées en place), Collège, Lycée, La vie à Hautefeuille (`/nouvelles` : activités + actualités), Informations pratiques (+ documentation), Inscriptions (+ soutenez-nous). Anciennes URL → redirections 308 (`next.config.js`). Menu CMS réordonné.
 - Actualités par défaut : Rome, Montmartre, Notre-Dame (ajoutée, texte court) avec photos et dates du prototype, puis goodies.
 
+- 20 nov. (suite) : menu latéral unique (`components/MenuDrawer.tsx`) sur l'accueil et les pages intérieures, ouvert au survol du bouton, refermé quand la souris le quitte ; page de fond seulement floutée, rien ne se décale. Menu à 7 entrées : Accueil, Qui sommes-nous ? (histoire + valeurs/étapes du parcours + familles + témoignages), Le Collège, Le Lycée, Informations pratiques (+ vie à Hautefeuille, actualités, documentation), Inscriptions, Contact. `/a-propos/projet-educatif` et `/nouvelles` redirigés (308) ; les articles restent sous `/nouvelles/<slug>`.
+
 ---
 
 ## Prochaines actions

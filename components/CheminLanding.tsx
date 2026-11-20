@@ -8,14 +8,15 @@
  * Styles : app/chemin.css (CSS du prototype isolée sous .chemin).
  */
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { ActualiteItem, SiteContent } from "@/lib/site-content";
+import { MenuDrawer } from "./MenuDrawer";
 import "@/app/chemin.css";
 
 const IMG = "/images/accueil";
 const ANCHORS = ["depart", "confiance", "apprendre", "engager"];
-const VALEURS = "/a-propos/projet-educatif";
+const VALEURS = "/a-propos";
 
 type Props = {
   news: ActualiteItem[];
@@ -52,11 +53,6 @@ function formatDate(iso?: string) {
 
 export function CheminLanding({ news, footer, chrome }: Props) {
   const rootRef = useRef<HTMLDivElement>(null);
-  const [menuOpen, setMenuOpen] = useState(false);
-  const menuOpenRef = useRef(false);
-  useEffect(() => {
-    menuOpenRef.current = menuOpen;
-  }, [menuOpen]);
 
   useEffect(() => {
     const root = rootRef.current!;
@@ -185,19 +181,9 @@ export function CheminLanding({ news, footer, chrome }: Props) {
       const anchor = target.closest<HTMLAnchorElement>('a[href^="#"]');
       if (anchor && root.contains(anchor)) {
         e.preventDefault();
-        setMenuOpen(false);
         const id = anchor.getAttribute("href")!.slice(1);
         history.replaceState(null, "", `#${id}`);
         navigate(id);
-        return;
-      }
-      if (menuOpenRef.current && !target.closest("#menu") && !target.closest("#menu-toggle")) setMenuOpen(false);
-    }
-
-    function onKey(e: KeyboardEvent) {
-      if (e.key === "Escape" && menuOpenRef.current) {
-        setMenuOpen(false);
-        $<HTMLButtonElement>("#menu-toggle").focus();
       }
     }
 
@@ -208,7 +194,6 @@ export function CheminLanding({ news, footer, chrome }: Props) {
     addEventListener("load", remeasure);
     reduced.addEventListener("change", schedule);
     document.addEventListener("click", onClick);
-    document.addEventListener("keydown", onKey);
     if (location.hash) requestAnimationFrame(() => navigate(location.hash.slice(1)));
 
     // Apparitions : titre d'ouverture, puis texte de l'envoi quand il entre à l'écran.
@@ -238,31 +223,24 @@ export function CheminLanding({ news, footer, chrome }: Props) {
       removeEventListener("load", remeasure);
       reduced.removeEventListener("change", schedule);
       document.removeEventListener("click", onClick);
-      document.removeEventListener("keydown", onKey);
       observer?.disconnect();
     };
   }, []);
 
-  // Pages du site absentes du menu du prototype (qui ne liste que le parcours).
-  const extraNav = chrome.nav.filter(
-    (item) => !["/", "/a-propos", "/a-propos/college", "/a-propos/lycee"].includes(item.href),
-  );
-
   return (
-    <div ref={rootRef} className={`chemin${menuOpen ? " menu-open" : ""}`}>
+    <div ref={rootRef} className="chemin">
       <a className="skip" href="#actualites">
         Passer le parcours animé
       </a>
       <header id="header">
-        <button
-          id="menu-toggle"
-          type="button"
-          aria-controls="menu"
-          aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-        >
-          <span className="burger">☰</span> <span>MENU</span>
-        </button>
+        <MenuDrawer
+          items={chrome.nav}
+          renderButton={({ open, ...props }) => (
+            <button id="menu-toggle" type="button" {...props} data-open={open}>
+              <span className="burger">☰</span> <span>MENU</span>
+            </button>
+          )}
+        />
         <a href="#depart" className="brand">
           {chrome.brand}
           <small className="brand-description">COLLÈGE &amp; LYCÉE DE GARÇONS</small>
@@ -271,19 +249,6 @@ export function CheminLanding({ news, footer, chrome }: Props) {
           Inscriptions <span aria-hidden="true">↗</span>
         </Link>
       </header>
-      <nav id="menu" hidden={!menuOpen} aria-label="Menu principal">
-        <Link href="/a-propos">Qui sommes-nous ?</Link>
-        <a href="#confiance">Prendre confiance</a>
-        <a href="#apprendre">Se dépasser</a>
-        <a href="#engager">S’engager</a>
-        <Link href="/a-propos/college">Le Collège</Link>
-        <Link href="/a-propos/lycee">Le Lycée</Link>
-        {extraNav.map((item) => (
-          <Link key={item.href} href={item.href}>
-            {item.label}
-          </Link>
-        ))}
-      </nav>
       <main>
         <div id="journey">
           <div className="stage">
@@ -392,7 +357,7 @@ export function CheminLanding({ news, footer, chrome }: Props) {
         <section id="actualites" className="news">
           <div className="news-heading">
             <h2>La vie à Hautefeuille</h2>
-            <Link className="dark-link" href="/nouvelles">
+            <Link className="dark-link" href="/a-propos/information-generale#actualites">
               Toutes les actualités <span aria-hidden="true">→</span>
             </Link>
           </div>

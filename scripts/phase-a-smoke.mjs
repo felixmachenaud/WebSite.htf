@@ -328,10 +328,8 @@ async function testPublicRoutes(base) {
     "/mentions-legales",
     "/confidentialite",
     "/contact",
-    "/nouvelles",
     "/a-propos/college",
     "/a-propos/lycee",
-    "/a-propos/projet-educatif",
     "/a-propos/information-generale",
     "/a-propos",
     "/a-propos/inscriptions",
@@ -346,7 +344,7 @@ async function testPublicRoutes(base) {
   }
 
   // Anciennes pages regroupées : redirection permanente vers leur nouvelle section.
-  for (const route of ["/a-propos/histoire", "/a-propos/familles", "/a-propos/vie-a-hautefeuille", "/a-propos/soutenez-nous"]) {
+  for (const route of ["/a-propos/histoire", "/a-propos/familles", "/a-propos/vie-a-hautefeuille", "/a-propos/soutenez-nous", "/a-propos/projet-educatif", "/nouvelles"]) {
     const res = await fetch(`${base}${route}`, { redirect: "manual" });
     if (res.status === 308) pass(`A7-redirect${route}`, `308 → ${res.headers.get("location")}`);
     else fail(`A7-redirect${route}`, `expected 308, got ${res.status}`);
@@ -389,11 +387,11 @@ async function testPublicRoutes(base) {
     fail("A7-footer-legal", "liens juridiques manquants");
   }
 
-  const nouvellesRes = await fetch(`${base}/nouvelles`);
+  const nouvellesRes = await fetch(`${base}/a-propos/information-generale`);
   const nouvellesHtml = await nouvellesRes.text();
   const foundBanned = BANNED_IMAGE_REFS.filter((b) => nouvellesHtml.includes(b));
   if (foundBanned.length === 0) {
-    pass("A7-no-student-images", "pas d'images Rome/Montmartre sur /nouvelles");
+    pass("A7-no-student-images", "pas d'images Rome/Montmartre sur la page des actualités");
   } else {
     fail("A7-no-student-images", `trouvé: ${foundBanned.join(", ")}`);
   }
@@ -428,8 +426,8 @@ async function testPublicRoutes(base) {
 
   const sidebarSrc = readFileSync(path.join(ROOT, "components/SidebarMenu.tsx"), "utf8");
   const navbarSrc = readFileSync(path.join(ROOT, "components/Navbar.tsx"), "utf8");
-  if (navbarSrc.includes("SidebarMenu") && homeHtml.includes('href="/contact"')) {
-    pass("A7-mobile-contact", "Contact dans le menu (nav → SidebarMenu, lien /contact sur /)");
+  if (navbarSrc.includes("MenuDrawer") && homeHtml.includes('href="/contact"')) {
+    pass("A7-mobile-contact", "Contact dans le menu (nav → MenuDrawer → SidebarMenu, lien /contact sur /)");
   } else if (sidebarSrc.toLowerCase().includes("contact")) {
     pass("A7-mobile-contact", "Contact référencé dans SidebarMenu.tsx");
   } else {

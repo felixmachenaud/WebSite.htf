@@ -7,11 +7,9 @@ const PATHS = [
   "/a-propos",
   "/a-propos/college",
   "/a-propos/lycee",
-  "/a-propos/projet-educatif",
   "/a-propos/information-generale",
   "/a-propos/inscriptions",
   "/contact",
-  "/nouvelles",
   "/mentions-legales",
   "/confidentialite",
 ];

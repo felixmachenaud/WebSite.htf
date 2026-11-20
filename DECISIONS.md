@@ -214,3 +214,8 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 - Mise en œuvre : CSS du prototype reprise telle quelle et isolée sous `.chemin` plutôt que réécrite en Tailwind, pour rester fidèle et pouvoir la resynchroniser. Textes de l'accueil statiques (hors CMS), comme dans le prototype ; l'ancien bloc CMS `landing.overlays` est retiré.
 - Pages intérieures : wording, arborescence et photos de `références/` et « Photos sélectionnées », mais regroupées pour éviter les recoupements de la maquette (14 → 7 pages de contenu). Anciennes URL redirigées en 308.
 - Hébergeur des mentions légales : Cloudflare, Inc. (suite de la décision « Cloudflare cible unique ») ; `SITE_HOSTING` supprimé.
+
+## 2026-11-20 — Menu unique et 5 rubriques
+
+- Décision (Félix) : un seul menu latéral (celui des pages intérieures) partout, ouvert au survol ; Qui sommes-nous regroupe valeurs et étapes du parcours ; Informations pratiques regroupe vie à Hautefeuille et actualités ; Collège, Lycée, Inscriptions, Contact inchangés.
+- Conséquence : le menu propre au prototype (ancres du parcours, décalage du texte à l'ouverture) est abandonné ; les étapes « Prendre confiance / Se dépasser / S'engager » sont reprises comme sur-titres des valeurs.

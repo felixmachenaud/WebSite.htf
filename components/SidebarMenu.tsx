@@ -25,9 +25,8 @@ export function SidebarMenu({ items, onClose, currentPath = "", linkClassName = 
         </div>
         <nav className="flex flex-col gap-0 pt-4">
           {items.map((item, i) => {
-            const isActive =
-              currentPath === item.href ||
-              (item.href !== "/" && currentPath.startsWith(item.href));
+            // Correspondance exacte : /a-propos ne doit pas rester actif sur /a-propos/college.
+            const isActive = currentPath.replace(/\/$/, "") === item.href.replace(/\/$/, "") || currentPath === item.href;
             return (
               <React.Fragment key={item.href}>
                 {i > 0 && <hr className="my-0 border-t border-black/30" />}

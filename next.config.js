@@ -2,7 +2,6 @@ const path = require("path");
 
 const isProd = process.env.NODE_ENV === "production";
 const siteIsHttps = (process.env.NEXT_PUBLIC_SITE_URL || "").startsWith("https://");
-const onVercel = process.env.VERCEL === "1";
 
 const scriptSrc = isProd
   ? "script-src 'self' 'unsafe-inline'"
@@ -30,7 +29,7 @@ const securityHeaders = [
   { key: "X-Frame-Options", value: "DENY" },
 ];
 
-if (isProd && (onVercel || siteIsHttps)) {
+if (isProd && siteIsHttps) {
   securityHeaders.push({
     key: "Strict-Transport-Security",
     value: "max-age=63072000; includeSubDomains",
@@ -42,6 +41,20 @@ const nextConfig = {
   poweredByHeader: false,
   turbopack: {
     root: path.join(__dirname),
+  },
+  // Pages regroupées (nov. 2026) : les anciennes URL renvoient vers la section qui les remplace.
+  async redirects() {
+    return [
+      ["/a-propos/histoire", "/a-propos"],
+      ["/a-propos/familles", "/a-propos#familles"],
+      ["/a-propos/temoignages", "/a-propos#temoignages"],
+      ["/a-propos/projet-educatif/viser-l-excellence", "/a-propos/projet-educatif#excellence"],
+      ["/a-propos/projet-educatif/s-ouvrir-au-monde", "/a-propos/projet-educatif#ouverture"],
+      ["/a-propos/projet-educatif/donner-du-sens", "/a-propos/projet-educatif#sens"],
+      ["/a-propos/vie-a-hautefeuille", "/nouvelles#activites"],
+      ["/a-propos/documentation", "/a-propos/information-generale#documentation"],
+      ["/a-propos/soutenez-nous", "/a-propos/inscriptions#soutenez-nous"],
+    ].map(([source, destination]) => ({ source, destination, permanent: true }));
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

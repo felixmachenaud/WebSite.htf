@@ -207,3 +207,10 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 - Décision (Félix) : chaque merge sur `main` doit aboutir sur le Worker.
 - Mise en œuvre : workflow séparé `deploy-cloudflare.yml`, déclenché par `workflow_run` après une CI verte sur `main` ; la CI reste sans secret. Secrets GitHub `CLOUDFLARE_API_TOKEN` (jeton « Edit Cloudflare Workers ») et `CLOUDFLARE_ACCOUNT_ID`, posés par Félix.
 - Limite : seul l'aperçu (compte Félix) est automatique ; la production sur le compte de l'école reste manuelle avec confirmation.
+
+## 2026-11-20 — Accueil identique au prototype, pages intérieures regroupées
+
+- Décision (Félix, demande du client) : l'accueil reproduit à l'identique le prototype `hautefeuille-chemin-prototype` (mise en page, textes, chemin doré, nombre et choix des images) ; seul le défilement des photos (de bas en haut) est conservé de l'accueil précédent.
+- Mise en œuvre : CSS du prototype reprise telle quelle et isolée sous `.chemin` plutôt que réécrite en Tailwind, pour rester fidèle et pouvoir la resynchroniser. Textes de l'accueil statiques (hors CMS), comme dans le prototype ; l'ancien bloc CMS `landing.overlays` est retiré.
+- Pages intérieures : wording, arborescence et photos de `références/` et « Photos sélectionnées », mais regroupées pour éviter les recoupements de la maquette (14 → 7 pages de contenu). Anciennes URL redirigées en 308.
+- Hébergeur des mentions légales : Cloudflare, Inc. (suite de la décision « Cloudflare cible unique ») ; `SITE_HOSTING` supprimé.

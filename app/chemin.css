@@ -1,0 +1,290 @@
+/* Accueil « chemin » : CSS du prototype hautefeuille-chemin-prototype, isolée sous .chemin (générée). */
+.chemin{--green:#183e31;--gold:#e4bd52;--cream:#f7f5ed}.chemin *{box-sizing:border-box}.chemin{margin:0;background:var(--cream);color:var(--green);font-family:Arial,sans-serif}.chemin a{color:inherit;text-decoration:none}.chemin button{font:inherit;cursor:pointer}.chemin button,.chemin a{-webkit-tap-highlight-color:transparent}.chemin button:focus-visible,.chemin a:focus-visible{outline:3px solid var(--gold);outline-offset:6px}.chemin .skip{position:fixed;top:-80px;left:20px;z-index:100;background:var(--cream);padding:15px}.chemin .skip:focus{top:12px}.chemin header{height:96px;padding:0 4.5%;position:fixed;top:0;left:0;width:100%;display:flex;align-items:center;justify-content:space-between;color:#fff;z-index:30;background:linear-gradient(#143227b5,transparent);transition:background .3s}.chemin header.solid{background:var(--green)}.chemin #menu-toggle{display:flex;align-items:center;gap:15px;background:none;border:0;color:inherit;font-size:11px;letter-spacing:2px}.chemin .burger{font-size:26px;font-weight:300}.chemin .brand{font-family:Georgia,serif;letter-spacing:2px;font-size:26px}.chemin .brand small{font-family:Arial,sans-serif;font-size:9px;letter-spacing:3px;display:block;text-align:center;margin-top:7px}.chemin .meet{font-size:12px;border-bottom:1px solid #ffffff70;padding:10px 0}.chemin .meet span{margin-left:18px}.chemin #menu{position:fixed;inset:96px auto 0 0;width:440px;max-width:100%;background:rgba(24,62,49,.5);color:white;z-index:40;padding:40px 6%;box-shadow:20px 0 80px #0004}.chemin #menu a{display:block;font-family:Georgia,serif;font-size:29px;margin-bottom:24px}.chemin #menu small{display:block;color:#c2cfc7;line-height:1.8;margin-top:40px}.chemin #journey{height:650vh;height:650svh}.chemin .stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;background:var(--green);color:white}.chemin .scenes,.chemin .scene,.chemin .scene>img,.chemin .shade{position:absolute;inset:0;width:100%;height:100%}.chemin .scene{opacity:0;visibility:hidden;transition:opacity .7s,visibility .7s}.chemin .scene.active{opacity:1;visibility:visible}.chemin .scene>img{object-fit:cover;transform:scale(1.06);will-change:transform}.chemin .scene[data-scene="1"] img{object-position:center 42%}.chemin .shade{background:linear-gradient(90deg,rgba(8,27,20,.8),rgba(8,27,20,.36) 56%,rgba(8,27,20,.3)),linear-gradient(0deg,#071b16aa,transparent 35%)}.chemin .scene:has(.right) .shade{background:linear-gradient(270deg,rgba(8,27,20,.85),rgba(8,27,20,.4) 60%,rgba(8,27,20,.15)),linear-gradient(0deg,#071b16aa,transparent 35%)}.chemin .copy{position:absolute;left:10%;top:50%;transform:translateY(-44%);width:min(620px,60%);z-index:5;transition:opacity .65s,translate .65s;opacity:0;translate:0 24px}.chemin .scene.active .copy{opacity:1;translate:0 0}.chemin .copy.right{left:43%;width:46%}.chemin .eyebrow{font-size:11px;letter-spacing:2.8px;font-weight:600;line-height:1.8}.chemin .copy .eyebrow{color:#f1d78c}.chemin h1,.chemin h2,.chemin h3{font-family:Georgia,'Times New Roman',serif;font-weight:400;letter-spacing:-2px;margin:25px 0;line-height:1.02}.chemin h1{font-size:clamp(64px,6.4vw,100px)}.chemin h2{font-size:clamp(49px,5.3vw,80px)}.chemin h3{font-size:48px}.chemin em{font-weight:400}.chemin .copy p{font-size:16px;line-height:1.85;max-width:470px;text-wrap:pretty}.chemin .text-link{display:inline-flex;gap:35px;align-items:center;margin-top:25px;padding:12px 0;color:#fff;border:0;border-bottom:1px solid #fff7;background:none;font-size:13px}.chemin .text-link span{color:var(--gold);font-size:21px}.chemin .tags{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}.chemin .tags span{font-size:10px;letter-spacing:.8px;padding:9px 13px;border:1px solid #fff5;border-radius:50px}.chemin .ribbon{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:2;mix-blend-mode:screen}.chemin .ribbon path{fill:none;stroke-linecap:round}.chemin #ribbon-wide{stroke:#d6af3c;stroke-width:120;opacity:.22}.chemin #ribbon-line{stroke:#f4ce68;stroke-width:2;opacity:.8}.chemin .waypoints{position:absolute;right:3.8%;top:50%;transform:translateY(-50%);z-index:12;display:grid;gap:26px}.chemin .rail{position:absolute;top:16px;bottom:16px;left:50%;width:1px;background:#fff5}.chemin .waypoints a{width:32px;height:32px;position:relative;display:flex;justify-content:center;align-items:center}.chemin .waypoints i{width:7px;height:7px;background:white;border-radius:50%;transition:.25s}.chemin .waypoints a.selected i{background:var(--gold);box-shadow:0 0 0 7px #e4bd5230}.chemin .waypoints span{position:absolute;right:40px;white-space:nowrap;font-size:11px;opacity:0;transition:.2s;background:#153b2ee8;padding:8px 12px}.chemin .waypoints a:hover span,.chemin .waypoints a:focus-visible span{opacity:1}.chemin .stage-bottom{position:absolute;bottom:34px;left:4.5%;right:4.5%;display:flex;justify-content:space-between;align-items:center;z-index:10;font-size:10px;letter-spacing:1.6px}.chemin .prototype{opacity:.7;font-size:8px}.chemin #next{display:flex;align-items:center;gap:20px}.chemin #next span{font-size:25px;color:var(--gold)}.chemin #counter{font-variant-numeric:tabular-nums}.chemin .progress{position:absolute;bottom:0;width:100%;height:3px;background:#ffffff25;z-index:10}.chemin #progress-bar{height:100%;width:0;background:var(--gold)}.chemin .schools{padding:110px 10%;scroll-margin-top:80px}.chemin .schools>h2{max-width:650px}.chemin .school-grid{display:grid;grid-template-columns:1fr 1fr;gap:6%;margin-top:70px}.chemin .school-grid article{border-top:1px solid #183e3160;padding-top:30px}.chemin .school-grid p{font-size:16px;line-height:1.8;max-width:350px}.chemin .dark-link{color:var(--green);border:0;border-bottom:1px solid #183e3150;background:none;padding:16px 0;display:flex;justify-content:space-between;width:100%;font-size:13px}.chemin .together{padding:75px 10%;display:grid;grid-template-columns:1fr 1fr;gap:8%;background:#e9eddf}.chemin .together p{line-height:1.9;font-size:15px}.chemin .contact{text-align:center;background:var(--green);color:var(--cream);padding:100px 20px;scroll-margin-top:80px}.chemin .contact .eyebrow{color:var(--gold)}.chemin .contact p{line-height:1.8}.chemin .gold-button{display:inline-flex;gap:35px;background:var(--gold);color:var(--green);padding:19px 26px;font-size:13px;margin:25px 0}.chemin .contact small{display:block;font-size:11px;opacity:.65;line-height:1.7}.chemin footer{display:flex;justify-content:space-between;align-items:center;gap:30px;padding:45px 6%;font-size:11px;line-height:1.8}.chemin footer .brand{font-size:22px}.chemin footer p{color:#5a6b60}.chemin dialog{border:0;background:var(--cream);color:var(--green);padding:38px 45px;max-width:620px;width:90%;max-height:85vh;overflow:auto}.chemin dialog::backdrop{background:#0a211bcc;backdrop-filter:blur(7px)}.chemin dialog form{text-align:right;margin-bottom:35px}.chemin dialog button{background:none;border:0;color:var(--green);font-size:12px}.chemin dialog h2{font-size:45px}.chemin dialog p{line-height:1.9}.chemin dialog small{font-size:11px;color:#657367}.chemin [hidden]{display:none!important}
+@media(max-width:700px){.chemin header{height:78px;padding:0 6%}.chemin .brand{font-size:20px}.chemin .brand small{font-size:7px;letter-spacing:2px}.chemin #menu-toggle>span:last-child,.chemin .meet{display:none}.chemin #menu-toggle{width:32px}.chemin header>.brand{margin-left:auto}.chemin #menu{top:78px}.chemin .copy,.chemin .copy.right{left:8%;width:78%;top:49%}.chemin h1{font-size:60px}.chemin h2{font-size:46px}.chemin .copy p{font-size:14px;line-height:1.75;max-width:350px}.chemin .eyebrow{font-size:9px;letter-spacing:2px}.chemin .shade,.chemin .scene:has(.right) .shade{background:linear-gradient(90deg,#0c271ed9,#0c271e77),linear-gradient(0deg,#071b16aa,transparent)}.chemin .waypoints{right:1%;gap:15px}.chemin .waypoints a{width:30px;height:30px}.chemin .waypoints span{display:none}.chemin .stage-bottom{bottom:25px;left:8%;right:8%}.chemin .prototype{display:none}.chemin .stage-bottom #next{font-size:9px}.chemin .ribbon{opacity:.65}.chemin .tags{margin-top:18px}.chemin .tags span{font-size:9px}.chemin .text-link{margin-top:15px}.chemin .schools{padding:65px 8%}.chemin .school-grid{grid-template-columns:1fr;gap:40px;margin-top:45px}.chemin .together{grid-template-columns:1fr;padding:55px 8%;gap:10px}.chemin .contact{padding:70px 8%}.chemin .contact h2{font-size:44px}.chemin footer{align-items:start;flex-direction:column;padding:35px 8%}.chemin dialog{padding:25px}.chemin dialog h2{font-size:34px}}
+@media(prefers-reduced-motion:reduce){.chemin .scene,.chemin .copy{transition:none}.chemin .scene>img{transform:none!important}.chemin .ribbon{display:block}}
+
+/* Final scene: leave the walkers and the Mont visible to the left. */
+.chemin .scene .copy.horizon-copy{left:66%;width:26%;top:46%}
+.chemin .horizon-copy h2{font-size:clamp(42px,4vw,64px)}
+.chemin .scene[data-scene="4"] .shade{background:linear-gradient(90deg,rgba(8,27,20,.08) 25%,rgba(8,27,20,.12) 53%,rgba(8,27,20,.76) 73%,rgba(8,27,20,.85))}
+@media(max-width:700px){
+.chemin .scene .copy.horizon-copy{left:8%;width:80%;top:110px;transform:none}
+.chemin .horizon-copy h2{font-size:39px;margin:16px 0}
+.chemin .horizon-copy p{font-size:13px;line-height:1.6}
+.chemin .scene[data-scene="4"] img{object-fit:contain;object-position:center bottom;transform:none!important}
+.chemin .scene[data-scene="4"] .shade{background:linear-gradient(180deg,#183e31 0%,rgba(24,62,49,.95) 38%,rgba(24,62,49,.1) 70%)}
+}
+
+/* Keep the scene text clear of the expanded menu, then restore its layout. */
+.chemin .copy{transition:opacity .65s,translate .65s,left .625s ease,width .625s ease}
+.chemin.menu-open .scene .copy{left:max(480px,48%);width:min(580px,calc(100% - max(480px,48%) - 9%))}
+.chemin.menu-open .scene .copy.horizon-copy{left:max(480px,66%);width:calc(100% - max(480px,66%) - 8%)}
+@media(min-width:701px) and (max-width:1050px){
+.chemin.menu-open #menu{width:40%;padding:30px 5%}
+.chemin.menu-open .scene .copy,.chemin.menu-open .scene .copy.horizon-copy{left:46%;width:44%}
+.chemin.menu-open .copy h1,.chemin.menu-open .copy h2{font-size:clamp(40px,5.4vw,56px)}
+}
+@media(max-width:700px){
+.chemin.menu-open #menu{width:43%;padding:28px 16px;overflow-y:auto}
+.chemin.menu-open #menu a{font-size:21px;line-height:1.2;margin-bottom:23px}
+.chemin.menu-open #menu small{font-size:10px}
+.chemin.menu-open .scene .copy,.chemin.menu-open .scene .copy.horizon-copy{left:49%;width:43%;top:110px;transform:none}
+.chemin.menu-open .copy h1,.chemin.menu-open .copy h2{font-size:30px;letter-spacing:-1px;margin:16px 0}
+.chemin.menu-open .copy p{font-size:12px;line-height:1.55}
+.chemin.menu-open .copy .eyebrow{font-size:8px;letter-spacing:1px}
+.chemin.menu-open .copy .tags{gap:6px;margin-top:12px}
+.chemin.menu-open .copy .tags span{padding:6px 8px;font-size:8px}
+.chemin.menu-open .copy .text-link{font-size:11px;gap:8px;margin-top:8px}
+}
+@media(prefers-reduced-motion:reduce){.chemin .copy{transition:none}}
+
+.chemin #college,.chemin #lycee,.chemin #qui-sommes-nous{scroll-margin-top:120px}
+
+.chemin .scene[data-scene="0"] img{object-position:55% 48%}
+
+/* Keep the immersive zoom, framing the upper part of the group photo. */
+.chemin .scene[data-scene="1"] img{object-fit:cover;object-position:50% 25%;transform-origin:50% 50%;transform:scale(1)}
+
+/* Focus on the faces; soften the blue tabletop with a localized green overlay. */
+.chemin .scene[data-scene="1"] .shade{background:linear-gradient(0deg,rgba(16,48,35,.88) 0%,rgba(16,48,35,.55) 20%,transparent 48%),linear-gradient(270deg,rgba(8,27,20,.80),rgba(8,27,20,.32) 58%,rgba(8,27,20,.12))}
+
+/* Confidence: wider lower-right block using the shared heading typography. */
+@media(min-width:701px){
+.chemin .scene[data-scene="1"] .copy.right,.chemin.menu-open .scene[data-scene="1"] .copy.right{left:49%;width:43%;top:auto;bottom:90px;transform:none}
+.chemin .scene[data-scene="1"] .copy p{max-width:520px}
+.chemin .scene[data-scene="1"] .copy .text-link{margin-top:22px}
+}
+
+/* Finalisation éditoriale — 13 novembre 2026. */
+.chemin #journey{height:540svh}
+.chemin .stage{min-height:680px}
+.chemin .identity{text-transform:none;letter-spacing:1px;display:block;max-width:780px;line-height:1.7}
+.chemin .copy.hero{left:8%;width:80%;max-width:1100px}
+.chemin .copy.hero h1{font-size:clamp(46px,5.3vw,82px);line-height:1.07;margin:24px 0}
+.chemin .copy.hero h1>span,.chemin .copy.hero h1>em{display:block}
+.chemin .copy.hero .intro{margin-top:26px}
+.chemin .copy.hero .intro p{max-width:850px;margin:10px 0}
+.chemin .copy.hero .intro .ambition{font-weight:600;font-size:clamp(15px,1.25vw,19px)}
+.chemin .scene .copy h2{font-size:clamp(40px,4vw,64px);line-height:1.08}
+.chemin .scene .copy p{font-size:16px;line-height:1.75}
+.chemin .scene[data-scene="1"] .copy.right{left:43%;width:49%;top:auto;bottom:78px;transform:none}
+.chemin .scene[data-scene="1"] .copy p{max-width:680px}
+.chemin .scene[data-scene="2"] .copy{left:8%;width:70%;top:auto;bottom:88px;transform:none}
+.chemin .scene[data-scene="2"] .copy p{max-width:760px}
+.chemin .scene[data-scene="3"] .copy.right{left:48%;width:43%;top:auto;bottom:90px;transform:none}
+.chemin .scene[data-scene="3"] .copy p{max-width:680px}
+.chemin.menu-open .scene .copy{left:max(470px,47%);width:calc(100% - max(470px,47%) - 8%)}
+.chemin.menu-open .scene[data-scene="1"] .copy.right{left:max(470px,47%);width:calc(100% - max(470px,47%) - 8%);bottom:78px}
+.chemin.menu-open .scene .copy h1,.chemin.menu-open .scene .copy h2{font-size:clamp(36px,3.4vw,54px)}
+.chemin .admissions{display:inline-flex;gap:22px;align-items:center;background:var(--gold);color:var(--green);border:1px solid var(--gold);padding:13px 20px;font-size:13px;border-radius:2px}
+.chemin .unlinked{cursor:default}
+.chemin .text-link{min-height:44px}
+.chemin .text-link span,.chemin .dark-link span{display:inline-block;transition:transform .25s}
+.chemin .text-link:hover span,.chemin .dark-link:hover span{transform:translateX(5px)}
+.chemin #menu .menu-label{display:block;text-align:left;font-family:Georgia,serif;font-size:29px;margin:0 0 24px;padding:0;background:none;border:0;color:inherit;line-height:normal}
+.chemin #menu{overflow-y:auto}
+.chemin .news{background:var(--cream);padding:105px 8% 130px;position:relative;scroll-margin-top:96px;overflow:hidden}
+.chemin .news::before{content:"";position:absolute;top:0;left:59%;height:55px;width:2px;background:var(--gold)}
+.chemin .news-heading{display:flex;align-items:baseline;justify-content:space-between;gap:30px;margin-bottom:48px}
+.chemin .news-heading h2{font-size:clamp(34px,4vw,58px);margin:0}
+.chemin .news-heading .dark-link{width:auto;gap:25px;flex-shrink:0}
+.chemin .news-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:34px}
+.chemin .news-card{min-width:0}
+.chemin .news-card>img{display:block;width:100%;height:auto;aspect-ratio:1.5;object-fit:cover;border-radius:2px}
+.chemin .news-card time{display:block;font-size:11px;letter-spacing:1px;margin-top:22px;color:#5b6a5d}
+.chemin .news-card h3{font-size:28px;letter-spacing:-.6px;line-height:1.2;min-height:70px;margin:14px 0 10px}
+.chemin .news-card .dark-link{padding:12px 0;width:100%;min-height:44px}
+.chemin .news-thread{position:absolute;bottom:-100px;left:45%;width:20%;height:170px;border:2px solid var(--gold);border-top-left-radius:100%;border-bottom:0;border-right:0;transform:rotate(25deg)}
+.chemin .sendoff{position:relative;min-height:800px;height:100svh;background:var(--green);overflow:hidden;color:var(--cream);scroll-margin-top:0}
+.chemin .sendoff>img,.chemin .sendoff-shade,.chemin .sendoff-route{position:absolute;inset:0;width:100%;height:100%}
+.chemin .sendoff>img{object-fit:cover;object-position:43% 50%}
+.chemin .sendoff-shade{background:linear-gradient(90deg,rgba(8,27,20,.02) 30%,rgba(8,27,20,.1) 55%,rgba(8,27,20,.65) 73%,rgba(8,27,20,.8)),linear-gradient(0deg,rgba(8,27,20,.35),transparent 40%)}
+.chemin .sendoff-route{pointer-events:none;opacity:.35}
+.chemin .sendoff-route path{fill:none;stroke:var(--gold);stroke-width:2}
+.chemin .sendoff-copy{position:absolute;left:65%;width:29%;top:19%;z-index:2}
+.chemin .sendoff h2{font-size:clamp(34px,3.2vw,50px);line-height:1.16;letter-spacing:-1px}
+.chemin .sendoff p{font-size:16px;line-height:1.8;max-width:420px;margin-top:30px}
+.chemin .sendoff strong{font-weight:500}
+.chemin footer{display:grid;grid-template-columns:1.2fr 1fr 1fr 1.1fr;align-items:start;padding:55px 6% 25px;gap:35px}
+.chemin footer address{font-style:normal;font-size:12px;line-height:1.9}.chemin footer address strong{font-weight:600}
+.chemin .footer-practical{display:flex;flex-direction:column;align-items:start;gap:9px;font-size:12px;overflow-wrap:anywhere}
+.chemin .footer-practical button{background:transparent;border:0;color:var(--green);padding:0;font-size:12px;min-height:28px}
+.chemin .footer-bottom{grid-column:1/-1;border-top:1px solid #183e3125;padding-top:22px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:10px}
+@media(min-width:701px) and (max-width:1050px){
+.chemin .copy.hero h1{font-size:clamp(43px,5.3vw,60px)}
+.chemin .scene[data-scene="1"] .copy.right,.chemin .scene[data-scene="3"] .copy.right{left:39%;width:52%}
+.chemin .scene .copy h2{font-size:clamp(34px,4.4vw,46px)}
+.chemin.menu-open .scene .copy,.chemin.menu-open .scene[data-scene="1"] .copy.right{left:46%;width:45%}
+.chemin.menu-open .scene .copy h1,.chemin.menu-open .scene .copy h2{font-size:36px}
+.chemin .news-grid{gap:20px}.chemin .news-card h3{font-size:23px}
+.chemin .sendoff{min-height:700px}.chemin .sendoff-copy{left:62%;width:32%;top:16%}.chemin .sendoff h2{font-size:34px}
+.chemin footer{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+.chemin header{gap:14px;padding:0 5%}.chemin .brand{font-size:17px;letter-spacing:1px}.chemin .brand small{font-size:6px;letter-spacing:1.5px}.chemin header>.brand{margin:0 auto}
+.chemin .admissions{display:flex;font-size:11px;padding:11px 12px;gap:6px}.chemin .admissions span{display:none}
+.chemin #journey{height:510svh}.chemin .stage{height:100svh;min-height:680px}
+.chemin .copy.hero,.chemin .scene[data-scene="1"] .copy.right,.chemin .scene[data-scene="2"] .copy,.chemin .scene[data-scene="3"] .copy.right{left:7%;width:82%;top:auto;bottom:85px;transform:none}
+.chemin .copy.hero h1{font-size:clamp(34px,8.6vw,48px);letter-spacing:-1px;line-height:1.1}
+.chemin .copy.hero .identity{font-size:9px;letter-spacing:.4px;max-width:340px}
+.chemin .copy.hero .intro .ambition{font-size:15px;line-height:1.6}
+.chemin .copy.hero .intro p,.chemin .scene .copy p{font-size:14px;line-height:1.7}
+.chemin .scene .copy h2{font-size:clamp(31px,8.4vw,44px);letter-spacing:-1px;line-height:1.12}
+.chemin .scene[data-scene="1"] .copy .text-link{margin-top:16px}
+.chemin #menu .menu-label{font-size:29px}
+.chemin.menu-open #menu .menu-label{font-size:21px;line-height:1.2;margin-bottom:23px}
+.chemin.menu-open .scene .copy,.chemin.menu-open .scene[data-scene="1"] .copy.right,.chemin.menu-open .scene[data-scene="2"] .copy,.chemin.menu-open .scene[data-scene="3"] .copy.right{left:49%;width:43%;top:110px;bottom:auto;transform:none}
+.chemin.menu-open .scene .copy h1,.chemin.menu-open .scene .copy h2{font-size:25px;line-height:1.08}
+.chemin.menu-open .scene .copy p,.chemin.menu-open .copy.hero .intro .ambition{font-size:12px;line-height:1.5}
+.chemin.menu-open .copy.hero .identity{font-size:8px}
+.chemin .news{padding:75px 7% 95px}.chemin .news-heading{display:block;margin-bottom:30px}.chemin .news-heading .dark-link{margin-top:18px}.chemin .news-grid{grid-template-columns:1fr;gap:42px}.chemin .news-card h3{min-height:0;font-size:28px}.chemin .news-card>img{aspect-ratio:1.6}
+.chemin .sendoff{height:auto;min-height:0;display:flex;flex-direction:column;padding-top:55px}
+.chemin .sendoff-copy{position:relative;left:auto;top:auto;width:auto;margin:0 8% 35px;order:0}
+.chemin .sendoff h2{font-size:35px}.chemin .sendoff p{font-size:15px;margin:25px 0}
+.chemin .sendoff>img{position:relative;inset:auto;height:auto;width:100%;object-fit:contain;order:1;display:block}
+.chemin .sendoff-shade{display:none}.chemin .sendoff-route{opacity:.2;z-index:0}
+.chemin footer{display:grid;grid-template-columns:1fr;gap:24px;padding:38px 7% 22px}.chemin .footer-bottom{display:flex;flex-direction:column;gap:15px}
+}
+@media(prefers-reduced-motion:reduce){.chemin .text-link span,.chemin .dark-link span{transition:none}}
+
+/* Présentation sous le nom de l’établissement. */
+.chemin header .brand{text-align:center;flex:0 1 440px;min-width:0}
+.chemin header .brand .brand-description{font-size:10px;letter-spacing:.2px;line-height:1.4;margin-top:5px;text-transform:none}
+@media(max-width:700px){.chemin header .brand .brand-description{font-size:8px;letter-spacing:0;line-height:1.3}.chemin header .brand{flex:1 1 auto}.chemin header{gap:8px}}
+
+/* Harmonisation des titres : retours sémantiques et proportions, sans toucher aux visuels. */
+.chemin .title-line{display:block}
+.chemin .keep-phrase{white-space:nowrap}
+.chemin .scene .copy .chapter-title{margin:16px 0 18px;line-height:1.08;text-wrap:balance}
+.chemin .scene .copy:has(.chapter-title)>p{margin:0;line-height:1.65}
+.chemin .scene .copy:has(.chapter-title)>.text-link{margin-top:14px;padding-top:9px;padding-bottom:9px}
+.chemin .scene[data-scene="1"] .copy .chapter-title{font-size:clamp(36px,3.35vw,54px);line-height:1.06;margin:13px 0 15px}
+.chemin .scene[data-scene="1"] .copy.right{bottom:78px}
+.chemin .scene[data-scene="3"] .copy .chapter-title{font-size:clamp(36px,3.7vw,58px)}
+.chemin .scene[data-scene="3"] .copy.right{left:47%;width:45%;bottom:85px}
+.chemin .sendoff-copy{left:63%;width:31%;top:19%}
+.chemin .sendoff h2{font-size:clamp(32px,3vw,46px);line-height:1.13;margin:20px 0 24px}
+.chemin .sendoff p{margin-top:24px;line-height:1.75}
+@media(min-width:1051px){
+.chemin .scene .chapter-title>.title-line,.chemin .scene .chapter-title>em>.title-line,.chemin .sendoff h2 .title-line{white-space:nowrap}
+}
+@media(min-width:701px) and (max-width:1050px){
+.chemin .scene[data-scene="1"] .copy .chapter-title{font-size:clamp(32px,3.8vw,40px)}
+.chemin .scene[data-scene="3"] .copy.right{left:39%;width:53%}
+.chemin .scene[data-scene="3"] .copy .chapter-title{font-size:clamp(34px,3.9vw,42px)}
+.chemin .sendoff-copy{left:61%;width:34%;top:16%}
+.chemin .sendoff h2{font-size:clamp(28px,3.4vw,34px)}
+}
+@media(max-width:700px){
+.chemin .copy.hero h1{font-size:clamp(30px,8.3vw,48px)}
+.chemin .scene .copy .chapter-title{font-size:clamp(29px,7.5vw,40px);margin:14px 0;line-height:1.1}
+.chemin .scene[data-scene="1"] .copy .chapter-title{font-size:clamp(28px,7.2vw,38px);line-height:1.08}
+.chemin .scene[data-scene="3"] .copy .chapter-title{font-size:clamp(29px,7.5vw,40px)}
+.chemin .scene[data-scene="3"] .copy.right{left:7%;width:82%;bottom:85px}
+.chemin .scene .copy:has(.chapter-title)>p{line-height:1.6}
+.chemin .scene .copy:has(.chapter-title)>.text-link{margin-top:10px}
+.chemin .scene[data-scene="3"] .chapter-title>.title-line{text-wrap:balance}
+.chemin .sendoff-copy{position:relative;left:auto;top:auto;width:auto;margin:0 8% 35px}
+.chemin .sendoff h2{font-size:clamp(29px,8vw,38px);line-height:1.13}
+}
+/* Le menu conserve le glissement existant, avec des lignes souples dans l’espace restant. */
+.chemin.menu-open .scene .chapter-title .title-line{white-space:normal;text-wrap:balance}
+.chemin.menu-open .scene[data-scene="1"] .chapter-title{font-size:clamp(30px,3vw,46px)}
+.chemin.menu-open .scene[data-scene="3"] .chapter-title{font-size:clamp(32px,3.3vw,50px)}
+.chemin.menu-open .scene[data-scene="3"] .copy.right{left:max(470px,47%);width:calc(100% - max(470px,47%) - 8%)}
+@media(min-width:701px) and (max-width:1050px){.chemin.menu-open .scene[data-scene="3"] .copy.right{left:46%;width:45%}}
+@media(max-width:700px){
+.chemin.menu-open .scene[data-scene="1"] .chapter-title,.chemin.menu-open .scene[data-scene="3"] .chapter-title{font-size:25px}
+.chemin.menu-open .scene[data-scene="3"] .copy.right{left:49%;width:43%;top:110px;bottom:auto}
+.chemin.menu-open .scene .keep-phrase{white-space:normal}
+}
+
+/* Les retours sont également inscrits dans le HTML, indépendamment du cache CSS. */
+.chemin .title-line{display:inline}
+
+/* Finitions ciblées : tailles ordinateur, visages dégagés et respiration de l’envoi. */
+@media(min-width:1051px){
+.chemin .scene[data-scene="1"] .copy .chapter-title{font-size:clamp(32.4px,3.015vw,48.6px)}
+.chemin:not(.menu-open) .scene[data-scene="1"] .copy.right{left:46%;width:46%}
+.chemin .scene[data-scene="3"] .copy .chapter-title{font-size:clamp(33.48px,3.441vw,53.94px)}
+.chemin.menu-open .scene[data-scene="1"] .chapter-title{font-size:clamp(27px,2.7vw,41.4px)}
+.chemin.menu-open .scene[data-scene="3"] .chapter-title{font-size:clamp(29.76px,3.069vw,46.5px)}
+.chemin .sendoff-copy{top:26%}
+}
+@media(min-width:701px) and (max-width:1050px){.chemin .sendoff-copy{top:23%}}
+
+/* Une entrée plus épurée, puis une invitation au premier défilement. */
+@media(min-width:1051px){
+.chemin .copy.hero{width:43%;max-width:760px}
+.chemin .copy.hero h1{font-size:clamp(40px,3.8vw,64px);line-height:1.1;letter-spacing:-1.5px;margin:0 0 26px}
+.chemin .copy.hero .intro{margin-top:0}
+.chemin .copy.hero .intro p{max-width:470px;font-size:16px;line-height:1.7;margin:0}
+.chemin .copy.hero>.text-link{margin-top:24px}
+}
+@media(min-width:701px) and (max-width:1050px){
+.chemin .copy.hero{width:55%}
+.chemin .copy.hero h1{font-size:clamp(36px,4.4vw,46px)}
+}
+@media(max-width:700px){
+.chemin .copy.hero .intro{margin-top:20px}
+.chemin .copy.hero>.text-link{margin-top:16px}
+}
+/* Apparitions ponctuelles : contenus visibles par défaut, sans dépendance au script. */
+@keyframes chemin-title-arrive{from{opacity:0;transform:translateY(var(--reveal-distance,10px))}to{opacity:1;transform:translateY(0)}}
+@keyframes chemin-text-arrive{from{opacity:0}to{opacity:1}}
+.chemin .hero.opening-reveal h1>span,.chemin .hero.opening-reveal h1>em{animation:chemin-title-arrive .55s cubic-bezier(.22,.61,.36,1) both}
+.chemin .hero.opening-reveal h1>:nth-child(1){animation-delay:.2s}
+.chemin .hero.opening-reveal h1>:nth-child(2){animation-delay:.45s}
+.chemin .hero.opening-reveal h1>:nth-child(3){animation-delay:.7s}
+.chemin .hero.opening-reveal>.text-link{animation:chemin-text-arrive .55s ease .95s both}
+.chemin .sendoff-part{display:block}
+.chemin .sendoff-copy.reveal-waiting .sendoff-part,.chemin .sendoff-copy.reveal-waiting>p{opacity:0}
+.chemin .sendoff-copy.reveal-visible .sendoff-part{animation:chemin-title-arrive .8s cubic-bezier(.22,.61,.36,1) both}
+.chemin .sendoff-copy.reveal-visible em.sendoff-part{animation-delay:.3s}
+.chemin .sendoff-copy.reveal-visible>p{animation:chemin-text-arrive .7s ease .6s both}
+@media(max-width:700px){.chemin .hero,.chemin .sendoff-copy{--reveal-distance:8px}}
+@media(prefers-reduced-motion:reduce){
+.chemin .hero.opening-reveal h1>*,.chemin .hero.opening-reveal>.text-link,.chemin .sendoff-copy.reveal-visible .sendoff-part,.chemin .sendoff-copy.reveal-visible>p{animation:none!important;opacity:1;transform:none}
+.chemin .sendoff-copy.reveal-waiting .sendoff-part,.chemin .sendoff-copy.reveal-waiting>p{opacity:1}
+}
+
+/* Le fil doré conserve sa géométrie ; seule sa longueur visible progresse. */
+.chemin .news::before{content:none}
+.chemin .news-route{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.chemin .news-route path{fill:none;stroke:var(--gold);stroke-width:2;opacity:.8}
+.chemin #ribbon-line,.chemin .news-route path,.chemin .sendoff-route path{stroke-linecap:butt}
+@media(max-width:700px){.chemin #ribbon-wide{opacity:.18}}
+@media(prefers-reduced-motion:reduce){.chemin #ribbon-line,.chemin .news-route path,.chemin .sendoff-route path{stroke-dasharray:none!important;stroke-dashoffset:0!important}}
+
+/* Épuration : une ouverture unique, sans rallonger les chapitres suivants. */
+.chemin #journey{height:474svh}
+@media(min-width:701px){
+.chemin .copy.hero{transform:translateY(calc(-44% - 24px))}
+.chemin .scene[data-scene="1"] .copy.right{bottom:180px}
+.chemin .scene[data-scene="2"] .copy{bottom:175px}
+.chemin .scene[data-scene="3"] .copy.right{bottom:175px}
+}
+@media(max-width:700px){
+.chemin #journey{height:448svh}
+.chemin .scene[data-scene="1"] .chapter-title em.title-line{white-space:normal;text-wrap:balance}
+}
+
+/* Chapitre 01 : préserver la main et placer les mots dans le feuillage. */
+.chemin .scene[data-scene="1"] img{object-position:50% 50%}
+.chemin .scene[data-scene="1"] .copy.right{top:15%;bottom:auto;transform:none}
+.chemin .scene[data-scene="1"] .shade{background:linear-gradient(180deg,rgba(8,27,20,.58),rgba(8,27,20,.25) 40%,rgba(8,27,20,.06) 65%,rgba(8,27,20,.18))}
+@media(max-width:700px){
+.chemin .scene[data-scene="1"] img{object-position:42% 50%}
+.chemin .scene[data-scene="1"] .copy.right{top:110px;bottom:auto}
+}
+
+/* Le ruban s’efface doucement autour de la main, sans changer son tracé. */
+.chemin .stage:has(.scene[data-scene="1"].active) .ribbon{-webkit-mask-image:radial-gradient(ellipse 14% 13% at 38% 70%,transparent 50%,#000 100%);mask-image:radial-gradient(ellipse 14% 13% at 38% 70%,transparent 50%,#000 100%)}
+
+/* Site Hautefeuille : défilement des images conservé de l'accueil précédent.
+   La photo suivante monte du bas de l'écran pendant que la photo courante glisse vers le haut
+   (au lieu du fondu du prototype). Pilotés par components/CheminLanding.tsx. */
+.chemin .scene{opacity:1;visibility:visible;transition:none}
+.chemin .scene:not(.active){pointer-events:none}
+.chemin .footer-practical a,.chemin .footer-bottom a{color:var(--green)}
+.chemin .brand{text-transform:uppercase}

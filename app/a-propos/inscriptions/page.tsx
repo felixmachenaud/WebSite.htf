@@ -6,5 +6,5 @@ const page = CONTENT_PAGES.inscriptions;
 export const metadata = contentPageMetadata(page);
 
 export default function InscriptionsPage() {
-  return <ContentPage page={page} />;
+  return <ContentPage page={page} sections={[["soutenez-nous", CONTENT_PAGES.soutien]]} />;
 }

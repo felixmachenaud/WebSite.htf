@@ -1,5 +1,7 @@
 /**
  * Pages issues de la maquette `références/site Hautefeuille maquette chemin v2`.
+ * Regroupées pour limiter le nombre de pages : valeurs → /a-propos/projet-educatif, familles et témoignages → /a-propos,
+ * vie → /nouvelles, documentation → infos pratiques, soutien → /a-propos/inscriptions (anciennes URL redirigées, next.config.js).
  * Textes repris de la maquette ; citations et annotations de maquette (« à rédiger », « XX % ») non publiées.
  * shortcut: contenu statique (hors CMS), passer dans lib/site-content.ts si l'école doit l'éditer.
  */
@@ -18,7 +20,7 @@ export interface ContentPageData {
   cards: { title: string; text: string; link?: PageLink }[];
   stats?: { title: string; items: { value: string; label: string }[] };
   band?: { title: string; text: string; link?: PageLink };
-  next: PageLink;
+  next?: PageLink;
 }
 
 const VALEURS: PageLink = { label: "Nos valeurs", href: "/a-propos/projet-educatif" };
@@ -58,7 +60,6 @@ export const CONTENT_PAGES = {
         { value: "40 ans", label: "d'histoire" },
       ],
     },
-    next: { label: "Étape suivante : S'ouvrir au monde et aux autres", href: "/a-propos/projet-educatif/s-ouvrir-au-monde" },
   },
   ouverture: {
     title: "S'ouvrir au monde et aux autres",
@@ -88,9 +89,8 @@ export const CONTENT_PAGES = {
     band: {
       title: "Les anciens : une camaraderie qui dure",
       text: "Témoignages d'anciens élèves, retrouvailles, réseau des anciens : ce que Hautefeuille leur a apporté et les amitiés qui restent.",
-      link: { label: "Lire les témoignages", href: "/a-propos/temoignages" },
+      link: { label: "Lire les témoignages", href: "/a-propos#temoignages" },
     },
-    next: { label: "Étape suivante : Donner du sens à sa vie", href: "/a-propos/projet-educatif/donner-du-sens" },
   },
   sens: {
     title: "Donner du sens à sa vie",
@@ -117,7 +117,6 @@ export const CONTENT_PAGES = {
         text: "La pratique des vertus humaines au quotidien : effort, loyauté, sens des responsabilités.",
       },
     ],
-    next: { label: "Découvrir le collège", href: "/a-propos/college" },
   },
   vie: {
     title: "La vie à Hautefeuille",
@@ -133,7 +132,6 @@ export const CONTENT_PAGES = {
       { title: "Engagement et solidarité", text: "Servir les autres, ici et ailleurs." },
       { title: "Voyages et ouverture", text: "Découvrir d'autres horizons." },
     ],
-    next: { label: "Infos pratiques et agenda", href: INFOS.href },
   },
   familles: {
     title: "Les familles",
@@ -166,7 +164,6 @@ export const CONTENT_PAGES = {
       text: "Conférences et rencontres de l'année : date, thème, intervenant, inscription.",
       link: CONTACT,
     },
-    next: INFOS,
   },
   temoignages: {
     title: "Témoignages",
@@ -186,7 +183,6 @@ export const CONTENT_PAGES = {
       text: "Vous êtes un ancien d'Hautefeuille ? Partagez votre parcours et vos souvenirs pour enrichir cette page.",
       link: { label: "Envoyer mon témoignage", href: "/contact" },
     },
-    next: { label: "Découvrir nos valeurs", href: VALEURS.href },
   },
   documentation: {
     title: "Documentation",
@@ -206,7 +202,6 @@ export const CONTENT_PAGES = {
       text: "Les circulaires de l'année et les documents réservés aux familles inscrites restent accessibles dans École Directe.",
       link: { label: "Accès École Directe", href: "https://www.ecoledirecte.com" },
     },
-    next: INFOS,
   },
   soutien: {
     title: "Soutenez-nous",
@@ -227,7 +222,6 @@ export const CONTENT_PAGES = {
       },
       { title: "Entreprises et anciens", text: "Mécénat, parrainage d'un projet : un contact dédié.", link: CONTACT },
     ],
-    next: { label: "Faire un don", href: "/contact" },
   },
   inscriptions: {
     title: "Inscriptions",

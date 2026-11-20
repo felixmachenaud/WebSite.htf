@@ -25,7 +25,7 @@ export interface EcolePendingData {
   siret: string | null;
   /** Nom du responsable de publication (direction) */
   publicationDirector: string | null;
-  /** Hébergeur Vercel confirmé par l'établissement */
+  /** Hébergeur (Cloudflare) confirmé par l'établissement */
   hostConfirmed: boolean;
   /** Adresse de contact affichée (Gmail actuel en attendant confirmation institutionnelle) */
   contactEmail: string;
@@ -45,7 +45,7 @@ export const ecolePending: EcolePendingData = {
   siret: "44345731200025",
   /** Identité nominative LCEN ; courriel de contact direction : dimitri.dugas-de-baudan@hautefeuille92.fr */
   publicationDirector: "Dimitri de Baudan",
-  /** Passer à true quand la direction valide le texte hébergeur (après choix Vercel ou OVH). */
+  /** Passer à true quand la direction valide le texte hébergeur (Cloudflare). */
   hostConfirmed: false,
   contactEmail: "hautefeuille92@gmail.com",
   contactEmailConfirmed: true,
@@ -79,10 +79,9 @@ export function contactEmailDisplay(): string {
   return `${ecolePending.contactEmail} (${PENDING_LABEL})`;
 }
 
-/** Texte hébergeur : SITE_HOSTING (vercel | ovh | pending) + validation direction. */
+/** Texte hébergeur (Cloudflare) + validation direction. */
 export function hostDisplay(): string {
   const text = hostLegalText();
   if (ecolePending.hostConfirmed) return text;
-  if (text.includes("en cours de finalisation")) return text;
   return `${text} Texte ${PENDING_LABEL} par la direction.`;
 }

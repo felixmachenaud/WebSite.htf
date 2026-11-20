@@ -1,5 +1,7 @@
 # Hébergement ambivalent — OVH (domaine) + Vercel ou OVH (application)
 
+> **Obsolète (20 nov. 2026)** : Vercel est abandonné, le site est hébergé sur Cloudflare Workers uniquement. Voir `docs/DEPLOIEMENT-CLOUDFLARE.md`.
+
 > Décision finale en négociation. **Un seul dépôt**, deux façons de déployer sans changer le mini-CMS.
 
 ## Principe

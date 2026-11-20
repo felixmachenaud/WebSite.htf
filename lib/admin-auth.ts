@@ -1,86 +1,50 @@
-import { randomBytes, scryptSync, timingSafeEqual, createHmac } from "crypto";
-import { cookies } from "next/headers";
+import { verifyAccessJwt, type AccessKey } from "@/lib/access-jwt";
 
-export const ADMIN_COOKIE = "hf_admin";
-const SESSION_SECONDS = 60 * 60 * 2;
-const SCRYPT_N = 16384;
-const SCRYPT_R = 8;
-const SCRYPT_P = 1;
-const KEYLEN = 64;
+/**
+ * L'admin est protégée par Cloudflare Access : l'utilisateur saisit son courriel, reçoit un code à 6 chiffres,
+ * et seuls les courriels autorisés par la politique Access entrent. Le Worker vérifie quand même le jeton
+ * (en-tête Cf-Access-Jwt-Assertion) : sans cela, une route non couverte par Access contournerait la protection.
+ * ACCESS_TEAM_DOMAIN (ex. ecole.cloudflareaccess.com) et ACCESS_AUD (audience de l'application) : vars de wrangler.jsonc.
+ */
+export type AuthConfig = "ok" | "unconfigured";
 
-export type AuthConfig = "ok" | "unconfigured" | "plaintext-refused";
+const team = () => (process.env.ACCESS_TEAM_DOMAIN ?? "").trim();
+const audience = () => (process.env.ACCESS_AUD ?? "").trim();
+const devMode = () => process.env.NODE_ENV === "development";
 
 export function authConfig(): AuthConfig {
-  if (process.env.NODE_ENV === "production" && process.env.ADMIN_PASSWORD) {
-    return "plaintext-refused";
-  }
-  const hash = process.env.ADMIN_PASSWORD_HASH ?? "";
-  const secret = process.env.AUTH_SECRET ?? "";
-  if (!hash.startsWith("scrypt$") || secret.length < 32) return "unconfigured";
-  return "ok";
+  if (devMode()) return "ok";
+  return team() && audience() ? "ok" : "unconfigured";
 }
 
-export function verifyPassword(password: string, stored: string): boolean {
-  const parts = stored.split("$");
-  if (parts.length !== 6 || parts[0] !== "scrypt") return false;
-  const n = Number(parts[1]);
-  const r = Number(parts[2]);
-  const p = Number(parts[3]);
-  if (n !== SCRYPT_N || r !== SCRYPT_R || p !== SCRYPT_P) return false;
-  let salt: Buffer;
-  let expected: Buffer;
+let cachedKeys: { at: number; keys: AccessKey[] } | null = null;
+
+async function accessKeys(maxAgeMs = 10 * 60_000): Promise<AccessKey[]> {
+  if (cachedKeys && Date.now() - cachedKeys.at < maxAgeMs) return cachedKeys.keys;
+  const response = await fetch(`https://${team()}/cdn-cgi/access/certs`);
+  if (!response.ok) throw new Error(`access-certs-${response.status}`);
+  const { keys } = (await response.json()) as { keys: AccessKey[] };
+  cachedKeys = { at: Date.now(), keys };
+  return keys;
+}
+
+/** Vrai si la requête porte un jeton Access valide pour l'application admin (toujours vrai en `next dev`). */
+export async function isAdmin(headers: { get(name: string): string | null }): Promise<boolean> {
+  if (devMode()) return true;
+  // En-tête posé par Access sur les chemins protégés ; sinon le cookie de session Access (même jeton signé).
+  const cookie = headers.get("cookie")?.match(/(?:^|;\s*)CF_Authorization=([^;]+)/)?.[1];
+  const token = headers.get("cf-access-jwt-assertion") || cookie;
+  if (!token || authConfig() !== "ok") return false;
   try {
-    salt = Buffer.from(parts[4], "base64url");
-    expected = Buffer.from(parts[5], "base64url");
+    const check = async (keys: AccessKey[]) => verifyAccessJwt(token, { team: team(), audience: audience(), keys });
+    // Access fait tourner ses clés : un refus relit les clés si elles datent de plus d'une minute.
+    return (await check(await accessKeys())) || (await check(await accessKeys(60_000)));
   } catch {
     return false;
   }
-  if (salt.length === 0 || expected.length !== KEYLEN) return false;
-  const actual = scryptSync(password, salt, KEYLEN, { N: n, r, p, maxmem: 64 * 1024 * 1024 });
-  if (actual.length !== expected.length) return false;
-  return timingSafeEqual(actual, expected);
 }
 
-export function sessionKey(token: string): string {
-  const secret = process.env.AUTH_SECRET ?? "";
-  return createHmac("sha256", secret).update(token).digest("hex");
-}
-
-export function newSessionToken(): string {
-  return randomBytes(32).toString("base64url");
-}
-
-export async function readSessionToken(): Promise<string | null> {
-  const jar = await cookies();
-  return jar.get(ADMIN_COOKIE)?.value ?? null;
-}
-
-export async function writeSessionCookie(token: string): Promise<void> {
-  const jar = await cookies();
-  jar.set(ADMIN_COOKIE, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: SESSION_SECONDS,
-  });
-}
-
-export async function clearSessionCookie(): Promise<void> {
-  const jar = await cookies();
-  jar.set(ADMIN_COOKIE, "", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    path: "/",
-    maxAge: 0,
-  });
-}
-
-export function sessionTtlSeconds(): number {
-  return SESSION_SECONDS;
-}
-
+/** Anti-CSRF : en-tête maison (impose un preflight CORS) et même origine. */
 export function isAdminFetch(request: Request): boolean {
   if (request.headers.get("x-hautefeuille-admin") !== "1") return false;
   const origin = request.headers.get("origin");
@@ -93,9 +57,4 @@ export function isAdminFetch(request: Request): boolean {
     }
   }
   return true;
-}
-
-export function clientAddress(request: Request): string {
-  const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-  return forwarded || "local";
 }

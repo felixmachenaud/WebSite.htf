@@ -294,7 +294,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : deux sources contradictoires ; donnée juridique, non modifiée.
 - Action : faire confirmer l'adresse par l'école, puis corriger les 4 occurrences.
 
-### CMS-05 [MONITOR] [MEDIUM] 2026-11-19
+### CMS-05 [FIXED] [MEDIUM] 2026-11-19
 
 - Composant : `lib/site-content.ts` (`mergeContent`), Blob prod
 - Constat : les nouveaux textes (maquette `références/`) sont des valeurs par défaut. Tout champ déjà enregistré via l'admin dans le Blob garde l'ancien texte (ex. 3 premiers encadrés de l'accueil, libellés du menu).
@@ -302,6 +302,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Action : après déploiement, vérifier l'admin prod et ressaisir ou réinitialiser les champs concernés.
 - Constat prod (19 nov., après `cd2f601`) : confirmé — menu, encadrés 1–3, titres et textes de collège, lycée, valeurs, qui sommes-nous, infos, actualités restent à l'ancien texte.
 - Correctif : bouton admin « Rétablir les textes par défaut de cet onglet » (remet les defaults dans l'éditeur, publication via « Enregistrer » ; liste des actualités conservée). Testé en local. Reste : déployer, puis réinitialiser les onglets Accueil, Collège, Lycée, Histoire, Projet, Infos, Actualités en prod. Attention : l'onglet remet aussi à défaut les champs volontairement modifiés par l'école (ex. direction, résultats).
+- 20 nov. : sans objet sur Cloudflare — le CMS R2 démarre vide (textes par défaut à jour). L'ancien JSON Vercel (14 oct.) est archivé dans `exports/vercel-blob-2026-11-20/` (hors Git), non réimporté.
 
 ### ARCH-08 [OPEN] [LOW] 2026-11-19
 
@@ -317,7 +318,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Cause : contenus non fournis par l'école ; textes statiques hors CMS (non éditables dans l'admin).
 - Action : collecter les contenus réels auprès de l'école ; passer ces pages dans `lib/site-content.ts` si l'école doit les éditer elle-même.
 
-### ARCH-09 [OPEN] [MEDIUM] 2026-11-19
+### ARCH-09 [MONITOR] [MEDIUM] 2026-11-19
 
 - Composant : Cloudflare Workers (`wrangler.jsonc`, `open-next.config.ts`, `lib/content-store.ts`)
 - Constat : l'aperçu Workers n'a ni CMS ni admin ; le cache OpenNext est en lecture seule ; les images statiques (servies par la couche assets) n'ont pas l'en-tête `X-Robots-Tag` (robots.txt fermé quand même).
@@ -325,6 +326,7 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Action : avant une production sur Workers, stockage CMS + sessions + secrets propres au compte, `r2IncrementalCache` + `d1NextTagCache`, Cloudflare Access sur `/admin`.
 - Priorité relevée (décision « Cloudflare cible unique », 19 nov.) : sans ce chantier, le site sur Workers n'a pas d'admin ; le contenu enregistré dans Vercel Blob est à exporter avant d'arrêter Vercel.
 - 20 nov. : Félix va supprimer le projet Vercel. `lib/content-store.ts` (`@vercel/blob`) et `lib/admin-sessions.ts` (Upstash) restent le code du CMS : sans migration vers R2 + KV/D1, l'admin n'a plus de stockage. Exporter `hautefeuille-site-content.json` du Blob avant suppression.
+- 20 nov. : Blob exporté. CMS branché sur Cloudflare : contenu R2 (`CMS_BUCKET`), admin derrière Cloudflare Access (jeton vérifié par le Worker), cache OpenNext R2 + D1 (`revalidatePath` effectif) ; `@vercel/blob` et `@upstash/redis` retirés. Ressources de l'aperçu créées (R2 ×2, D1). Reste : application Access de l'aperçu (Félix, tableau de bord) puis `ACCESS_AUD` / `ACCESS_TEAM_DOMAIN`, production sur le compte de l'école, permissions R2/D1 du jeton GitHub.
 
 ### CONT-04 [OPEN] [MEDIUM] 2026-11-20
 
@@ -339,3 +341,11 @@ Les identifiants reprennent ceux de l'audit. Une entrée n'est jamais supprimée
 - Constat : l'accueil suit la charte du prototype (vert #183e31, or #e4bd52, crème, Georgia) ; les pages intérieures gardent l'en-tête vert clair et le pied de page blanc.
 - Cause : demande limitée à l'accueil ; les pages intérieures suivent la maquette `références/`.
 - Action : si le client veut une charte unique, aligner Navbar et Footer sur l'en-tête et le pied du prototype.
+
+### SEC-17 [FIXED] [MEDIUM] 2026-11-20
+
+- Composant : `lib/admin-auth.ts` (`verifyPassword`, scrypt N=16384) sur Cloudflare Workers
+- Constat : le hash scrypt coûte de l'ordre de 50 à 100 ms de CPU ; le plan Workers gratuit limite une requête à 10 ms de CPU.
+- Cause : paramètres scrypt choisis pour Node (Vercel).
+- Action : vérifier la connexion admin sur l'aperçu ; si erreur 1102 (CPU), passer le compte en Workers Paid ou protéger l'admin par Cloudflare Access seul.
+- 20 nov. : sans objet — mot de passe remplacé par Cloudflare Access (demande de Félix) ; scrypt, sessions et KV retirés.

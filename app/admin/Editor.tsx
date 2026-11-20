@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import type { SiteContent } from "@/lib/site-content";
-import { LogoutButton } from "./LogoutButton";
 
 const TABS = [
   ["accueil", "Accueil — textes du bandeau"],
@@ -93,7 +92,10 @@ export function Editor({ initial, defaults }: { initial: SiteContent; defaults: 
     <div className="mx-auto max-w-4xl px-4 py-8">
       <div className="flex items-center justify-between gap-4">
         <h1 className="font-serif text-3xl">Textes du site</h1>
-        <LogoutButton />
+        {/* Déconnexion Cloudflare Access (efface le jeton de session Access). */}
+        <a href="/cdn-cgi/access/logout" className="rounded border border-slate-300 px-3 py-1.5 text-sm text-slate-700">
+          Se déconnecter
+        </a>
       </div>
       <div className="mt-6 flex flex-wrap gap-2">
         {TABS.map(([id, label]) => (

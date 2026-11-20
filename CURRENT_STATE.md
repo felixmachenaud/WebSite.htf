@@ -131,9 +131,18 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ---
 
+## CMS sur Cloudflare (20 nov. 2026, branche `claude/cms-cloudflare`)
+
+- Contenu : R2 `CMS_BUCKET` ; pages en cache R2 + invalidations D1 (enregistrement admin visible tout de suite). Vercel Blob et Upstash retirés du code.
+- Accès admin : Cloudflare Access (courriel autorisé + code à 6 chiffres), plus de mot de passe ni de secret. Le Worker revérifie le jeton Access.
+- Ressources de l'aperçu créées sur le compte de Félix (`hautefeuille-cms-preview`, `hautefeuille-cache-preview`, `hautefeuille-tags-preview`). Application Access à créer par Félix, puis `ACCESS_AUD` / `ACCESS_TEAM_DOMAIN` dans `wrangler.jsonc` (`docs/DEPLOIEMENT-CLOUDFLARE.md`).
+- Export Vercel Blob (14 oct.) : `exports/vercel-blob-2026-11-20/`, non réimporté (plus ancien que les textes actuels).
+
+---
+
 ## Prochaines actions
 
 1. Commit/déployer correctifs locaux (saveContent, smoke `--admin-only`, juridique B4) si pas encore sur `main`
 2. Relecture direction (B4) — transmettre `docs/RELECTURE-DIRECTION-B4.md` — SEC-02
-3. Exporter le contenu Vercel Blob avant de supprimer le projet Vercel ; CMS sur Cloudflare (ARCH-09)
+3. Application Access de l'aperçu, AUD dans `wrangler.jsonc`, déploiement ; production : ressources et Access sur le compte de l'école (ARCH-09)
 4. Domaine de l'école → `routes` custom_domain dans `wrangler.jsonc` quand le nom final est fixé

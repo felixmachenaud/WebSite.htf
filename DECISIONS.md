@@ -219,3 +219,16 @@ Format : **date** — **décision** — raison — alternatives — conséquence
 
 - Décision (Félix) : un seul menu latéral (celui des pages intérieures) partout, ouvert au survol ; Qui sommes-nous regroupe valeurs et étapes du parcours ; Informations pratiques regroupe vie à Hautefeuille et actualités ; Collège, Lycée, Inscriptions, Contact inchangés.
 - Conséquence : le menu propre au prototype (ancres du parcours, décalage du texte à l'ouverture) est abandonné ; les étapes « Prendre confiance / Se dépasser / S'engager » sont reprises comme sur-titres des valeurs.
+
+## 2026-11-20 — CMS sur Cloudflare : R2, KV, D1
+
+- Décision : contenu CMS dans R2 (un JSON, lecture cohérente après écriture), cache OpenNext R2 + tags D1 pour que `revalidatePath` publie un enregistrement immédiatement.
+- Alternatives écartées : KV pour le contenu (cohérence à terme, jusqu'à ~60 s) ; rendu dynamique de toutes les pages (CPU par requête, limite du plan gratuit) ; Durable Objects (inutile pour un seul admin).
+- Build : `scripts/deploy.mjs` télécharge le JSON R2 avant le build pour que les pages prérendues partent du contenu en ligne ; pendant `next build`, aucune liaison n'est lue (pas de données locales de test dans un build).
+- L'export Vercel du 14 oct. n'est pas réimporté : antérieur aux textes de la maquette, il écraserait le menu et les pages actuels.
+
+## 2026-11-20 — Admin derrière Cloudflare Access, sans mot de passe
+
+- Décision (Félix) : connexion à l'admin par courriel autorisé + code à 6 chiffres (Cloudflare Access, One-time PIN), au lieu d'un mot de passe partagé.
+- Mise en œuvre : application Access sur `/admin` et `/api/admin` ; le Worker vérifie le jeton `Cf-Access-Jwt-Assertion` (signature, audience, émetteur, expiration). Retirés : scrypt, sessions, limitation des tentatives (gérée par Access), KV, secrets `ADMIN_PASSWORD_HASH` / `AUTH_SECRET`.
+- Conséquence : gérer les accès = modifier la liste de courriels de la politique Access, sans redéployer.

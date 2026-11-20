@@ -5,11 +5,10 @@
  *   node scripts/phase-a-smoke.mjs
  *   node scripts/phase-a-smoke.mjs --public-only --base=https://example.com
  *   node scripts/phase-a-smoke.mjs --admin-only --base=https://example.com
- *     (401/429 sans secret ; save/login si ADMIN_SMOKE_PASSWORD est défini)
+ *     (/admin derrière Cloudflare Access, enregistrement refusé sans jeton)
  */
-import { spawn, execSync } from "node:child_process";
-import { randomBytes } from "node:crypto";
-import { readFileSync, rmSync } from "node:fs";
+import { spawn } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 
@@ -18,8 +17,6 @@ const PUBLIC_ONLY = process.argv.includes("--public-only");
 const ADMIN_ONLY = process.argv.includes("--admin-only");
 const BASE_ARG = process.argv.find((a) => a.startsWith("--base="));
 const EXTERNAL_BASE = BASE_ARG ? BASE_ARG.slice("--base=".length).replace(/\/$/, "") : null;
-const ADMIN_SMOKE_PASSWORD = process.env.ADMIN_SMOKE_PASSWORD?.trim() || "";
-const LOCAL_SMOKE_PASSWORD = "PhaseATest2026!";
 
 const results = [];
 let failed = 0;
@@ -78,37 +75,6 @@ function stopServer(child) {
   child.kill("SIGTERM");
 }
 
-class CookieJar {
-  constructor() {
-    this.map = new Map();
-  }
-  ingest(setCookie) {
-    if (!setCookie) return;
-    const parts = setCookie.split(";")[0];
-    const eq = parts.indexOf("=");
-    if (eq === -1) return;
-    const name = parts.slice(0, eq).trim();
-    const value = parts.slice(eq + 1).trim();
-    this.map.set(name, value);
-  }
-  header() {
-    if (this.map.size === 0) return undefined;
-    return [...this.map.entries()].map(([k, v]) => `${k}=${v}`).join("; ");
-  }
-}
-
-async function fetchWithJar(url, jar, options = {}) {
-  const headers = { ...(options.headers ?? {}) };
-  const cookie = jar.header();
-  if (cookie) headers.cookie = cookie;
-  const res = await fetch(url, { ...options, headers, redirect: "manual" });
-  const raw = res.headers.getSetCookie?.() ?? [];
-  for (const c of raw) jar.ingest(c);
-  const single = res.headers.get("set-cookie");
-  if (single) jar.ingest(single);
-  return res;
-}
-
 function adminHeaders(base) {
   const host = new URL(base).host;
   return {
@@ -120,7 +86,7 @@ function adminHeaders(base) {
 }
 
 async function testUnconfiguredAdmin(base) {
-  console.log("\n── A4.1 Admin sans configuration (production, sans env) ──");
+  console.log("\n── A4.1 Admin sans configuration Access (production) ──");
   const adminRes = await fetch(`${base}/admin`);
   const adminHtml = await adminRes.text();
   if (adminRes.status === 200 && adminHtml.includes("Administration non configurée")) {
@@ -128,197 +94,39 @@ async function testUnconfiguredAdmin(base) {
   } else {
     fail("A4.1a", `status=${adminRes.status}, snippet=${adminHtml.slice(0, 120)}`);
   }
-  const loginRes = await fetch(`${base}/api/admin/login`, {
+  await testSaveRefused(base, "A4.1b");
+}
+
+/** Sans jeton Cloudflare Access, l'enregistrement est refusé (401) ou intercepté par Access (redirection). */
+async function testSaveRefused(base, id) {
+  const res = await fetch(`${base}/api/admin/save`, {
     method: "POST",
     headers: adminHeaders(base),
-    body: JSON.stringify({ password: "x" }),
+    body: JSON.stringify({ chrome: { brand: "pirate" } }),
+    redirect: "manual",
   });
-  if (loginRes.status === 503) {
-    pass("A4.1b", "POST login → 503");
+  if ([401, 302, 303, 403].includes(res.status)) {
+    pass(id, `POST /api/admin/save sans jeton → ${res.status}`);
   } else {
-    fail("A4.1b", `expected 503, got ${loginRes.status}`);
-  }
-}
-
-function loginHeaders(base, ip = "smoke-local") {
-  return { ...adminHeaders(base), "x-forwarded-for": ip };
-}
-
-function readBrandFromHomeHtml(html) {
-  const match =
-    html.match(/\/images\/logo\.png[^>]*>\s*<span class="truncate">([^<]+)<\/span>/i) ||
-    html.match(/"brand":"([^"]+)"/);
-  return match?.[1]?.trim() || null;
-}
-
-async function fetchPublicBrand(base) {
-  const res = await fetch(`${base}/`, { headers: { "cache-control": "no-cache" } });
-  const html = await res.text();
-  return readBrandFromHomeHtml(html);
-}
-
-async function testWrongPassword(base) {
-  console.log("\n── A4.2 Auth admin — mauvais mot de passe ──");
-  await testWrongPasswordMaybeAfterCooldown(base, { allowCooldown: false });
-}
-
-async function testLoginRateLimit(base, { first429At = 9 } = {}) {
-  console.log("\n── A5 Auth admin — rate limit login ──");
-  const jar = new CookieJar();
-  let rateLimited = false;
-  for (let i = 1; i <= first429At; i++) {
-    const res = await fetchWithJar(`${base}/api/admin/login`, jar, {
-      method: "POST",
-      headers: loginHeaders(base, "smoke-rate"),
-      body: JSON.stringify({ password: `wrong-rate-${i}` }),
-    });
-    if (i < first429At) {
-      if (res.status !== 401) {
-        fail("A5", `tentative ${i}: expected 401, got ${res.status}`);
-      }
-    } else if (res.status === 429) {
-      pass("A5", `${i}e tentative (cumul IP) → 429`);
-      rateLimited = true;
-    } else {
-      fail("A5", `${i}e tentative: expected 429, got ${res.status}`);
-    }
-  }
-  if (!rateLimited) {
-    fail("A5", "aucune réponse 429 observée");
-  }
-}
-
-async function testSaveSessionLogout(base, password) {
-  console.log("\n── A4.3–A4.7 Auth admin — login, save, public, logout ──");
-  const originalBrand = await fetchPublicBrand(base);
-  if (!originalBrand) {
-    fail("A4-setup-brand", "Impossible de lire chrome.brand sur / avant save");
-    return;
-  }
-
-  const freshJar = new CookieJar();
-  const hdrs = loginHeaders(base, "smoke-ok");
-  const ok = await fetchWithJar(`${base}/api/admin/login`, freshJar, {
-    method: "POST",
-    headers: hdrs,
-    body: JSON.stringify({ password }),
-  });
-  if (ok.status === 200) {
-    pass("A4.3", "Bon mot de passe → 200");
-  } else {
-    fail("A4.3", `expected 200, got ${ok.status} — ${await ok.text()}`);
-    return;
-  }
-
-  const testBrand = `PhaseA-${Date.now()}`;
-  try {
-    const saveRes = await fetchWithJar(`${base}/api/admin/save`, freshJar, {
-      method: "POST",
-      headers: hdrs,
-      body: JSON.stringify({ chrome: { brand: testBrand } }),
-    });
-    if (saveRes.status === 200) {
-      pass("A4.4", "Save chrome.brand → 200");
-    } else {
-      fail("A4.4", `expected 200, got ${saveRes.status} — ${await saveRes.text()}`);
-      return;
-    }
-
-    await sleep(800);
-    const homeHtml = await fetch(`${base}/`, { headers: { "cache-control": "no-cache" } }).then((r) => r.text());
-    if (homeHtml.includes(testBrand)) {
-      pass("A4.5", "Page publique reflète chrome.brand après save");
-    } else {
-      fail("A4.5", `brand « ${testBrand} » absent du HTML /`);
-    }
-
-    const oldCookie = freshJar.header();
-    await fetchWithJar(`${base}/api/admin/logout`, freshJar, {
-      method: "POST",
-      headers: hdrs,
-    });
-    pass("A4.6", "Logout → OK");
-
-    const staleSave = await fetch(`${base}/api/admin/save`, {
-      method: "POST",
-      headers: { ...hdrs, cookie: oldCookie ?? "" },
-      body: JSON.stringify({ chrome: { brand: "Hijacked" } }),
-    });
-    if (staleSave.status === 401) {
-      pass("A4.7", "Session expirée ne peut plus save → 401");
-    } else {
-      fail("A4.7", `expected 401 after logout, got ${staleSave.status}`);
-    }
-  } finally {
-    const revertJar = new CookieJar();
-    const revertLogin = await fetchWithJar(`${base}/api/admin/login`, revertJar, {
-      method: "POST",
-      headers: loginHeaders(base, "smoke-revert"),
-      body: JSON.stringify({ password }),
-    });
-    if (revertLogin.status !== 200) {
-      fail("A4-revert", `restauration brand : login ${revertLogin.status}`);
-      return;
-    }
-    const revertSave = await fetchWithJar(`${base}/api/admin/save`, revertJar, {
-      method: "POST",
-      headers: loginHeaders(base, "smoke-revert"),
-      body: JSON.stringify({ chrome: { brand: originalBrand } }),
-    });
-    if (revertSave.status === 200) {
-      pass("A4-revert", `chrome.brand restauré (« ${originalBrand} »)`);
-    } else {
-      fail("A4-revert", `restauration brand → ${revertSave.status}`);
-    }
-    await fetchWithJar(`${base}/api/admin/logout`, revertJar, {
-      method: "POST",
-      headers: loginHeaders(base, "smoke-revert"),
-    });
-  }
-}
-
-async function testAuthFlow(base, password) {
-  await testWrongPassword(base);
-  await testLoginRateLimit(base, { first429At: 9 });
-  await testSaveSessionLogout(base, password);
-}
-
-const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000 + 5000;
-
-async function testWrongPasswordMaybeAfterCooldown(base, { allowCooldown = false } = {}) {
-  let wrong = await fetch(`${base}/api/admin/login`, {
-    method: "POST",
-    headers: loginHeaders(base, "smoke-wrong"),
-    body: JSON.stringify({ password: "wrong-password-phase-a" }),
-  });
-  if (allowCooldown && wrong.status === 429) {
-    console.log(`  … IP encore limitée — attente ${Math.round(RATE_LIMIT_WINDOW_MS / 60000)} min (sans nouvelle requête login)`);
-    await sleep(RATE_LIMIT_WINDOW_MS);
-    wrong = await fetch(`${base}/api/admin/login`, {
-      method: "POST",
-      headers: loginHeaders(base, "smoke-wrong"),
-      body: JSON.stringify({ password: "wrong-password-phase-a" }),
-    });
-  }
-  if (wrong.status === 401) {
-    pass("A4.2", "Mauvais mot de passe → 401");
-  } else {
-    fail("A4.2", `expected 401, got ${wrong.status}`);
+    fail(id, `expected 401/302/403, got ${res.status}`);
   }
 }
 
 async function testExternalAdmin(base) {
   console.log(`\n── Admin externe : ${base} ──`);
-  console.log("   (Vercel : IP client réelle — rate limit cumulé sur une seule IP)");
-  await testWrongPasswordMaybeAfterCooldown(base, { allowCooldown: true });
-  if (ADMIN_SMOKE_PASSWORD) {
-    console.log("\n   Ordre prod : save/revert avant A5 (sinon 429 bloque le login).");
-    await testSaveSessionLogout(base, ADMIN_SMOKE_PASSWORD);
-    await testLoginRateLimit(base, { first429At: 9 });
-    return;
+  const res = await fetch(`${base}/admin`, { redirect: "manual" });
+  const location = res.headers.get("location") || "";
+  if ([302, 303].includes(res.status) && location.includes("cloudflareaccess.com")) {
+    pass("A4.2", "/admin → connexion Cloudflare Access");
+  } else {
+    const html = await res.text();
+    if (html.includes("Accès réservé") || html.includes("Administration non configurée")) {
+      fail("A4.2", "/admin n'est pas derrière Cloudflare Access (jeton vérifié par le Worker, mais pas de page de connexion)");
+    } else {
+      fail("A4.2", `status=${res.status}, location=${location}`);
+    }
   }
-  await testLoginRateLimit(base, { first429At: 8 });
-  console.log("\n  ⏭ A4.3–A4.7 ignorés — définir ADMIN_SMOKE_PASSWORD pour login/save/revert.");
+  await testSaveRefused(base, "A4.3");
 }
 
 async function testPublicRoutes(base) {
@@ -470,37 +278,13 @@ async function main() {
     console.log("\n── Démarrage serveur non configuré (port 3455) ──");
     unconfiguredChild = startServer(unconfiguredPort, {
       NODE_ENV: "production",
-      ADMIN_PASSWORD_HASH: "",
-      AUTH_SECRET: "",
+      ACCESS_TEAM_DOMAIN: "",
+      ACCESS_AUD: "",
     });
     await waitForServer(unconfiguredBase);
     await testUnconfiguredAdmin(unconfiguredBase);
     stopServer(unconfiguredChild);
     unconfiguredChild = null;
-    await sleep(1000);
-
-    const passwordHash = execSync('node scripts/hash-admin-password.mjs "PhaseATest2026!"', {
-      cwd: ROOT,
-      encoding: "utf8",
-    }).trim();
-    if (!passwordHash.startsWith("scrypt$")) {
-      fail("A4-setup", "Impossible de générer ADMIN_PASSWORD_HASH");
-      printSummary();
-      process.exit(1);
-    }
-    const authSecret = randomBytes(32).toString("hex");
-    const authEnv = { ADMIN_PASSWORD_HASH: passwordHash, AUTH_SECRET: authSecret };
-
-    const authPort = 3456;
-    const authBase = `http://127.0.0.1:${authPort}`;
-    rmSync(path.join(ROOT, ".data"), { recursive: true, force: true });
-    console.log("\n── Démarrage serveur auth (port 3456, next dev — sessions locales) ──");
-    console.log("   Note: next start exige Redis en production (sessionStoreReady).");
-    configuredChild = startServer(authPort, authEnv, "dev");
-    await waitForServer(authBase, 90_000);
-    await testAuthFlow(authBase, LOCAL_SMOKE_PASSWORD);
-    stopServer(configuredChild);
-    configuredChild = null;
     await sleep(1000);
 
     const publicPort = 3456;

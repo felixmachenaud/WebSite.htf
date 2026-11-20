@@ -4,7 +4,8 @@ import Link from "next/link";
 import { SafeSectionImage } from "@/components/SafeSectionImage";
 import { AdresseCards } from "@/components/AdresseCards";
 import { getContent } from "@/lib/content-store";
-import { ContentSections } from "@/components/ContentPage";
+import { ContentSection, ContentSections } from "@/components/ContentPage";
+import { ActualitesGrid } from "@/components/ActualitesGrid";
 import { CONTENT_PAGES } from "@/data/pages";
 import type { InfoSection } from "@/lib/site-content";
 
@@ -44,7 +45,7 @@ function InstallationsPhotos({
 }
 
 export default async function InformationGeneralePage() {
-  const { infos } = await getContent();
+  const { infos, actualites, actualitesPage } = await getContent();
   return (
     <main className="min-h-screen bg-page safe-navbar-pt">
       <PageHeader title={infos.title} imageUrl={HEADER} />
@@ -85,6 +86,14 @@ export default async function InformationGeneralePage() {
             <SectionBlock key={item.id} item={item} index={index} total={infos.sections.length} infos={infos} />
           ))}
         </div>
+      </div>
+      {/* La vie à Hautefeuille (activités + actualités), regroupée ici. */}
+      <div className="mx-auto max-w-5xl px-6 pt-16">
+        <ContentSection id="vie" page={CONTENT_PAGES.vie} />
+      </div>
+      <div id="actualites" className="mx-auto max-w-6xl scroll-mt-28 px-6 pt-16">
+        <h2 className="mb-10 font-serif text-3xl font-bold text-slate-900 md:text-4xl">Actualités</h2>
+        <ActualitesGrid items={actualites} readPrefix={actualitesPage.readPrefix} />
       </div>
       <ContentSections sections={[["documentation", CONTENT_PAGES.documentation]]} />
     </main>

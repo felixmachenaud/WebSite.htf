@@ -44,7 +44,7 @@ export default async function ActualitePage({
         <div className="mx-auto max-w-3xl px-6 py-16">
           <p className="text-lg leading-relaxed text-slate-700">{actu.excerpt}</p>
           <Link
-            href="/nouvelles"
+            href="/a-propos/information-generale#actualites"
             className="mt-12 inline-flex items-center gap-2 text-slate-600 hover:text-slate-900"
           >
             ← {content.actualitesPage.backLabel}

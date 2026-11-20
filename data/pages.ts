@@ -1,7 +1,8 @@
 /**
  * Pages issues de la maquette `références/site Hautefeuille maquette chemin v2`.
- * Regroupées pour limiter le nombre de pages : valeurs → /a-propos/projet-educatif, familles et témoignages → /a-propos,
- * vie → /nouvelles, documentation → infos pratiques, soutien → /a-propos/inscriptions (anciennes URL redirigées, next.config.js).
+ * Regroupées pour limiter le nombre de pages : valeurs, familles et témoignages → /a-propos (Qui sommes-nous),
+ * vie, actualités et documentation → /a-propos/information-generale, soutien → /a-propos/inscriptions
+ * (anciennes URL redirigées, next.config.js).
  * Textes repris de la maquette ; citations et annotations de maquette (« à rédiger », « XX % ») non publiées.
  * shortcut: contenu statique (hors CMS), passer dans lib/site-content.ts si l'école doit l'éditer.
  */
@@ -23,7 +24,7 @@ export interface ContentPageData {
   next?: PageLink;
 }
 
-const VALEURS: PageLink = { label: "Nos valeurs", href: "/a-propos/projet-educatif" };
+const VALEURS: PageLink = { label: "Nos valeurs", href: "/a-propos#valeurs" };
 const CONTACT: PageLink = { label: "Nous contacter", href: "/contact" };
 const INFOS: PageLink = { label: "Informations pratiques", href: "/a-propos/information-generale" };
 const photo = (id: string) => `/images/photos/htf-${id}.jpg`;

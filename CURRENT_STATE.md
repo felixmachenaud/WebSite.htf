@@ -111,6 +111,15 @@ Le smoke admin (login, 429) reste local ou Preview : il a besoin de secrets et d
 
 ---
 
+## Cloudflare Workers (19 nov. 2026, branche `claude/cloudflare-workers`)
+
+- Aperçu déployé : https://hautefeuille-preview.felixmachenaud2.workers.dev (compte Félix, indexation fermée). Smoke public 35/35.
+- Sans CMS (textes par défaut, admin non configuré). Next 16.4.6. Détail : `docs/DEPLOIEMENT-CLOUDFLARE.md`.
+- **Décision 19 nov. : Vercel abandonné, toutes les modifications doivent aboutir sur le Worker Cloudflare.** Le projet Vercel tourne encore tant qu'il n'est pas débranché.
+- Déploiement auto de l'aperçu après CI verte sur `main` (`deploy-cloudflare.yml`) — actif dès que les secrets GitHub `CLOUDFLARE_API_TOKEN` et `CLOUDFLARE_ACCOUNT_ID` sont posés.
+
+---
+
 ## Prochaines actions
 
 1. Commit/déployer correctifs locaux (saveContent, smoke `--admin-only`, juridique B4) si pas encore sur `main`

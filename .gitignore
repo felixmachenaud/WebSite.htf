@@ -40,3 +40,8 @@ next-env.d.ts
 .env*
 .agents/
 skills-lock.json
+
+# Cloudflare Workers (OpenNext / Wrangler)
+.open-next/
+.wrangler/
+.dev.vars*

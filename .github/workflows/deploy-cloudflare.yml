@@ -1,0 +1,51 @@
+name: Deploy Cloudflare
+
+# Déploie le Worker d'aperçu (compte Félix) après une CI verte sur main.
+# La production (compte de l'école) reste manuelle : npm run deploy:htf:production.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-cloudflare-preview
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      PREVIEW_URL: https://hautefeuille-preview.felixmachenaud2.workers.dev
+    steps:
+      - name: Secrets Cloudflare présents
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "Secrets GitHub CLOUDFLARE_API_TOKEN et CLOUDFLARE_ACCOUNT_ID manquants (voir docs/DEPLOIEMENT-CLOUDFLARE.md)." >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          # Node 22 : type stripping pour test:indexing ; requis par Wrangler 4.
+          node-version: "22"
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Indexation fermée hors production
+        run: npm run test:indexing
+      - name: Build OpenNext et déploiement de l'aperçu
+        run: npm run deploy:htf:preview
+      - name: Smoke public sur l'aperçu
+        run: node scripts/phase-a-smoke.mjs --public-only --base="$PREVIEW_URL"

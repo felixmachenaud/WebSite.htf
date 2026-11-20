@@ -1,6 +1,5 @@
 "use client";
 
-import type React from "react";
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
@@ -13,7 +12,6 @@ type ButtonProps = {
   open: boolean;
   onClick: () => void;
   onMouseEnter: () => void;
-  onMouseLeave: (e: React.MouseEvent) => void;
   "data-menu-button": true;
   "aria-expanded": boolean;
   "aria-controls": string;
@@ -53,12 +51,29 @@ export function MenuDrawer({
     return () => document.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // Se referme quand la souris quitte bouton et panneau (passer de l'un à l'autre le garde ouvert).
-  const leave = (e: React.MouseEvent) => {
-    const to = e.relatedTarget;
-    if (to instanceof Element && to.closest("#site-menu, [data-menu-button]")) return;
-    setOpen(false);
-  };
+  // Au survol : reste ouvert tant que la souris est sur le bouton ou sur le panneau (même pendant qu'il glisse),
+  // se referme dès qu'elle en sort. Suivi par position, car le voile flouté passe par-dessus le bouton :
+  // des mouseleave déclencheraient une boucle ouverture/fermeture (clignotement).
+  useEffect(() => {
+    if (!open || !matchMedia("(hover: hover)").matches) return;
+    const inside = (el: Element | null, x: number, y: number) => {
+      const r = el?.getBoundingClientRect();
+      return !!r && x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") return;
+      const panel = document.getElementById("site-menu");
+      const button = document.querySelector("[data-menu-button]");
+      if (!inside(panel, e.clientX, e.clientY) && !inside(button, e.clientX, e.clientY)) setOpen(false);
+    };
+    const onOut = (e: MouseEvent) => !e.relatedTarget && setOpen(false);
+    document.addEventListener("pointermove", onMove);
+    document.addEventListener("mouseout", onOut);
+    return () => {
+      document.removeEventListener("pointermove", onMove);
+      document.removeEventListener("mouseout", onOut);
+    };
+  }, [open]);
 
   const hoverable = () => matchMedia("(hover: hover)").matches;
 
@@ -68,7 +83,6 @@ export function MenuDrawer({
         open,
         onClick: () => setOpen((o) => !o),
         onMouseEnter: () => hoverable() && setOpen(true),
-        onMouseLeave: (e) => hoverable() && leave(e),
         "data-menu-button": true,
         "aria-expanded": open,
         "aria-controls": "site-menu",
@@ -86,7 +100,6 @@ export function MenuDrawer({
               <div
                 id="site-menu"
                 ref={panelRef}
-                onMouseLeave={(e) => hoverable() && leave(e)}
                 className={`fixed left-0 top-0 z-[1002] flex h-full w-[85vw] max-w-[486px] flex-col overflow-y-auto pb-8 pl-4 pr-6 font-sans text-slate-800 shadow-xl transition-transform duration-300 ease-out md:pl-0 md:pr-8 ${
                   open ? "translate-x-0" : "pointer-events-none -translate-x-full"
                 }`}

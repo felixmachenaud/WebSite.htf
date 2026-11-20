@@ -268,7 +268,7 @@ export function CheminLanding({ news, footer, chrome }: Props) {
                 </div>
               </section>
               <section className="scene" data-scene="1" aria-label="Prendre confiance">
-                <img src={`${IMG}/se-depasser-accompagnement.jpg`} alt="Un adulte accompagne un élève en forêt, la main posée sur son épaule" />
+                <img src={`${IMG}/prendre-confiance.jpg`} alt="Des élèves de Hautefeuille sautent de joie dans la cour, l'un brandit un trophée" />
                 <div className="shade" />
                 <div className="copy right">
                   <span className="eyebrow">01 — PRENDRE CONFIANCE</span>

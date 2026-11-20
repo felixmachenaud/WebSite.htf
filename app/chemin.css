@@ -288,9 +288,14 @@
 .chemin .scene:not(.active){pointer-events:none}
 .chemin .footer-practical a,.chemin .footer-bottom a{color:var(--green)}
 .chemin .brand{text-transform:uppercase}
-/* Étape 01 : photo de la cour (élèves qui sautent) à la place de la forêt ; le masque autour de la main n'a plus lieu d'être. */
+/* Étape 01 : photo de classe (élève qui lève la main) à la place de la forêt ; le masque autour de la main n'a plus lieu d'être. */
 .chemin .stage:has(.scene[data-scene="1"].active) .ribbon{-webkit-mask-image:none;mask-image:none}
 .chemin .scene[data-scene="1"] img{object-position:50% 40%}
 .chemin .scene[data-scene="1"] .shade{background:linear-gradient(0deg,rgba(8,27,20,.92) 0%,rgba(8,27,20,.7) 30%,rgba(8,27,20,.15) 62%,rgba(8,27,20,.25)),linear-gradient(270deg,rgba(8,27,20,.45),transparent 60%)}
 @media(min-width:701px){.chemin .scene[data-scene="1"] .copy.right,.chemin .scene[data-scene="1"] .copy.right{top:auto;bottom:110px}}
 @media(max-width:700px){.chemin .scene[data-scene="1"] .copy.right{top:auto;bottom:85px}}
+/* Léger voile vert (vert du site #183e31) sur toutes les photos de l'accueil : étapes, actualités, envoi. */
+.chemin .shade::after,.chemin .sendoff-shade::after,.chemin .news-photo::after{content:"";position:absolute;inset:0;background:rgba(24,62,49,.2);pointer-events:none}
+.chemin .news-photo{position:relative;border-radius:2px;overflow:hidden}
+.chemin .news-photo>img{display:block;width:100%;height:auto;aspect-ratio:1.5;object-fit:cover}
+@media(max-width:700px){.chemin .news-photo>img{aspect-ratio:1.6}.chemin .sendoff-shade{display:block;background:none}}
